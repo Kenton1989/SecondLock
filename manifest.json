@@ -2,15 +2,19 @@
     "manifest_version": 2,
 
     "name": "TimeLock",
-    "version": "0.1",
+    "version": "0.0.1",
     "description": "Lock your time with your intension.",
     
     "default_locale": "en",
     
-    "permissions": ["activeTab", "declarativeContent", "storage"],
+    "permissions": [
+      "tabs", "storage",
+      "http://*/",
+      "https://*/"
+    ],
 
     "background": {
-      "scripts": ["js/background.js"],
+      "page": "background.html",
       "persistent": false
     },
 

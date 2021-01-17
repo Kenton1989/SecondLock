@@ -1,6 +1,11 @@
 
+const selectTimeURL = chrome.runtime.getURL("select-time.html");
+
 var activate = document.getElementById("activate");
 var saveBtn = document.getElementById("save-options");
+var selectLink = document.getElementById("go-select");
+
+selectLink.href = selectTimeURL;
 
 chrome.storage.sync.get("activated", function(data) {
     activate.checked = data.activated;
