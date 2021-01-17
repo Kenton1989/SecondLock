@@ -1,5 +1,6 @@
 
 const selectTimeURL = chrome.runtime.getURL("select-time.html");
+const kExtName = chrome.i18n.getMessage("extname");
 
 var activate = document.getElementById("activate");
 var saveBtn = document.getElementById("save-options");

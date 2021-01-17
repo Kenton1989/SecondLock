@@ -1,3 +1,11 @@
 {
-    
+  "extname": {
+    "message": "时间锁"
+  },
+  "minute_single": {
+    "message": "分钟"
+  },
+  "minute_plural": {
+    "message": "分钟"
+  }
 }

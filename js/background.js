@@ -1,4 +1,5 @@
 import {getUrlOfTab} from "./general.js"
+import {MinHeap} from "./min_heap.js"
 
 const kSelectTimeURL = chrome.runtime.getURL("select-time.html");
 const kBlockPageURL = chrome.runtime.getURL("blocking.html");
@@ -9,6 +10,7 @@ const kBlackListProtocol = new Set(["http:", "https:"]);
 var whiteList = [undefined, null, ""];
 
 var activated = true;
+
 
 chrome.runtime.onInstalled.addListener(function() {
     chrome.storage.sync.set({activated: true}, function(){
@@ -44,7 +46,8 @@ function blockTab(tab) {
     console.log("Blocking the tab");
     window.setTimeout(function(){
         chrome.tabs.create({
-            url: kOptionURL
+            url: kOptionURL,
+            openerTabId: tab.id
             }
         );
     }, 100);
