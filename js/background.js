@@ -84,10 +84,12 @@ chrome.tabs.onActivated.addListener(function(tabInfo) {
 
 chrome.windows.onFocusChanged.addListener(function(winId){
     if (winId == chrome.windows.WINDOW_ID_NONE) return;
-    chrome.tabs.query({active: true, windowId: winId}, function(tabs){
-        console.assert(tabs.length == 1,
-                            "Window "+winId+" should have one active tab, "+
-                            "but has "+tabs.length+" instead.");
-        onTabSwitched(tabs[0]);
-    });
+    window.setTimeout(function(){
+        chrome.tabs.query({active: true, windowId: winId}, function(tabs){
+            console.assert(tabs.length == 1,
+                                "Window "+winId+" should have one active tab, "+
+                                "but has "+tabs.length+" instead.");
+            onTabSwitched(tabs[0]);
+        });
+    }, 200);
 });

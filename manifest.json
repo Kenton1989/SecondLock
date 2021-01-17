@@ -8,9 +8,7 @@
     "default_locale": "en",
     
     "permissions": [
-      "tabs", "storage",
-      "http://*/",
-      "https://*/"
+      "tabs", "storage"
     ],
 
     "background": {
