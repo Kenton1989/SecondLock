@@ -1,16 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TimeLock Options</title>
-</head>
-<body>
-    <input type="checkbox" id="activate" name="activate">
-    <label for="activate"> Activate Lock </label>
-    <button id="save-options">Save</button>
-    <br>
-    <a id = "go-select" href="select-time.html">To Selection Page</a>
+  </head>
+  <body>
+    <header>
+      <h1>TimeLock</h1>
+    </header>
+    <main>
+      <input type="checkbox" id="activate" name="activate" />
+      <label for="activate"> Activate Lock </label>
+      <button id="save-options">Save</button>
+      <div>
+        <h2>Page Debug</h2>
+        <a id="go-select" href="select-time.html">To Selection Page</a>
+        <a id="go-block" href="blocking.html">To Selection Page</a>
+      </div>
+    </main>
+    <footer>
+      &copy;2020-<span id="copy-end-year">2020</span> Kenton. All rights
+      reserved.
+    </footer>
     <script src="js/options.js"></script>
-</body>
+  </body>
 </html>

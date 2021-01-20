@@ -1,6 +1,6 @@
-let left = i=>i<<1;
-let right = i=>(i<<1)+1;
-let par = i=>(i>>1);
+let left = (i) => i << 1;
+let right = (i) => (i << 1) + 1;
+let par = (i) => i >> 1;
 function swap(arr, i1, i2) {
   let temp = arr[i1];
   arr[i1] = arr[i2];
@@ -8,32 +8,35 @@ function swap(arr, i1, i2) {
 }
 
 class MinHeap {
-  static defaultLessThan(a, b) { return a < b; }
-  
+  static defaultLessThan(a, b) {
+    return a < b;
+  }
+
   #data = [undefined];
   #cmp = MinHeap.defaultLessThan;
 
-	constructor(lessThan = MinHeap.defaultLessThan) {
+  constructor(lessThan = MinHeap.defaultLessThan) {
     this.#data = [undefined];
     this.#cmp = lessThan;
-	}
+  }
 
-	top() {
-		this.#checkNonEmpty();
-		return this.#data[1];
-	}
+  top() {
+    this.#checkNonEmpty();
+    return this.#data[1];
+  }
 
-	pop() {
-		this.#checkNonEmpty();
+  pop() {
+    this.#checkNonEmpty();
     let data = this.#data;
     let cmp = this.#cmp;
 
-    swap(data, 1, data.length-1);
+    swap(data, 1, data.length - 1);
     let ret = data.pop();
 
     let i = 1;
     while (i < data.length) {
-      let l = left(i), r = right(i);
+      let l = left(i),
+        r = right(i);
       let minI = i;
       if (l < data.length && cmp(data[l], data[minI])) minI = l;
       if (r < data.length && cmp(data[r], data[minI])) minI = r;
@@ -44,7 +47,7 @@ class MinHeap {
 
     return ret;
   }
-  
+
   push(val) {
     let data = this.#data;
     let cmp = this.#cmp;
@@ -61,43 +64,43 @@ class MinHeap {
     }
   }
 
-	size() {
-		return this.#data.length - 1;
-	}
-
-	empty() {
-		return this.size() == 0;
-	}
-
-	#checkNonEmpty() {
-		if (this.empty()) {
-			throw new ReferenceError("Try to refer the top element of empty heap.");
-		}
+  size() {
+    return this.#data.length - 1;
   }
-};
+
+  empty() {
+    return this.size() == 0;
+  }
+
+  #checkNonEmpty() {
+    if (this.empty()) {
+      throw new ReferenceError("Try to refer the top element of empty heap.");
+    }
+  }
+}
 
 class MaxHeap extends MinHeap {
   static defaultLessThan = MinHeap.defaultLessThan;
 
   constructor(lessThan = MaxHeap.defaultLessThan) {
-    super((a, b)=>!lessThan(a, b));
+    super((a, b) => !lessThan(a, b));
   }
 }
 
 function testMinHeap() {
   let heap = new MaxHeap();
-  let data = [5,3,9,7,4,14,3,2];
+  let data = [5, 3, 9, 7, 4, 14, 3, 2];
 
-  data.forEach(num => {
+  data.forEach((num) => {
     heap.push(num);
   });
-  
+
   let sorted = [];
   while (!heap.empty()) {
     let num = heap.pop();
     sorted.push(num);
   }
-  
+
   console.log(sorted);
 }
 
