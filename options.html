@@ -3,26 +3,46 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TimeLock Options</title>
+    <link rel="stylesheet" href="css/option.css" />
+    <title class="option-title">Options</title>
   </head>
   <body>
     <header>
-      <h1>TimeLock</h1>
+      <h1 class="ext-name">TimeLock</h1>
+      <h2 class="option-title">Options</h2>
     </header>
-    <main>
-      <input type="checkbox" id="activate" name="activate" />
-      <label for="activate"> Activate Lock </label>
-      <button id="save-options">Save</button>
-      <div>
-        <h2>Page Debug</h2>
-        <a id="go-select" href="select-time.html">To Selection Page</a>
-        <a id="go-block" href="blocking.html">To Selection Page</a>
+    <main class="container">
+      <aside>
+        <ul id="nav-list"></ul>
+      </aside>
+      <div id="main-div">
+        <section id="general">
+          <h2 class="section-title">General</h2>
+          <input type="checkbox" id="activate" name="activate" />
+          <label for="activate"> Activate Lock </label>
+          <button id="save-options">Save</button>
+        </section>
+        <section id="debug">
+          <h2 class="section-title">Debug</h2>
+          <a id="go-select" href="select-time.html">To Selection Page</a>
+          <br />
+          <a id="go-block" href="blocking.html">To Blocking Page</a>
+        </section>
       </div>
     </main>
     <footer>
-      &copy;2020-<span id="copy-end-year">2020</span> Kenton. All rights
+      &copy;2021-<span id="copy-end-year">2020</span> Kenton. All rights
       reserved.
     </footer>
-    <script src="js/options.js"></script>
+    
+    <div style="display: none;">
+      <ul>
+        <li class="nav-item">
+          <a href="#">Something</a>
+        </li>
+      </ul>
+    </div>
+    </template>
+    <script type="module" src="js/options.js"></script>
   </body>
 </html>

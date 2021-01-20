@@ -1,3 +1,9 @@
 @import "page-layout.css";
 @import "typography.css";
 @import "color.css";
+
+
+main {
+  padding: 20px;
+  text-align: center;
+}

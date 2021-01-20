@@ -1,8 +1,25 @@
 :root {
-  --space-cadet: #21295cff;
-  --dark-cornflower-blue: #1b3b6fff;
-  --blue-sapphire: #065a82ff;
-  --cg-blue: #1c7293ff;
-  --cadet-grey: #9eb3c2ff;
-  
+  --light-color:  #e7e7ef;
+  --bright-color:  #279af1;
+  --dark-color:  #212738;
+  --side-bar-color: #23b5d3;
+  --side-bar-dark: #1d97af;
+  --side-bar-light: #50cae2;
+}
+
+main {
+  background-color: var(--light-color);
+}
+
+aside {
+  background-color: var(--side-bar-color);
+}
+
+header {
+  background-color: var(--bright-color);
+  color: var(--dark-color);
+}
+
+footer {
+  background-color: var(--light-color);
 }

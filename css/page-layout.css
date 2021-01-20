@@ -1,3 +1,50 @@
 * {
   box-sizing: border-box;
+  margin: 0px;
+}
+
+.container {
+  position: relative;
+}
+
+body {
+  max-width: 1000px;
+  margin: auto;
+  padding: 0px;
+}
+
+header {
+  min-height: 100px;
+  position: relative;
+}
+
+header h1 {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+}
+
+header h2 {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+}
+
+main {
+  min-height: 500px;
+  margin: 10px 0px;
+}
+
+section {
+  margin: 20px 40px;
+}
+
+section .section-title {
+  margin: 0 0 10px 0;
+}
+
+footer {
+  text-align: center;
+  min-height: 80px;
+  padding: 20px 20px;
 }

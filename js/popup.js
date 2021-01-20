@@ -1,4 +1,4 @@
-import {getUrlOfTab} from "./general.js"
+import {getUrlOfTab} from "./utility.js"
 
 var startBtn = document.getElementById("start");
 var digitTxt = document.getElementById("digits");

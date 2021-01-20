@@ -1,13 +1,15 @@
+import {} from "./common-page.js"
+
 let minUnit = chrome.i18n.getMessage("minute_single");
 let minUnits = chrome.i18n.getMessage("minute_plural");
 
 function selectTime(btn) {}
 
-timeBtnDiv = document.getElementById("buttons");
+let timeBtnDiv = document.getElementById("buttons");
 const defaultTimes = [1, 5, 10, 15, 30, 60];
 
 defaultTimes.forEach((minutes) => {
-  newBtn = document.createElement("button");
+  let newBtn = document.createElement("button");
   if (minutes == 1) {
     newBtn.innerText = minutes + " " + minUnit;
   } else {

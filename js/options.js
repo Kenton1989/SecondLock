@@ -1,24 +1,27 @@
+import {} from "./common-page.js";
+import {setupSectionNav} from "./nav-setup.js";
 
-const selectTimeURL = chrome.runtime.getURL("select-time.html");
-const kExtName = chrome.i18n.getMessage("extname");
+function main() {
+    setupSectionNav();
 
-var activate = document.getElementById("activate");
-var saveBtn = document.getElementById("save-options");
-var selectLink = document.getElementById("go-select");
+    let activate = document.getElementById("activate");
+    let saveBtn = document.getElementById("save-options");
+    
+    chrome.storage.sync.get("activated", function(data) {
+        activate.checked = data.activated;
+        console.log("Setup activated as " + data.activated)
+    });
 
-selectLink.href = selectTimeURL;
-
-chrome.storage.sync.get("activated", function(data) {
-    activate.checked = data.activated;
-    console.log("Setup activated as " + data.activated)
-});
-
-saveBtn.onclick = function(e) {
-    chrome.storage.sync.set({
+    saveBtn.addEventListener("click", function() {
+        chrome.storage.sync.set({
             "activated": activate.checked
         },
         function() {
             console.log("Options saved");
             console.log("activated: "+activate.checked);
         });
-};
+    });
+
+}
+
+window.addEventListener("load", main);

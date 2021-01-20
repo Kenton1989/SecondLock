@@ -3,22 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/general-layout.css">
-    <title>Unlock Time Selection</title>
+    <link rel="stylesheet" href="css/select-time.css" />
+    <title class="time-select-title">Unlock Time Selection</title>
   </head>
   <body>
     <header>
-      <h1>TimeLock</h1>
+      <h1 class="ext-name">TimeLock</h1>
+      <h2 class="time-select-title">Unlock Time Selection</h2>
     </header>
     <main>
-      <h2>Select the length of time to unlock</h2>
+      <h1 class="time-select-hint">Select the length of time to unlock</h2>
       <div id="buttons"></div>
+      <div id="other-length">
+        <input type="number" name="time-length" id="time-length" />
+        <span class="min-units">minutes</span>
+        <button>GO</button>
+      </div>
     </main>
     <footer>
       &copy;2021-<span id="copy-end-year">2021</span> Kenton. All rights
       reserved.
     </footer>
-    <script src="js/common-page.js"></script>
-    <script src="js/select-time.js"></script>
+    <script type="module" src="js/select-time.js"></script>
   </body>
 </html>

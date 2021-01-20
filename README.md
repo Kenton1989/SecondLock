@@ -23,6 +23,9 @@ Inspired by [Mr. He's video][mr_he_video].
 # Update
 
 ### 2021/01/21
+- 初步完成UI设计
+
+### 2021/01/20
 - 加了一堆意义不明的CSS
 - 初步确定前后端（？）结构
 
@@ -41,6 +44,9 @@ Inspired by [Mr. He's video][mr_he_video].
 # TODO
 
 以下按优先级从高到低排序
+- [x] 功能整体思路
+- [x] UI设计
+- [ ] 整体模块框架设计
 - [ ] 打开网站前要确定使用时间(核心功能1)
 - [ ] 白名单/黑名单(核心功能2)
 - [ ] 倒计时显示
@@ -48,10 +54,10 @@ Inspired by [Mr. He's video][mr_he_video].
 - [ ] 弄个好看的icon
 - [ ] 弄好Readme（格式和语言）
 - [ ] 多国语言支持
+- [ ] 格言集合
+- [ ] 累计用时显示/限制
 - 进阶功能（大概率并不会做）
-  - [ ] 格言集合
-  - [ ] 数据统计与导出
-  - [ ] 累计用时显示/限制
+  - [ ] 数据统计
 
 [mr_he_video]: https://www.bilibili.com/video/BV1ev411x7en
 [mr_he_app]: http://download.yitangyx.cn/test/student-he/new.html?202001
