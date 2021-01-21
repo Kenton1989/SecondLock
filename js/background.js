@@ -1,5 +1,5 @@
 import { getUrlOfTab } from "./utility.js";
-import { MinHeap } from "./min_heap.js";
+import { DynamicPageBackend } from "./dynamic-page-backend.js";
 
 const kSelectTimeURL = chrome.runtime.getURL("select-time.html");
 const kBlockPageURL = chrome.runtime.getURL("blocking.html");
@@ -41,17 +41,7 @@ function shouldBlock(tab) {
 
 function blockTab(tab) {
   console.log("Blocking the tab");
-  window.setTimeout(function () {
-    chrome.tabs.create(
-      {
-        url: kOptionURL,
-        openerTabId: tab.id,
-      },
-      function (newTab) {
-        console.log("Blocked: "+tab.url)
-      }
-    );
-  }, 100);
+  DynamicPageBackend.openOnNewTab(kBlockPageURL, {blocked_link: tab.url});
 }
 
 function onTabChanged(tab) {

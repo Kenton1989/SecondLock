@@ -1,5 +1,6 @@
 import {} from "./common-page.js";
 import {setupSectionNav} from "./nav-setup.js";
+import {DynamicPage} from "./dynamic-page.js";
 
 function main() {
     setupSectionNav();
@@ -21,7 +22,6 @@ function main() {
             console.log("activated: "+activate.checked);
         });
     });
-
 }
 
 window.addEventListener("load", main);

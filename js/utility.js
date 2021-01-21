@@ -4,7 +4,7 @@
  * If neither tab.url nor the tab.pendingUrl is set, the function return undefined.
  * 
  * @param {chrome.tabs.Tab} tab
- * @returns the URL object of the url of the given tab.
+ * @returns {URL} the URL object of the url of the given tab.
  */
 export function getUrlOfTab(tab) {
   var urlStr = tab.url;
