@@ -1,6 +1,7 @@
 :root {
   --light-color:  #e7e7ef;
   --bright-color:  #279af1;
+  --deep-color: #1B4079;
   --dark-color:  #212738;
   --side-bar-color: #23b5d3;
   --side-bar-dark: #1d97af;
@@ -22,4 +23,17 @@ header {
 
 footer {
   background-color: var(--light-color);
+}
+
+button {
+  background-color: var(--deep-color);
+  color: white;
+}
+
+button:hover {
+  background-color: var(--dark-color);
+}
+
+button:active {
+  background-color: var(--bright-color);
 }

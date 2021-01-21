@@ -4,6 +4,14 @@
 
 
 main {
-  padding: 20px;
+  padding: 50px;
   text-align: center;
+}
+
+#buttons {
+  margin: 10px;
+}
+
+#buttons button {
+  margin: 0px 5px;
 }
