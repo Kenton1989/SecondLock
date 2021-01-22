@@ -6,7 +6,7 @@ let minUnits = chrome.i18n.getMessage("minute_plural");
 function selectTime(btn) {}
 
 let timeBtnDiv = document.getElementById("buttons");
-const defaultTimes = [1, 5, 10, 15, 30, 60];
+const defaultTimes = [1, 5, 10, 15, 30, 60, 120];
 
 defaultTimes.forEach((minutes) => {
   let newBtn = document.createElement("button");

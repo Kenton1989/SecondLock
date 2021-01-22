@@ -1,5 +1,3 @@
-import { getUrlOfTab } from "./utility.js";
-
 class DynamicPageBackend {
   /**
    * Open the given dynamic page with the given arguments on the given tab.
