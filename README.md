@@ -22,8 +22,12 @@ Inspired by [Mr. He's video][mr_he_video].
 
 # Update
 
+### 2021/01/24
+- 完善动态页面实现
+- 实现用户浏览页面监视模块(browsing-page-monitor.js)
+
 ### 2021/01/22
-- 实现动态页面内容
+- 实现动态页面内容(dynamic-page.js & dynamic-page-backend.js)
 
 ### 2021/01/21
 - 初步完成UI设计
