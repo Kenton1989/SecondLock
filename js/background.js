@@ -9,10 +9,8 @@ const kBlackListProtocol = new Set(["http:", "https:"]);
 
 var activated = true;
 
-
-
 chrome.runtime.onInstalled.addListener(function () {
-  chrome.storage.sync.set({ activated: true }, function () {
+  chrome.storage.sync.set({ activated: false }, function () {
     console.log("Lock is activated");
   });
 });

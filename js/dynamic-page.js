@@ -4,7 +4,7 @@ class DynamicPage {
   // Setup flag
   static #setup = false;
   // event key
-  static #ARGS_BUFFERED_EVENT_KEY = "dynamic_page_argument_buffered";
+  static #ARGS_BUFFERED_EVENT_KEY = "dynamic-page-arguments-buffered";
 
   /**
    * Initialize the current page with the given callback function.
@@ -33,19 +33,21 @@ class DynamicPage {
     if (DynamicPage.#setup) return;
     DynamicPage.#setup = true;
 
-    // Receiving arguments
-    chrome.runtime.onMessage.addListener(function (message) {
-      if (message.dynamic_page_init_args != undefined) {
+    // Request arguments
+    chrome.runtime.sendMessage(
+      { dynamic_page_init_request: true },
+      {},
+      function (response) {
         if (DynamicPage.#args != undefined) {
           throw new Error("Multiple set of arguments are passed in.");
         }
         // Buffering the argument
-        DynamicPage.#args = message.dynamic_page_init_args;
+        DynamicPage.#args = response.dynamic_page_init_args;
         // Trigger the argument reception event
-        let args_arrive_event = new CustomEvent(DynamicPage.#ARGS_BUFFERED_EVENT_KEY);
+        let args_arrive_event = new Event(DynamicPage.#ARGS_BUFFERED_EVENT_KEY);
         document.dispatchEvent(args_arrive_event);
       }
-    });
+    );
   }
 }
 

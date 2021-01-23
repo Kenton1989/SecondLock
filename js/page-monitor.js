@@ -4,6 +4,7 @@ class PageMonitor {
   #monitoredHost = new Set();
   #matchingRegex = ``;
   constructor() {
+    
   }
 
   addMonitoredHost(hostname) {}
