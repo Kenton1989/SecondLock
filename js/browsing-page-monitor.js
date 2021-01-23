@@ -5,6 +5,7 @@ import {
   validIPv6Hostname,
 } from "./utility.js";
 
+// Different hostname type
 const HOST_TYPE = {
   UNKNOWN: 0,
   NORMAL: 1,
@@ -33,7 +34,14 @@ function reformat(hostname) {
   return url.hostname;
 }
 
-class PageMonitor {
+/**
+ * Used for monitoring browser user's browsing page.
+ * 
+ * Client can define a list of hostname to be monitored.
+ * When user start browsing a monitored hostname, 
+ * callback functions will be activated.
+ */
+class BrowsingPageMonitor {
   static #MONITORED_PAGE_ACTIVE = "monitored-page-active";
   #monitoredHost = new Map();
   #matchingRegex = /$^/;
@@ -56,7 +64,7 @@ class PageMonitor {
 
       // prepare for event dispatching
       let monitoredHost = result[0];
-      let event = new CustomEvent(PageMonitor.#MONITORED_PAGE_ACTIVE, {
+      let event = new CustomEvent(BrowsingPageMonitor.#MONITORED_PAGE_ACTIVE, {
         detail: { tab: tab, hostname: monitoredHost },
       });
 
@@ -181,7 +189,7 @@ class PageMonitor {
    */
   addReaction(callback) {
     this.#eventTarget.addEventListener(
-      PageMonitor.#MONITORED_PAGE_ACTIVE,
+      BrowsingPageMonitor.#MONITORED_PAGE_ACTIVE,
       function (e) {
         callback(e.detail.tab, e.detail.hostname);
       }
@@ -248,26 +256,6 @@ class PageMonitor {
 
     this.#matchingRegex = new RegExp(pattern, "i");
   }
-
-  #onPageChanged(tab) {
-    // Check if the host is monitored
-    let hostname = getUrlOfTab(tab).hostname;
-    let result = this.#matchingRegex.exec(hostname);
-    if (!result) return;
-
-    // prepare for event dispatching
-    let monitoredHost = result[0];
-    let eventTarget = this.#eventTarget;
-    let event = new CustomEvent(PageMonitor.#MONITORED_PAGE_ACTIVE, {
-      detail: { tab: tab, hostname: monitoredHost },
-    });
-
-    // Wait for a wait to complete tab switch
-    // To avoid some weird bugs
-    window.setTimeout(function () {
-      eventTarget.dispatchEvent(event);
-    }, 100);
-  }
 }
 
-export { PageMonitor };
+export { BrowsingPageMonitor };

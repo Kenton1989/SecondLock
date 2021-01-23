@@ -1,6 +1,6 @@
 import { getUrlOfTab } from "./utility.js";
 import { DynamicPageBackend } from "./dynamic-page-backend.js";
-import { PageMonitor } from "./page-monitor.js";
+import { BrowsingPageMonitor } from "./browsing-page-monitor.js";
 
 const kSelectTimeURL = chrome.runtime.getURL("select-time.html");
 const kBlockPageURL = chrome.runtime.getURL("blocking.html");
@@ -39,7 +39,7 @@ function shouldBlock(tab) {
   return true;
 }
 
-let monitor = new PageMonitor();
+let monitor = new BrowsingPageMonitor();
 let blackList = ["bilibili.com", "youtube.com", "localhost"];
 monitor.addMonitoredHostList(blackList);
 
