@@ -13,27 +13,72 @@ const HOST_TYPE = {
 };
 Object.freeze(HOST_TYPE);
 
+const HOSTNAME_CHARS = /^[a-z0-9:\-\.\[\]]*$/i;
+/**
+ * Reformat a hostname into what chrome would like to display.
+ * - lowercase hostname
+ * - for ip hostname, omit redundancy
+ *
+ * @param {String} hostname a hostname
+ */
+function reformat(hostname) {
+  if (!HOSTNAME_CHARS.test(hostname)) return undefined;
+  let url = undefined;
+  try {
+    url = new URL(`http://${hostname}`);
+  } catch (e) {
+    console.warn(e);
+    return undefined;
+  }
+  return url.hostname;
+}
+
 class PageMonitor {
-  static #HOSTNAME_CHARS = /^[a-z0-9:\-\.\[\]]*$/i;
   static #MONITORED_PAGE_ACTIVE = "monitored-page-active";
   #monitoredHost = new Map();
   #matchingRegex = /$^/;
   #eventTarget = new EventTarget();
+  #monitoring = true;
 
   constructor() {
-    let onPageChanged = this.#onPageChanged;
+    // make private member public
+    let eventTarget = this.#eventTarget;
+    // avoid ambiguity of "this"
+    let monitor = this;
+
+    let onPageChanged = function (tab) {
+      if (!tab.url) return;
+      
+      // Check if the host is monitored
+      let hostname = getUrlOfTab(tab).hostname;
+      let result = monitor.isMonitoring(hostname);
+      if (result == undefined) return;
+
+      // prepare for event dispatching
+      let monitoredHost = result[0];
+      let event = new CustomEvent(PageMonitor.#MONITORED_PAGE_ACTIVE, {
+        detail: { tab: tab, hostname: monitoredHost },
+      });
+
+      // Wait for a while to complete tab switch
+      // To avoid some weird bugs
+      window.setTimeout(function () {
+        eventTarget.dispatchEvent(event);
+      }, 100);
+    };
 
     chrome.tabs.onUpdated.addListener(function (id, changes, tab) {
-      if (!tab.active || !changes.url || !tab.url) return;
+      if (!monitor.active || !tab.active || !changes.url) return;
       onPageChanged(tab);
     });
 
     chrome.tabs.onActivated.addListener(function (tabInfo) {
+      if (!monitor.active) return;
       chrome.tabs.get(tabInfo.tabId, onPageChanged);
     });
 
     chrome.windows.onFocusChanged.addListener(function (winId) {
-      if (winId == chrome.windows.WINDOW_ID_NONE) return;
+      if (!monitor.active || winId == chrome.windows.WINDOW_ID_NONE) return;
       window.setTimeout(function () {
         chrome.tabs.query({ active: true, windowId: winId }, function (tabs) {
           onPageChanged(tabs[0]);
@@ -50,12 +95,31 @@ class PageMonitor {
   }
 
   /**
+   * @returns {Boolean} If the monitor is active
+   */
+  get active() {
+    return this.#monitoring;
+  }
+
+  set active(val) {
+    val = new Boolean(val);
+    this.#monitoring = val;
+  }
+
+  /**
    * Check if a hostname is monitored.
    * @param {String} hostname the hostname to be checked.
-   * @returns {boolean} true if the hostname is monitored.
+   * @returns {*} the actual monitored host suffix if the hostname is monitored.
+   *    If the hostname is not monitored, return undefined
    */
-  hasMonitoredHost(hostname) {
-    return this.#monitoredHost.has(hostname);
+  isMonitoring(hostname) {
+    hostname = reformat(hostname);
+    if (!hostname) return undefined;
+
+    let result = this.#matchingRegex.exec(hostname);
+    if (!result) return undefined;
+
+    return result[0];
   }
 
   /**
@@ -91,7 +155,7 @@ class PageMonitor {
    */
   removeMonitoredHost(hostname) {
     if (!this.hasMonitoredHost(hostname)) return;
-    
+
     this.#updateRegex();
   }
 
@@ -105,7 +169,7 @@ class PageMonitor {
       dirty = this.#removeFromMap(val) || dirty;
     }
     if (!dirty) return;
-    
+
     this.#updateRegex();
   }
 
@@ -130,7 +194,7 @@ class PageMonitor {
    * @returns {boolean} true if a hostname is successfully added.
    */
   #addToMap(hostname) {
-    let formattedHost = PageMonitor.#reformat(hostname);
+    let formattedHost = reformat(hostname);
     if (!formattedHost) {
       console.warn(`Invalid hostname: ${hostname}`);
       return false;
@@ -157,7 +221,7 @@ class PageMonitor {
    * @returns {boolean} true if a hostname is removed from the map
    */
   #removeFromMap(hostname) {
-    let formattedHost = PageMonitor.#reformat(hostname);
+    let formattedHost = reformat(hostname);
     if (!formattedHost) {
       console.warn(`Invalid hostname: ${hostname}`);
       return false;
@@ -197,31 +261,12 @@ class PageMonitor {
     let event = new CustomEvent(PageMonitor.#MONITORED_PAGE_ACTIVE, {
       detail: { tab: tab, hostname: monitoredHost },
     });
-    
+
     // Wait for a wait to complete tab switch
     // To avoid some weird bugs
     window.setTimeout(function () {
       eventTarget.dispatchEvent(event);
     }, 100);
-  }
-
-  /**
-   * Reformat a hostname into what chrome would like to display.
-   * - lowercase hostname
-   * - for ip hostname, omit redundancy
-   *
-   * @param {String} hostname a hostname
-   */
-  static #reformat(hostname) {
-    if (!PageMonitor.#HOSTNAME_CHARS.test(url)) return undefined;
-    let url = undefined;
-    try {
-      url = new URL(`http://${hostname}`);
-    } catch (e) {
-      console.warn(e);
-      return undefined;
-    }
-    return url.hostname;
   }
 }
 
