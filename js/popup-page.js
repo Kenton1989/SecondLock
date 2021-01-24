@@ -28,6 +28,6 @@ goOptions.onclick = function(e) {
 
 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     console.assert(tabs.length == 1, "There are more than one active tab in the window!");
-    console.log(tabs[0]);
+    console.debug(tabs[0]);
     currentHostTxt.innerText = getUrlOfTab(tabs[0]).hostname;
 });

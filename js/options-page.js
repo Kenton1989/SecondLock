@@ -10,7 +10,7 @@ function main() {
     
     chrome.storage.sync.get("activated", function(data) {
         activate.checked = data.activated;
-        console.log("Setup activated as " + data.activated)
+        console.debug("Setup activated as " + data.activated)
     });
 
     saveBtn.addEventListener("click", function() {
@@ -18,8 +18,8 @@ function main() {
             "activated": activate.checked
         },
         function() {
-            console.log("Options saved");
-            console.log("activated: "+activate.checked);
+            console.debug("Options saved");
+            console.debug("activated: "+activate.checked);
         });
     });
 }

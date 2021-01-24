@@ -11,19 +11,19 @@ var activated = true;
 
 chrome.runtime.onInstalled.addListener(function () {
   chrome.storage.sync.set({ activated: false }, function () {
-    console.log("Lock is activated");
+    console.debug("Lock is activated");
   });
 });
 
 chrome.storage.sync.get("activated", function (data) {
   activated = data.activated;
-  console.log("Init activated: " + data.activated);
+  console.debug("Init activated: " + data.activated);
 });
 
 chrome.storage.onChanged.addListener(function (changes, namespace) {
   if (changes.activated != undefined) {
     activated = changes.activated.newValue;
-    console.log("background buffered activated changed: " + activated);
+    console.debug("background buffered activated changed: " + activated);
   }
 });
 
@@ -33,7 +33,7 @@ function shouldBlock(tab) {
   }
   var url = getUrlOfTab(tab);
   if (!kBlackListProtocol.has(url.protocol)) {
-    console.log("Protocol not in black list");
+    console.debug("Protocol not in black list");
     return false;
   }
   return true;
@@ -41,10 +41,10 @@ function shouldBlock(tab) {
 
 let monitor = new BrowsingPageMonitor();
 let blackList = ["bilibili.com", "youtube.com", "localhost"];
-monitor.addMonitoredHostList(blackList);
+monitor.blackList.addList(blackList);
 
 function blockTab(tab, hostname) {
-  console.log(`Blocking the tab of host: ${hostname}`);
+  console.debug(`Blocking the tab of host: ${hostname}`);
   DynamicPageBackend.openOnNewTab(kSelectTimeURL, {blocked_link: hostname});
 }
 

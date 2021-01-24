@@ -13,15 +13,15 @@ function setupSectionNav() {
   let sections = document.getElementsByTagName("section");
   let navList = document.getElementById("nav-list");
   let tempItem = document.getElementsByClassName("nav-item")[0];
-  // console.log(tempItem)
+  // console.debug(tempItem)
   let link = tempItem.getElementsByTagName("a")[0];
-  // console.log(link)
+  // console.debug(link)
 
   for (const sec of sections) {
     let title = sec.getElementsByClassName("section-title")[0].innerText;
     link.href = "#"+sec.id;
     link.innerText = title;
-    // console.log(sec)
+    // console.debug(sec)
     let copy = tempItem.cloneNode(true);
     navList.appendChild(copy);
   }

@@ -22,9 +22,9 @@ class DynamicPageBackend {
 
     // remove args of tab on close
     chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
-      console.log(`Tab #${tabId} closed.`);
+      console.debug(`Tab #${tabId} closed.`);
       if (DynamicPageBackend.#tabArgs.delete(tabId)) {
-        console.log(`Argument for tab #${tabId} deleted.`);
+        console.debug(`Argument for tab #${tabId} deleted.`);
       }
     });
   }
@@ -40,7 +40,7 @@ class DynamicPageBackend {
   static openOnExistingTab(url, pageArgs, tabId, callback = function (tab) {}) {
     DynamicPageBackend.#tabArgs.set(tabId, pageArgs);
     chrome.tabs.update(tabId, { url: url }, callback);
-    console.log(`Overwriting tab #${tabId} with URL:${url}.`);
+    console.debug(`Overwriting tab #${tabId} with URL:${url}.`);
   }
 
   /**
@@ -61,7 +61,7 @@ class DynamicPageBackend {
     tabProperties.url = url;
     chrome.tabs.create(tabProperties, function (tab) {
       DynamicPageBackend.#tabArgs.set(tab.id, pageArgs);
-      console.log(`Created tab #${tab.id} opened with URL:${url}.`);
+      console.debug(`Created tab #${tab.id} opened with URL:${url}.`);
       callback(tab);
     });
   }

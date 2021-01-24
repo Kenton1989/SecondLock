@@ -140,7 +140,7 @@ function testMinHeap() {
     sorted.push(num);
   }
 
-  console.log(sorted);
+  console.debug(sorted);
 }
 
 export { MinHeap, testMinHeap };

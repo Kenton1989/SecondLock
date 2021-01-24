@@ -1,3 +1,4 @@
+import { HostnameSet } from "./hostname-set.js";
 import {
   getUrlOfTab,
   validHostname,
@@ -43,8 +44,7 @@ function reformat(hostname) {
  */
 class BrowsingPageMonitor {
   static #MONITORED_PAGE_ACTIVE = "monitored-page-active";
-  #monitoredHost = new Map();
-  #matchingRegex = /$^/;
+  #monitoredHost = new HostnameSet();
   #eventTarget = new EventTarget();
   #monitoring = true;
 
@@ -56,6 +56,8 @@ class BrowsingPageMonitor {
 
     let onPageChanged = function (tab) {
       if (!tab.url) return;
+
+      console.debug(`User are browsing: ${tab.url}`);
       
       // Check if the host is monitored
       let hostname = getUrlOfTab(tab).hostname;
@@ -94,14 +96,7 @@ class BrowsingPageMonitor {
       }, 200);
     });
 
-    console.log("Browsing monitor setup.");
-  }
-
-  /**
-   * The number of hostname being monitored.
-   */
-  get monitoredCount() {
-    return this.#monitoredHost.size;
+    console.debug("Browsing monitor setup.");
   }
 
   /**
@@ -123,69 +118,14 @@ class BrowsingPageMonitor {
    *    If the hostname is not monitored, return undefined
    */
   isMonitoring(hostname) {
-    hostname = reformat(hostname);
-    if (!hostname) return undefined;
-
-    let result = this.#matchingRegex.exec(hostname);
-    if (!result) return undefined;
-
-    let actualHost = result[0];
-    if (actualHost[0] == '.') {
-      actualHost = actualHost.slice(1);
-    }
-
-    return actualHost;
+    return this.#monitoredHost.has(hostname);
   }
 
   /**
-   * Add a hostname to be monitored.
-   * @param {String} hostname the hostname to be monitored
-   * @returns {boolean} true if successfully added. If the hostname is invalid or
-   *          the hostname is already existed, return false.
+   * Get a set of host name that are monitored.
    */
-  addMonitoredHost(hostname) {
-    if (!this.#addToMap(hostname)) return false;
-
-    this.#updateRegex();
-  }
-
-  /**
-   * Remove a list of hostname to be monitored.
-   * @param {String[]} hostnameList the list of hostname to be monitored
-   */
-  addMonitoredHostList(hostnameList) {
-    let dirty = false;
-    for (const val of hostnameList) {
-      dirty = this.#addToMap(val) || dirty;
-    }
-    if (!dirty) return;
-
-    this.#updateRegex();
-  }
-
-  /**
-   * Remove a hostname from the monitored list.
-   * @param {String} hostname the hostname to be removed.
-   * @return {boolean} true if the hostname exist in the list and being removed.
-   */
-  removeMonitoredHost(hostname) {
-    if (!this.hasMonitoredHost(hostname)) return;
-
-    this.#updateRegex();
-  }
-
-  /**
-   * Remove a list of hostname to be monitored.
-   * @param {String[]} hostnameList the list of hostname to be monitored
-   */
-  removeMonitoredHostList(hostnameList) {
-    let dirty = false;
-    for (const val of hostnameList) {
-      dirty = this.#removeFromMap(val) || dirty;
-    }
-    if (!dirty) return;
-
-    this.#updateRegex();
+  get blackList() {
+    return this.#monitoredHost;
   }
 
   /**
@@ -201,67 +141,6 @@ class BrowsingPageMonitor {
         callback(e.detail.tab, e.detail.hostname);
       }
     );
-  }
-
-  /**
-   * add a hostname into map, without updating matcher.
-   * @param {String} hostname a hostname
-   * @returns {boolean} true if a hostname is successfully added.
-   */
-  #addToMap(hostname) {
-    let formattedHost = reformat(hostname);
-    if (!formattedHost) {
-      console.warn(`Invalid hostname: ${hostname}`);
-      return false;
-    }
-    if (this.#monitoredHost.has(formattedHost)) return false;
-
-    if (validHostname(formattedHost)) {
-      this.#monitoredHost.set(formattedHost, HOST_TYPE.NORMAL);
-    } else if (validIPv4Address(formattedHost)) {
-      this.#monitoredHost.set(formattedHost, HOST_TYPE.IPV4);
-    } else if (validIPv6Hostname(formattedHost)) {
-      this.#monitoredHost.set(formattedHost, HOST_TYPE.IPV6);
-    } else {
-      console.warn(`Invalid hostname: ${hostname}`);
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
-   * remove a hostname from map, without updating matcher.
-   * @param {String} hostname a hostname
-   * @returns {boolean} true if a hostname is removed from the map
-   */
-  #removeFromMap(hostname) {
-    let formattedHost = reformat(hostname);
-    if (!formattedHost) {
-      console.warn(`Invalid hostname: ${hostname}`);
-      return false;
-    }
-    return this.#monitoredHost.delete(hostname);
-  }
-
-  /**
-   * Update the regex matcher for hostname.
-   */
-  #updateRegex() {
-    // initialized with an impossible pattern.
-    let pattern = "($^)";
-
-    for (const pair of this.#monitoredHost) {
-      if (pair[1] == HOST_TYPE.NORMAL) {
-        // Match suffix
-        pattern += `|((^|\\.)(${pair[0]})$)`;
-      } else {
-        // Exact match
-        pattern += `|(^${pair[0]}$)`;
-      }
-    }
-
-    this.#matchingRegex = new RegExp(pattern, "i");
   }
 }
 
