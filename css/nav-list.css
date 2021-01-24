@@ -12,6 +12,10 @@ aside {
   float: right;
 }
 
+aside * {
+  margin: 0px;
+}
+
 #nav-list {
   position: sticky;
   top: 0;

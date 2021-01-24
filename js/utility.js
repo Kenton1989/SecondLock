@@ -73,4 +73,23 @@ function validIPv6Hostname(str) {
   );
 }
 
-export { getUrlOfTab, validHostname, validIPv4Address, validIPv6Hostname };
+/**
+ * Set the innerText property for all elements in the document
+ * with given className to the given text.
+ * @param {String} className class name of elements.
+ * @param {String} text text to be set as innerText property of elements.
+ */
+function setTextForClass(className, text) {
+  let elements = document.getElementsByClassName(className);
+  for (const element of elements) {
+    element.innerText = text;
+  }
+}
+
+export {
+  getUrlOfTab,
+  validHostname,
+  validIPv4Address,
+  validIPv6Hostname,
+  setTextForClass,
+};

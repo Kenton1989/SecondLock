@@ -8,10 +8,6 @@ main {
   text-align: center;
 }
 
-#buttons {
-  margin: 10px;
-}
-
 #buttons button {
-  margin: 0px 5px;
+  margin: 5px 5px;
 }

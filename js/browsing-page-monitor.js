@@ -129,7 +129,12 @@ class BrowsingPageMonitor {
     let result = this.#matchingRegex.exec(hostname);
     if (!result) return undefined;
 
-    return result[0];
+    let actualHost = result[0];
+    if (actualHost[0] == '.') {
+      actualHost = actualHost.slice(1);
+    }
+
+    return actualHost;
   }
 
   /**

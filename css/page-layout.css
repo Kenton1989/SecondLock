@@ -1,6 +1,6 @@
 * {
   box-sizing: border-box;
-  margin: 0px;
+  /* margin: 0px; */
 }
 
 .container {
@@ -18,16 +18,18 @@ header {
   position: relative;
 }
 
-header h1 {
+header h1, header h2 {
   position: absolute;
-  left: 20px;
   bottom: 20px;
+  margin: 0;
+}
+
+header h1 {
+  left: 20px;
 }
 
 header h2 {
-  position: absolute;
   right: 20px;
-  bottom: 20px;
 }
 
 main {

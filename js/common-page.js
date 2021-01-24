@@ -1,5 +1,3 @@
-
-
 let thisYear = new Date(Date.now()).getFullYear();
 
 function main() {
@@ -8,5 +6,6 @@ function main() {
   if (copyEndYear != undefined)
     copyEndYear.innerText = thisYear;
 }
+
 
 window.addEventListener("load", main);
