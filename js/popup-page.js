@@ -1,3 +1,4 @@
+import { RemoteCallable } from "./remote-callable.js";
 import {getUrlOfTab} from "./utility.js"
 
 var startBtn = document.getElementById("start");
@@ -30,4 +31,8 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     console.assert(tabs.length == 1, "There are more than one active tab in the window!");
     console.debug(tabs[0]);
     currentHostTxt.innerText = getUrlOfTab(tabs[0]).hostname;
+});
+
+RemoteCallable.call("browse-monitor", "isMonitoring", ["bilibili.com"], function(hostname){
+    console.log(hostname);
 });

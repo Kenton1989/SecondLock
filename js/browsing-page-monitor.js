@@ -1,5 +1,6 @@
 import { CustomEventWrapper } from "./custom-event-wrapper.js";
 import { HostnameSet } from "./hostname-set.js";
+import { RemoteCallable } from "./remote-callable.js";
 import {
   getUrlOfTab,
   validHostname,
@@ -47,7 +48,7 @@ const WINDOW_SWITCH_DELAY = 300;
  * When user start browsing a monitored hostname,
  * callback functions will be activated.
  */
-class BrowsingPageMonitor {
+class BrowsingPageMonitor extends RemoteCallable {
   #monitoredHost = new HostnameSet();
   #eventTarget = new EventTarget();
   #browseEvent = new CustomEventWrapper(
@@ -56,7 +57,9 @@ class BrowsingPageMonitor {
   );
   #monitoring = true;
 
-  constructor() {
+  constructor(name) {
+    super(name);
+
     // make private member public
     let browseEvent = this.#browseEvent;
     // avoid ambiguity of "this"
@@ -102,24 +105,25 @@ class BrowsingPageMonitor {
   }
 
   /**
-   * @returns {Boolean} If the monitor is active
+   * @returns {boolean} If the monitor is active
    */
   get active() {
     return this.#monitoring;
   }
 
   set active(val) {
-    val = new Boolean(val);
+    val = new Boolean(val).valueOf();
     this.#monitoring = val;
   }
 
   /**
    * Check if a hostname is monitored.
    * @param {String} hostname the hostname to be checked.
-   * @returns {*} the actual monitored host suffix if the hostname is monitored.
+   * @returns {(String|undefined)} the actual monitored host suffix if the hostname is monitored.
    *    If the hostname is not monitored, return undefined
    */
   isMonitoring(hostname) {
+    if (!this.active) return undefined;
     return this.#monitoredHost.has(hostname);
   }
 
@@ -132,7 +136,7 @@ class BrowsingPageMonitor {
 
   /**
    * The event that will be triggered when user browse the host in blacklist.
-   * 
+   *
    * The callback function format for this event is:
    *
    *     function (tab: chrome.tabs.Tab, hostname: String)
