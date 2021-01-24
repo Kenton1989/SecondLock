@@ -247,7 +247,7 @@ class BrowsingPageMonitor {
     for (const pair of this.#monitoredHost) {
       if (pair[1] == HOST_TYPE.NORMAL) {
         // Match suffix
-        pattern += `|((.*\\.)?${pair[0]}$)`;
+        pattern += `|((.*\\.)?(${pair[0]})$)`;
       } else {
         // Exact match
         pattern += `|(^${pair[0]}$)`;
