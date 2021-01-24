@@ -1,5 +1,6 @@
 import { CustomEventWrapper } from "./custom-event-wrapper.js";
 import { RemoteCallable } from "./remote-callable.js";
+import { notifyUnblock } from "./tab-blocker.js";
 
 const UNLOCK_TIMES_UP = "timing-monitor-times-up";
 
@@ -85,9 +86,7 @@ class LockTimeMonitor extends RemoteCallable {
     }, timePoint - Date.now());
 
     // Notify that a hostname is unlocked.
-    chrome.runtime.sendMessage({
-      closeOnUnlock: hostname,
-    });
+    notifyUnblock(hostname);
 
     console.log(`Unlocked ${hostname} until ${new Date(timePoint)}.`)
   }

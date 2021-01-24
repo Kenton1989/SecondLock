@@ -1,11 +1,25 @@
 import {} from "./common-page.js";
 import { DynamicPage } from "./dynamic-page.js";
-import { setTextForClass } from "./utility.js";
+import { autoUnblock, notifyUnblock } from "./tab-blocker.js";
+import { closeCurrentTab, setTextForClass } from "./utility.js";
 
-function main() {
+let blockedHost = undefined;
+
+function doOnLoaded() {
+  let closeAllBtn = document.getElementById("close-all-about");
+  
   DynamicPage.dynamicInit(function (args) {
-    setTextForClass("blocked-link", args.blocked_link);
+    blockedHost = args.blockedHost;
+    
+    setTextForClass("blocked-link", blockedHost);
+    
+    autoUnblock(blockedHost);
+
+    closeAllBtn.onclick = function () {
+      notifyUnblock(blockedHost);
+      closeCurrentTab();
+    };
   });
 }
 
-window.addEventListener("load", main);
+window.addEventListener("load", doOnLoaded);

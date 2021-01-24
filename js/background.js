@@ -1,12 +1,6 @@
-import { getUrlOfTab } from "./utility.js";
-import { DynamicPageBackend } from "./dynamic-page-backend.js";
 import { BrowsingPageMonitor } from "./browsing-page-monitor.js";
 import { LockTimeMonitor } from "./lock-timing-monitor.js";
-
-const kSelectTimeURL = chrome.runtime.getURL("select-time.html");
-const kBlockPageURL = chrome.runtime.getURL("blocking.html");
-const kOptionURL = chrome.runtime.getURL("options.html");
-
+import { blockAllTabsOf, blockPageToSelectTime } from "./tab-blocker.js";
 
 var activated = true;
 
@@ -28,23 +22,24 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
   }
 });
 
-
 let monitor = new BrowsingPageMonitor("browse-monitor");
 let unlockTiming = new LockTimeMonitor("lock-time-monitor");
 
 let blackList = ["bilibili.com", "youtube.com", "localhost"];
 monitor.blackList.addList(blackList);
 
-function blockTab(tab, hostname) {
+function selectTime(tab, hostname) {
   console.debug(`Blocking the tab of host: ${hostname}`);
   if (unlockTiming.isUnlocked(hostname)) {
-    console.debug(`${hostname} is unlocked, does not block.`)
+    console.debug(`${hostname} is unlocked, does not block.`);
     return;
   }
-  DynamicPageBackend.openOnNewTab(kSelectTimeURL, {blocked_link: hostname});
+  blockPageToSelectTime(tab, hostname);
 }
+monitor.onBrowse.addListener(selectTime);
 
-// monitor.onBrowse.addListener(blockTab);
-monitor.onBrowse["addListener"](blockTab);
+unlockTiming.onTimesUp.addListener(function (hostname) {
+  blockAllTabsOf(hostname);
+});
 
 // monitor.active = false;

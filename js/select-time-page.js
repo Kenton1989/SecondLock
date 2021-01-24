@@ -1,7 +1,8 @@
 import {} from "./common-page.js";
 import { DynamicPage } from "./dynamic-page.js";
 import { RemoteCallable } from "./remote-callable.js";
-import { autoCloseOnUnlock, setTextForClass } from "./utility.js";
+import { autoUnblock } from "./tab-blocker.js";
+import { setTextForClass } from "./utility.js";
 
 let minUnit = chrome.i18n.getMessage("minute_single");
 let minUnits = chrome.i18n.getMessage("minute_plural");
@@ -34,9 +35,9 @@ function setUnlock(minutes) {
 
 // Initialize the blocked hostname
 DynamicPage.dynamicInit(function (args) {
-  blockedHost = args.blocked_link;
+  blockedHost = args.blockedHost;
   setTextForClass("blocked-link", blockedHost);
-  autoCloseOnUnlock(blockedHost);
+  autoUnblock(blockedHost);
 });
 
 function doOnLoaded() {
