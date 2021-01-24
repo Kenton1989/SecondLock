@@ -27,9 +27,20 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
   }
 });
 
+function shouldBlock(tab) {
+  if (!activated) {
+    return false;
+  }
+  var url = getUrlOfTab(tab);
+  if (!kBlackListProtocol.has(url.protocol)) {
+    console.log("Protocol not in black list");
+    return false;
+  }
+  return true;
+}
 
 let monitor = new BrowsingPageMonitor();
-let blackList = ["bilibili.com", "youtube.com"];
+let blackList = ["bilibili.com", "youtube.com", "localhost"];
 monitor.addMonitoredHostList(blackList);
 
 function blockTab(tab) {
