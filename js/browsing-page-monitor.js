@@ -63,7 +63,7 @@ class BrowsingPageMonitor {
       if (result == undefined) return;
 
       // prepare for event dispatching
-      let monitoredHost = result[0];
+      let monitoredHost = result;
       let event = new CustomEvent(BrowsingPageMonitor.#MONITORED_PAGE_ACTIVE, {
         detail: { tab: tab, hostname: monitoredHost },
       });
@@ -93,6 +93,8 @@ class BrowsingPageMonitor {
         });
       }, 200);
     });
+
+    console.log("Browsing monitor setup.");
   }
 
   /**
@@ -247,7 +249,7 @@ class BrowsingPageMonitor {
     for (const pair of this.#monitoredHost) {
       if (pair[1] == HOST_TYPE.NORMAL) {
         // Match suffix
-        pattern += `|((.*\\.)?${pair[0]}$)`;
+        pattern += `|((^|\\.)(${pair[0]})$)`;
       } else {
         // Exact match
         pattern += `|(^${pair[0]}$)`;

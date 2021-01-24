@@ -40,12 +40,12 @@ function shouldBlock(tab) {
 }
 
 let monitor = new BrowsingPageMonitor();
-let blackList = ["bilibili.com", "youtube.com", "localhost"];
+let blackList = ["bilibili.com", "www.youtube.com", "localhost"];
 monitor.addMonitoredHostList(blackList);
 
-function blockTab(tab) {
+function blockTab(tab, hostname) {
   console.log("Blocking the tab");
-  DynamicPageBackend.openOnNewTab(kBlockPageURL, {blocked_link: tab.url});
+  DynamicPageBackend.openOnNewTab(kBlockPageURL, {blocked_link: hostname});
 }
 
 monitor.addReaction(blockTab);
