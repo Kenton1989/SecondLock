@@ -77,10 +77,19 @@ class LockTimeMonitor extends RemoteCallable {
 
     let restTimeMap = this.#restTimeMap;
     let timesUpEvent = this.#timesUpEvent;
+
     window.setInterval(function () {
+      console.log(`Times Up: ${hostname} locked.`);
+      timesUpEvent.trigger(hostname, duration);
       restTimeMap.delete(hostname);
-      timesUpEvent.trigger();
     }, timePoint - Date.now());
+
+    // Notify that a hostname is unlocked.
+    chrome.runtime.sendMessage({
+      closeOnUnlock: hostname,
+    });
+
+    console.log(`Unlocked ${hostname} until ${new Date(timePoint)}.`)
   }
 
   /**

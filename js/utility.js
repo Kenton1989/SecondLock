@@ -96,6 +96,19 @@ function closeCurrentTab() {
   });
 }
 
+/**
+ * 
+ * @param {String} hostname the hostname
+ */
+function autoCloseOnUnlock(hostname) {
+  chrome.runtime.onMessage.addListener(function (message) {
+    if (message.closeOnUnlock) {
+      let unlockedHost = message.closeOnUnlock;
+      if (unlockedHost == hostname) closeCurrentTab();
+    }
+  });
+}
+
 export {
   getUrlOfTab,
   validHostname,
@@ -103,4 +116,5 @@ export {
   validIPv6Hostname,
   setTextForClass,
   closeCurrentTab,
+  autoCloseOnUnlock,
 };

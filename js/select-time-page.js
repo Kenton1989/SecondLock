@@ -1,7 +1,7 @@
 import {} from "./common-page.js";
 import { DynamicPage } from "./dynamic-page.js";
 import { RemoteCallable } from "./remote-callable.js";
-import { setTextForClass, closeCurrentTab } from "./utility.js";
+import { autoCloseOnUnlock, setTextForClass } from "./utility.js";
 
 let minUnit = chrome.i18n.getMessage("minute_single");
 let minUnits = chrome.i18n.getMessage("minute_plural");
@@ -13,6 +13,10 @@ const MIN_UNLOCK_MIN = 1;
 let blockedHost = undefined;
 let warningTxt = undefined;
 
+/**
+ * Unlock the blocked host of this page for the given duration.
+ * @param {Number} minutes the duration in minute.
+ */
 function setUnlock(minutes) {
   console.debug(`Unlock ${blockedHost} for ${minutes} mins.`);
 
@@ -22,25 +26,24 @@ function setUnlock(minutes) {
   }
 
   let unlockDuration = Math.round(minutes * MINUTE);
-  RemoteCallable.call(
-    "lock-time-monitor",
-    "unlockFor",
-    [blockedHost, unlockDuration],
-    closeCurrentTab
-  );
+  RemoteCallable.call("lock-time-monitor", "unlockFor", [
+    blockedHost,
+    unlockDuration,
+  ]);
 }
 
-function main() {
-  // Initialize the blocked hostname
-  DynamicPage.dynamicInit(function (args) {
-    setTextForClass("blocked-link", args.blocked_link);
-    blockedHost = args.blocked_link;
-  });
+// Initialize the blocked hostname
+DynamicPage.dynamicInit(function (args) {
+  blockedHost = args.blocked_link;
+  setTextForClass("blocked-link", blockedHost);
+  autoCloseOnUnlock(blockedHost);
+});
 
+function doOnLoaded() {
   // Set where to show warning
   warningTxt = document.getElementsByClassName("warning")[0];
 
-  // Prepare for default time selection
+  // Prepare buttons for default time selection
   let timeBtnDiv = document.getElementById("buttons");
   for (const minutes of defaultTimes) {
     let newBtn = document.createElement("button");
@@ -62,6 +65,8 @@ function main() {
     let val = parseFloat(enterTimeLine.value);
     if (isNaN(val)) {
       warningTxt.innerText = "Please enter a number.";
+    } else if (val < MIN_UNLOCK_MIN) {
+      warningTxt.innerText = `The minimal unlock period is ${MIN_UNLOCK_MIN} mins.`;
     } else {
       warningTxt.innerText = "";
       setUnlock(val);
@@ -76,4 +81,4 @@ function main() {
   };
 }
 
-window.addEventListener("load", main);
+window.addEventListener("load", doOnLoaded);
