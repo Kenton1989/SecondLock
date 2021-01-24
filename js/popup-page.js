@@ -32,7 +32,3 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     console.debug(tabs[0]);
     currentHostTxt.innerText = getUrlOfTab(tabs[0]).hostname;
 });
-
-RemoteCallable.call("browse-monitor", "isMonitoring", ["bilibili.com"], function(hostname){
-    console.log(hostname);
-});

@@ -78,7 +78,7 @@ class BrowsingPageMonitor extends RemoteCallable {
       // Wait for a while to complete tab switch
       // to avoid some weird bugs
       window.setTimeout(function () {
-        browseEvent.trigger(tab, hostname);
+        browseEvent.trigger(tab, monitoredHost);
       }, TAB_SWITCH_DELAY);
     };
 

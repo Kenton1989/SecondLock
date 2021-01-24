@@ -41,6 +41,9 @@ class DynamicPage {
         if (DynamicPage.#args != undefined) {
           throw new Error("Multiple set of arguments are passed in.");
         }
+        if (!response || !response.dynamic_page_init_args) {
+          throw new Error("Failed to get page arguments.");
+        }
         // Buffering the argument
         DynamicPage.#args = response.dynamic_page_init_args;
         // Trigger the argument reception event

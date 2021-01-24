@@ -1,5 +1,4 @@
-import { CustomEventWrapper } from "./custom-event-wrapper";
-import { HostnameSet } from "./hostname-set";
+import { CustomEventWrapper } from "./custom-event-wrapper.js";
 import { RemoteCallable } from "./remote-callable.js";
 
 const UNLOCK_TIMES_UP = "timing-monitor-times-up";
@@ -68,10 +67,11 @@ class LockTimeMonitor extends RemoteCallable {
    * @param {(Number|Date)} timePoint the ending time point of unlock.
    */
   unlockUntil(hostname, timePoint) {
+    if (typeof hostname != "string") return;
     if (timePoint instanceof Date) timePoint = timePoint.getTime();
 
     let duration = timePoint - Date.now();
-    if (duration <= MINIMAL_UNLOCK_TIME) return;
+    if (duration <= LockTimeMonitor.MINIMAL_UNLOCK_TIME) return;
 
     this.#restTimeMap.set(hostname, timePoint);
 

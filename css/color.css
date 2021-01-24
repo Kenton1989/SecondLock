@@ -35,5 +35,9 @@ button:hover {
 }
 
 button:active {
-  background-color: var(--bright-color);
+  background-color: #2559a7;
+}
+
+.warning {
+  color: #b33a3a;
 }

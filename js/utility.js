@@ -86,10 +86,21 @@ function setTextForClass(className, text) {
   }
 }
 
+/**
+ * Close current tab.
+ */
+function closeCurrentTab() {
+  chrome.tabs.getCurrent(function (tab) {
+    if (!tab) return;
+    chrome.tabs.remove(tab.id);
+  });
+}
+
 export {
   getUrlOfTab,
   validHostname,
   validIPv4Address,
   validIPv6Hostname,
   setTextForClass,
+  closeCurrentTab,
 };

@@ -16,11 +16,16 @@
       <h2 class="blocked-link">hostname</h2>
       <div id="buttons"></div>
       <div id="other-length">
-        
-        <input type="number" name="time-length" id="time-length"  placeholder="> 1" />
+        <input
+          type="number"
+          name="time-length"
+          id="enter-time-line"
+          min="1"
+        />
         <span class="min-units">minutes</span>
-        <button>GO</button>
+        <button id="enter-time-btn">GO</button>
       </div>
+      <p class="warning"></p>
     </main>
     <footer>
       &copy;2021-<span id="copy-end-year">2021</span> Kenton. All rights
