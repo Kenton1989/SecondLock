@@ -71,6 +71,7 @@ class LockTimeMonitor extends RemoteCallable {
     if (typeof hostname != "string") return;
     if (timePoint instanceof Date) timePoint = timePoint.getTime();
 
+    let now = new Date(Date.now());
     let duration = timePoint - Date.now();
     if (duration <= LockTimeMonitor.MINIMAL_UNLOCK_TIME) return;
 
@@ -79,8 +80,10 @@ class LockTimeMonitor extends RemoteCallable {
     let restTimeMap = this.#restTimeMap;
     let timesUpEvent = this.#timesUpEvent;
 
-    window.setInterval(function () {
-      console.log(`Times Up: ${hostname} locked.`);
+    window.setTimeout(function () {
+      console.log(
+        `Times Up: ${hostname} unlocked between ${now} and ${new Date(Date.now())}.`
+      );
       timesUpEvent.trigger(hostname, duration);
       restTimeMap.delete(hostname);
     }, timePoint - Date.now());
@@ -88,7 +91,7 @@ class LockTimeMonitor extends RemoteCallable {
     // Notify that a hostname is unlocked.
     notifyUnblock(hostname);
 
-    console.log(`Unlocked ${hostname} until ${new Date(timePoint)}.`)
+    console.log(`Unlocked ${hostname} until ${new Date(timePoint)}.`);
   }
 
   /**

@@ -1,2 +1,36 @@
 @import "color.css";
 @import "typography.css";
+
+body {
+  min-width: 200px;
+  margin: 10px;
+}
+
+* {
+  margin: 3px 0px;
+}
+
+#page-info {
+  border-bottom: 2px solid lightgray;
+  margin-bottom: 5px;
+}
+
+#timer-display {
+  border-radius: 5px;
+  background-color: black;
+  color: white;
+  padding: 3px 8px;
+}
+
+#remain-time {
+  font-size: xx-large;
+  font-family:'Courier New', Courier, monospace;
+  font-weight: bold;
+  color: skyblue;
+  text-align: right;
+}
+
+#links-div {
+  border-top: 2px solid lightgray;
+  margin-top: 5px;
+}

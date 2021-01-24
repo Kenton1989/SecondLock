@@ -55,7 +55,12 @@ class RemoteCallable {
    * @param {function(any)} callOnReturn callback on function return.
    *    The parameter will be the value returned by the called function
    */
-  static call(name, funcName, args, callOnReturn = RemoteCallable.doNothing) {
+  static call(
+    name,
+    funcName,
+    args = [],
+    callOnReturn = RemoteCallable.doNothing
+  ) {
     chrome.runtime.sendMessage(
       {
         remoteCallInfo: {
@@ -71,4 +76,22 @@ class RemoteCallable {
   }
 }
 
-export { RemoteCallable };
+/**
+ * Call a method of the given remote callable object.
+ *
+ * @param {String} name name of the remote object
+ * @param {String} funcName name of the function to be called
+ * @param {any[]} args parameter list
+ * @param {function(any)} callOnReturn callback on function return.
+ *    The parameter will be the value returned by the called function
+ */
+function remoteCall(
+  name,
+  funcName,
+  args = [],
+  callOnReturn = RemoteCallable.doNothing
+) {
+  RemoteCallable.call(name, funcName, args, callOnReturn);
+}
+
+export { RemoteCallable, remoteCall };

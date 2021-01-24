@@ -7,12 +7,17 @@
     <title>TimeLock</title>
   </head>
   <body>
-    <p>Current host: <span id="current-host"></span></p>
-    <p id="digits">0</p>
-    <button id="start">Start</button>
-    <div>
+    <section id="page-info">
+      <p>Current host:</p>
+      <p id="current-host"></p>
+    </section>
+    <section id="timer-display">
+      remain time:
+      <div id="remain-time">INACTIVE</div>
+    </section>
+    <section id="links-div">
       <a id="go-options" href="options.html">Options</a>
-    </div>
+    </section>
     <script type="module" src="js/popup-page.js"></script>
   </body>
 </html>

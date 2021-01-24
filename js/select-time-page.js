@@ -10,6 +10,7 @@ let minUnits = chrome.i18n.getMessage("minute_plural");
 const defaultTimes = [1, 5, 10, 15, 30, 60, 120];
 const MINUTE = 60000;
 const MIN_UNLOCK_MIN = 1;
+const MAX_UNLOCK_MIN = 1000;
 
 let blockedHost = undefined;
 let warningTxt = undefined;
@@ -68,6 +69,8 @@ function doOnLoaded() {
       warningTxt.innerText = "Please enter a number.";
     } else if (val < MIN_UNLOCK_MIN) {
       warningTxt.innerText = `The minimal unlock period is ${MIN_UNLOCK_MIN} mins.`;
+    } else if (val > MAX_UNLOCK_MIN) {
+      warningTxt.innerText = `The maximal unlock period is ${MAX_UNLOCK_MIN} mins.`;
     } else {
       warningTxt.innerText = "";
       setUnlock(val);
