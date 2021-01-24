@@ -2,20 +2,37 @@ import { CustomEventWrapper } from "./custom-event-wrapper";
 import { HostnameSet } from "./hostname-set";
 import { RemoteCallable } from "./remote-callable.js";
 
-const NEW_SCHEDULE = "timing-monitor-new-schedule";
-const TIMES_UP = "timing-monitor-times-up";
-const MINIMAL_UNLOCK_TIME = 1000;
+const UNLOCK_TIMES_UP = "timing-monitor-times-up";
 
 class LockTimeMonitor extends RemoteCallable {
+  static get MINIMAL_UNLOCK_TIME() {
+    return 1000;
+  }
+
   #restTimeMap = new Map();
+  #eventTarget = new EventTarget();
+  #timesUpEvent = new CustomEventWrapper(UNLOCK_TIMES_UP, this.#eventTarget);
 
   constructor(name) {
     super(name);
   }
 
   /**
+   * The event that will be triggered on any host's unlock times up.
+   *
+   * The callback function format for this event is:
+   *
+   *     function (hostname: string, timePoint: number)
+   *  - hostname: the previous unlocked hostname.
+   *  - timePoint: the ending time point of unlock period.
+   */
+  get onTimesUp() {
+    return this.#timesUpEvent;
+  }
+
+  /**
    * Check if the hostname is in the unlocked list.
-   * 
+   *
    * @param {String} hostname the hostname to be checked.
    */
   isUnlocked(hostname) {
@@ -23,7 +40,7 @@ class LockTimeMonitor extends RemoteCallable {
   }
 
   /**
-   * Check the rest unlocked time of the given hostname 
+   * Check the rest unlocked time of the given hostname
    * @param {String} hostname the hostname to be checked.
    * @returns {(Number|undefined)} the rest unlock time in milliseconds,
    *   or undefined if the hostname is not in the unlock list.
@@ -57,10 +74,12 @@ class LockTimeMonitor extends RemoteCallable {
     if (duration <= MINIMAL_UNLOCK_TIME) return;
 
     this.#restTimeMap.set(hostname, timePoint);
-    
+
     let restTimeMap = this.#restTimeMap;
-    window.setInterval(function(){
+    let timesUpEvent = this.#timesUpEvent;
+    window.setInterval(function () {
       restTimeMap.delete(hostname);
+      timesUpEvent.trigger();
     }, timePoint - Date.now());
   }
 
