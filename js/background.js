@@ -48,4 +48,4 @@ function blockTab(tab, hostname) {
   DynamicPageBackend.openOnNewTab(kSelectTimeURL, {blocked_link: hostname});
 }
 
-monitor.addReaction(blockTab);
+monitor.onBrowse.addListener(blockTab);

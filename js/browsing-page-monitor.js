@@ -1,3 +1,4 @@
+import { CustomEventWrapper } from "./custom-event-wrapper.js";
 import { HostnameSet } from "./hostname-set.js";
 import {
   getUrlOfTab,
@@ -35,22 +36,29 @@ function reformat(hostname) {
   return url.hostname;
 }
 
+const BROWSING_MONITORED_PAGE = "browsing-monitored-host";
+const TAB_SWITCH_DELAY = 100;
+const WINDOW_SWITCH_DELAY = 300;
+
 /**
  * Used for monitoring browser user's browsing page.
- * 
+ *
  * Client can define a list of hostname to be monitored.
- * When user start browsing a monitored hostname, 
+ * When user start browsing a monitored hostname,
  * callback functions will be activated.
  */
 class BrowsingPageMonitor {
-  static #MONITORED_PAGE_ACTIVE = "monitored-page-active";
   #monitoredHost = new HostnameSet();
   #eventTarget = new EventTarget();
+  #browseEvent = new CustomEventWrapper(
+    BROWSING_MONITORED_PAGE,
+    this.#eventTarget
+  );
   #monitoring = true;
 
   constructor() {
     // make private member public
-    let eventTarget = this.#eventTarget;
+    let browseEvent = this.#browseEvent;
     // avoid ambiguity of "this"
     let monitor = this;
 
@@ -58,23 +66,17 @@ class BrowsingPageMonitor {
       if (!tab.url) return;
 
       console.debug(`User are browsing: ${tab.url}`);
-      
+
       // Check if the host is monitored
       let hostname = getUrlOfTab(tab).hostname;
-      let result = monitor.isMonitoring(hostname);
-      if (result == undefined) return;
-
-      // prepare for event dispatching
-      let monitoredHost = result;
-      let event = new CustomEvent(BrowsingPageMonitor.#MONITORED_PAGE_ACTIVE, {
-        detail: { tab: tab, hostname: monitoredHost },
-      });
+      let monitoredHost = monitor.isMonitoring(hostname);
+      if (monitoredHost == undefined) return;
 
       // Wait for a while to complete tab switch
-      // To avoid some weird bugs
+      // to avoid some weird bugs
       window.setTimeout(function () {
-        eventTarget.dispatchEvent(event);
-      }, 100);
+        browseEvent.trigger(tab, hostname);
+      }, TAB_SWITCH_DELAY);
     };
 
     chrome.tabs.onUpdated.addListener(function (id, changes, tab) {
@@ -93,7 +95,7 @@ class BrowsingPageMonitor {
         chrome.tabs.query({ active: true, windowId: winId }, function (tabs) {
           onPageChanged(tabs[0]);
         });
-      }, 200);
+      }, WINDOW_SWITCH_DELAY);
     });
 
     console.debug("Browsing monitor setup.");
@@ -129,18 +131,16 @@ class BrowsingPageMonitor {
   }
 
   /**
-   * Add a callback function when a web page switch to a monitored host.
-   * @param {function(chrome.tabs.Tab, String)} callback
-   * -- param1: the tab which accessed the monitored hostname,
-   * - param2: the monitored hostname.
+   * The event that will be triggered when user browse the host in blacklist.
+   * 
+   * The callback function format for this event is:
+   *
+   *     function (tab: chrome.tabs.Tab, hostname: String)
+   *  - tab: the tab that opened a monitored host
+   *  - hostname: the monitored hostname
    */
-  addReaction(callback) {
-    this.#eventTarget.addEventListener(
-      BrowsingPageMonitor.#MONITORED_PAGE_ACTIVE,
-      function (e) {
-        callback(e.detail.tab, e.detail.hostname);
-      }
-    );
+  get onBrowse() {
+    return this.#browseEvent;
   }
 }
 
