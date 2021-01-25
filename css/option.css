@@ -22,18 +22,12 @@
 
 .host-list {
   padding: 0px;
-  min-height: 40px;
+  min-height: 100px;
 }
 
-.host-list li {
-  display: block;
-  padding: 3px 0;
-  padding-left: 5px;
-  border-bottom: 1px solid gray;
-}
 
 .input-host-div {
-  border-top: 1px solid black;
+  border-top: 1px solid gray;
   position: relative;
 }
 
@@ -57,22 +51,26 @@
   right: 0;
 }
 
-.unsaved {
-  background-color: rgb(209, 236, 209);
-}
-
 .unsaved::after {
   content: " (unsaved)";
 }
 
-.deleted {
-  background-color: rgb(241, 188, 188);
-}
 .deleted .host {
   text-decoration: line-through;
 }
 .deleted::after {
   content: " (unsaved)";
+}
+
+.host-list-item {
+  display: block;
+  padding: 3px 0;
+  padding-left: 5px;
+  border-bottom: 1px solid gray;
+}
+
+.host-list-item:last-child {
+  border-bottom: 0;
 }
 
 .host-list-item button {
@@ -86,7 +84,7 @@
 }
 
 .host-list-item button:hover {
-  color: tomato;
+  color: red;
 }
 
 .host-list-item button:active {
