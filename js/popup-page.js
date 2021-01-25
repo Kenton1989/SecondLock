@@ -33,59 +33,63 @@ function convertDur(milliseconds) {
   return [hour, min, sec, mSec];
 }
 
+const TIME_BUFFER_LO = 50;
+const TIME_BUFFER_HI = 150;
+const TIME_BUFFER = (TIME_BUFFER_HI + TIME_BUFFER_LO) >> 1;
 function updateRemainTime() {
   let mSec = unlockEndTime - Date.now();
   let dur = convertDur(mSec);
   remainTimeDiv.innerText = `${pad0(dur[0])}:${pad0(dur[1])}:${pad0(dur[2])}`;
   if (mSec >= 1000) {
-    window.setTimeout(updateRemainTime, (dur[3] + 900) % 1000);
+    let len = dur[3];
+    if (len < TIME_BUFFER_LO) len += 1000 - TIME_BUFFER;
+    else if (len > TIME_BUFFER_HI) len -= TIME_BUFFER;
+    else len = 1000;
+    window.setTimeout(updateRemainTime, len);
   } else {
-    window.setTimeout(function(){
+    window.setTimeout(function () {
       window.close();
-    }, mSec+100);
+    }, mSec + 100);
   }
 }
 
-function doOnLoaded() {
-  // open the option page with special method.
-  // Using hyperlink directly will open the page in the popup window
-  let goOptions = document.getElementById("go-options");
-  goOptions.onclick = function (e) {
-    chrome.runtime.openOptionsPage();
-  };
+// open the option page with special method.
+// Using hyperlink directly will open the page in the popup window
+let goOptions = document.getElementById("go-options");
+goOptions.onclick = function (e) {
+  chrome.runtime.openOptionsPage();
+};
 
-  remainTimeDiv = document.getElementById("remain-time");
+remainTimeDiv = document.getElementById("remain-time");
 
-  // set current browsing host
-  let currentHostTxt = document.getElementById("current-host");
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    currentHost = getUrlOfTab(tabs[0]).hostname;
-    currentHostTxt.innerText = currentHost;
+/**
+ * Setup the time countdown
+ */
+function setupCountdown() {
+  // Use remote call because the browse monitor runs in the background.
+  remoteCall("browse-monitor", "isMonitoring", [currentHost],
+    function (hostname) {
+      if (!hostname) return;
+      monitoredHost = hostname;
 
-    remoteCall(
-      "browse-monitor",
-      "isMonitoring",
-      [currentHost],
-      function (hostname) {
-        if (!hostname) return;
-        monitoredHost = hostname;
-        remoteCall(
-          "lock-time-monitor",
-          "endTimePoint",
-          [monitoredHost],
-          function (endTimePoint) {
-            if (endTimePoint == undefined) {
-              remainTimeDiv.innerText = "ERROR!";
-              console.error("Accessing monitored page without unlocking.");
-              return;
-            }
-            unlockEndTime = endTimePoint;
-            updateRemainTime();
+      // Use remote call because the timing monitor runs in the background.
+      remoteCall("lock-time-monitor", "endTimePoint", [monitoredHost],
+        function (endTimePoint) {
+          if (endTimePoint == undefined) {
+            remainTimeDiv.innerText = "ERROR!";
+            console.error("Accessing monitored page without unlocking.");
+            return;
           }
-        );
-      }
-    );
-  });
+          unlockEndTime = endTimePoint;
+          updateRemainTime();
+        });
+    });
 }
 
-window.addEventListener("load", doOnLoaded);
+// set current browsing host
+let currentHostTxt = document.getElementById("current-host");
+chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+  currentHost = getUrlOfTab(tabs[0]).hostname;
+  currentHostTxt.innerText = currentHost;
+  setupCountdown();
+});
