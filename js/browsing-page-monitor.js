@@ -1,12 +1,7 @@
 import { CustomEventWrapper } from "./custom-event-wrapper.js";
 import { HostnameSet } from "./hostname-set.js";
 import { RemoteCallable } from "./remote-callable.js";
-import {
-  getUrlOfTab,
-  validHostname,
-  validIPv4Address,
-  validIPv6Hostname,
-} from "./utility.js";
+import { getUrlOfTab } from "./utility.js";
 
 // Different hostname type
 const HOST_TYPE = {
@@ -16,26 +11,6 @@ const HOST_TYPE = {
   IPV6: 6,
 };
 Object.freeze(HOST_TYPE);
-
-const HOSTNAME_CHARS = /^[a-z0-9:\-\.\[\]]*$/i;
-/**
- * Reformat a hostname into what chrome would like to display.
- * - lowercase hostname
- * - for ip hostname, omit redundancy
- *
- * @param {String} hostname a hostname
- */
-function reformat(hostname) {
-  if (!HOSTNAME_CHARS.test(hostname)) return undefined;
-  let url = undefined;
-  try {
-    url = new URL(`http://${hostname}`);
-  } catch (e) {
-    console.warn(e);
-    return undefined;
-  }
-  return url.hostname;
-}
 
 const BROWSING_MONITORED_PAGE = "browsing-monitored-host";
 const TAB_SWITCH_DELAY = 100;

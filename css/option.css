@@ -8,3 +8,93 @@
   padding: 1px;
   display: block;
 }
+
+.host-list-div {
+  background-color: white;
+  border: 1px solid gray;
+  max-width: 500px;
+  margin: 10px 0;
+}
+
+.host-list-div * {
+  margin: 0px;
+}
+
+.host-list {
+  padding: 0px;
+  min-height: 40px;
+}
+
+.host-list li {
+  display: block;
+  padding: 3px 0;
+  padding-left: 5px;
+  border-bottom: 1px solid gray;
+}
+
+.input-host-div {
+  border-top: 1px solid black;
+  position: relative;
+}
+
+.host-input {
+  width: 80%;
+  border: 0;
+  border-radius: 0;
+  padding: 3px 5px;
+  font-size: medium;
+}
+
+.add-host-btn {
+  border-radius: 0;
+  display: block;
+  width: 20%;
+  padding: 3px;
+  float: right;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.unsaved {
+  background-color: rgb(209, 236, 209);
+}
+
+.unsaved::after {
+  content: " (unsaved)";
+}
+
+.deleted {
+  background-color: rgb(241, 188, 188);
+}
+.deleted .host {
+  text-decoration: line-through;
+}
+.deleted::after {
+  content: " (unsaved)";
+}
+
+.host-list-item button {
+  float: right;
+  background-color: inherit;
+  min-width: 64px;
+  text-align: center;
+  color: black;
+  padding: 0px 5px;
+  font-size: medium;
+}
+
+.host-list-item button:hover {
+  color: tomato;
+}
+
+.host-list-item button:active {
+  color: black;
+}
+
+.host-list-item .host {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+}

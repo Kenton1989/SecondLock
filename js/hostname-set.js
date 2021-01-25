@@ -2,6 +2,7 @@ import {
   validHostname,
   validIPv4Address,
   validIPv6Hostname,
+  reformatHostname,
 } from "./utility.js";
 
 // Different hostname type
@@ -12,26 +13,6 @@ const HOST_TYPE = {
   IPV6: 6,
 };
 Object.freeze(HOST_TYPE);
-
-const HOSTNAME_CHARS = /^[a-z0-9:\-\.\[\]]*$/i;
-/**
- * Reformat a hostname into what chrome would like to display.
- * - lowercase hostname
- * - for ip hostname, omit redundancy
- *
- * @param {String} hostname a hostname
- */
-function reformat(hostname) {
-  if (!HOSTNAME_CHARS.test(hostname)) return undefined;
-  let url = undefined;
-  try {
-    url = new URL(`http://${hostname}`);
-  } catch (e) {
-    console.warn(e);
-    return undefined;
-  }
-  return url.hostname;
-}
 
 /**
  * A class of set of hostname.
@@ -60,7 +41,7 @@ class HostnameSet {
    *    If the hostname is not monitored, return undefined
    */
   has(hostname) {
-    hostname = reformat(hostname);
+    hostname = reformatHostname(hostname);
     if (!hostname) return undefined;
 
     let result = this.#matchingRegex.exec(hostname);
@@ -139,7 +120,7 @@ class HostnameSet {
    * @returns {boolean} true if a hostname is successfully added.
    */
   #addToMap(hostname) {
-    let formattedHost = reformat(hostname);
+    let formattedHost = reformatHostname(hostname);
     if (!formattedHost) {
       console.warn(`Invalid hostname: ${hostname}`);
       return false;
@@ -166,7 +147,7 @@ class HostnameSet {
    * @returns {boolean} true if a hostname is removed from the map
    */
   #removeFromMap(hostname) {
-    let formattedHost = reformat(hostname);
+    let formattedHost = reformatHostname(hostname);
     if (!formattedHost) {
       console.warn(`Invalid hostname: ${hostname}`);
       return false;

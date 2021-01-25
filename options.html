@@ -1,48 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/option.css" />
-    <title class="option-title">Options</title>
-  </head>
-  <body>
-    <header>
-      <h1 class="ext-name">TimeLock</h1>
-      <h2 class="option-title">Options</h2>
-    </header>
-    <main class="container">
-      <aside>
-        <ul id="nav-list"></ul>
-      </aside>
-      <div id="main-div">
-        <section id="general">
-          <h2 class="section-title">General</h2>
-          <input type="checkbox" id="activate" name="activate" />
-          <label for="activate"> Activate Lock </label>
-          <button id="save-options">Save</button>
-        </section>
-        <section id="debug">
-          <h2 class="section-title">Debug</h2>
-          <a id="go-select" target="_blank" href="select-time.html">To Selection Page</a>
-          <br />
-          <a id="go-block" target="_blank" href="blocking.html">To Blocking Page</a>
-        </section>
-      </div>
-    </main>
-    <footer>
-      &copy;2021-<span id="copy-end-year">2020</span> Kenton. All rights
-      reserved.
-    </footer>
-    
-    <div style="display: none;">
-      <ul>
-        <li class="nav-item">
-          <a href="#">Something</a>
-        </li>
-      </ul>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/option.css" />
+  <title class="option-title">Options</title>
+</head>
+
+<body>
+  <header>
+    <h1 class="ext-name">TimeLock</h1>
+    <h2 class="option-title">Options</h2>
+  </header>
+  <main class="container">
+    <aside>
+      <ul id="nav-list"></ul>
+    </aside>
+    <div id="main-div">
+      <section id="general">
+        <h2 class="section-title">General</h2>
+        <input type="checkbox" id="activate" name="activate" />
+        <label for="activate"> Activate Lock </label>
+        <button id="save-options">Save</button>
+      </section>
+      <section id="debug">
+        <h2 class="section-title">Debug</h2>
+        <a id="go-select" target="_blank" href="select-time.html">To Selection Page</a>
+        <br />
+        <a id="go-block" target="_blank" href="blocking.html">To Blocking Page</a>
+      </section>
+      <section id="monitored-host">
+        <h2 class="section-title">Monitored Host</h2>
+        <div class="host-list-div">
+          <ul class="host-list">
+          </ul>
+          <div class="input-host-div">
+            <input type="url" name="host-input" class="host-input">
+            <button class="add-host-btn">Add</button>
+          </div>
+        </div>
+        <button class="save-host-btn">Save</button>
+        <span class="warning"></span>
+      </section>
     </div>
-    </template>
-    <script type="module" src="js/options-page.js"></script>
-  </body>
+  </main>
+  <footer>
+    &copy;2021-<span id="copy-end-year">2020</span> Kenton. All rights
+    reserved.
+  </footer>
+
+  <div id="templates" style="display: none;">
+    <li class="nav-item">
+      <a href="#">Something</a>
+    </li>
+
+    <li class="host-list-item">
+      <span class="host">hostname</span><button class="undo-btn">[undo]</button><button
+        class="delete-btn">[delete]</button>
+    </li>
+  </div>
+  </template>
+  <script type="module" src="js/options-page.js"></script>
+</body>
+
 </html>
