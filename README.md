@@ -26,6 +26,8 @@ Inspired by [Mr. He's video][mr_he_video].
 - 完成计时模块(lock-timing-monitor.js)
 - 完成两个障碍界面的功能
 - 完成核心功能1：时间选择与计时拦截
+- 完成BrowserAction中的倒计时显示
+- 初步完成黑名单UI
 
 ### 2021/01/24
 - 完善动态页面实现
@@ -60,7 +62,7 @@ Inspired by [Mr. He's video][mr_he_video].
 - [x] UI设计
 - [x] 整体模块框架设计
 - [x] 打开网站前要确定使用时间(核心功能1)
-- [ ] 倒计时显示
+- [x] 倒计时显示
 - [ ] 白名单/黑名单(核心功能2)
 - [ ] 弄个好看的icon
 - [ ] 弄好Readme（格式和语言）
