@@ -5,21 +5,17 @@ import { closeCurrentTab, setTextForClass } from "./utility.js";
 
 let blockedHost = undefined;
 
-function doOnLoaded() {
-  let closeAllBtn = document.getElementById("close-all-about");
-  
-  DynamicPage.dynamicInit(function (args) {
-    blockedHost = args.blockedHost;
-    
-    setTextForClass("blocked-link", blockedHost);
-    
-    autoUnblock(blockedHost);
+let closeAllBtn = document.getElementById("close-all-about");
 
-    closeAllBtn.onclick = function () {
-      notifyUnblock(blockedHost);
-      closeCurrentTab();
-    };
-  });
-}
+DynamicPage.dynamicInit(function (args) {
+  blockedHost = args.blockedHost;
 
-window.addEventListener("load", doOnLoaded);
+  setTextForClass("blocked-link", blockedHost);
+
+  autoUnblock(blockedHost);
+
+  closeAllBtn.onclick = function () {
+    notifyUnblock(blockedHost);
+    closeCurrentTab();
+  };
+});

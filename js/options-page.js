@@ -123,16 +123,13 @@ function setUpHostListDiv(hosts, hostListDiv, onSaveHostList = function () {}) {
 
 setupSectionNav();
 
-// read element templates
-templates = document.getElementById("templates");
-
 /**
  * Make a host list item.
  * @param {String} host the hostname stored in the item
  */
 let makeHostListItem = (function () {
   // Local variable encapsulation
-  let tempItem = templates.getElementsByClassName("host-list-item")[0];
+  let tempItem = document.getElementsByClassName("host-list-item")[0];
   let hostnameTxt = tempItem.getElementsByClassName("host")[0];
 
   // actual function
