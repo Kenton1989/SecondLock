@@ -1,5 +1,6 @@
 import { BrowsingPageMonitor } from "./browsing-page-monitor.js";
 import { LockTimeMonitor } from "./lock-timing-monitor.js";
+import { myBlackList } from "./my-blacklist.js";
 import { blockAllTabsOf, blockPageToSelectTime } from "./tab-blocker.js";
 
 var activated = true;
@@ -25,7 +26,7 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
 let monitor = new BrowsingPageMonitor("browse-monitor");
 let unlockTiming = new LockTimeMonitor("lock-time-monitor");
 
-let blackList = ["bilibili.com", "youtube.com", "localhost"];
+let blackList = myBlackList;
 monitor.blackList.addList(blackList);
 
 function selectTime(tab, hostname) {
