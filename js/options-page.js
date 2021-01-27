@@ -10,6 +10,41 @@ import {
 } from "./utility.js";
 
 /**
+ * Make a host list item.
+ * @param {String} host the hostname stored in the item
+ */
+let makeHostListItem = (function () {
+  // Local variable encapsulation
+  let tempItem = document.getElementsByClassName("host-list-item")[0];
+  let hostnameTxt = tempItem.getElementsByClassName("host")[0];
+
+  // actual function
+  return function (host) {
+    // Set hostname before clone the node.
+    hostnameTxt.innerText = host;
+    let item = tempItem.cloneNode(true);
+    let deleteBtn = item.getElementsByClassName("delete-btn")[0];
+    let undoBtn = item.getElementsByClassName("undo-btn")[0];
+
+    undoBtn.style.display = "none";
+    // delete and undo buttons will hide themselves, display the other one
+    // and modify the deletion tag of this item
+    deleteBtn.onclick = function () {
+      item.classList.add("deleted");
+      deleteBtn.style.display = "none";
+      undoBtn.style.display = "block";
+    };
+    undoBtn.onclick = function () {
+      item.classList.remove("deleted");
+      undoBtn.style.display = "none";
+      deleteBtn.style.display = "block";
+    };
+
+    return item;
+  };
+})();
+
+/**
  * Add a list of hostname into the given element
  * @param {String[]} hosts array of hostname
  * @param {Element} hostListElement the element to put the list
@@ -123,40 +158,6 @@ function setUpHostListDiv(hosts, hostListDiv, onSaveHostList = function () {}) {
 
 setupSectionNav();
 
-/**
- * Make a host list item.
- * @param {String} host the hostname stored in the item
- */
-let makeHostListItem = (function () {
-  // Local variable encapsulation
-  let tempItem = document.getElementsByClassName("host-list-item")[0];
-  let hostnameTxt = tempItem.getElementsByClassName("host")[0];
-
-  // actual function
-  return function (host) {
-    // Set hostname before clone the node.
-    hostnameTxt.innerText = host;
-    let item = tempItem.cloneNode(true);
-    let deleteBtn = item.getElementsByClassName("delete-btn")[0];
-    let undoBtn = item.getElementsByClassName("undo-btn")[0];
-
-    undoBtn.style.display = "none";
-    // delete and undo buttons will hide themselves, display the other one
-    // and modify the deletion tag of this item
-    deleteBtn.onclick = function () {
-      item.classList.add("deleted");
-      deleteBtn.style.display = "none";
-      undoBtn.style.display = "block";
-    };
-    undoBtn.onclick = function () {
-      item.classList.remove("deleted");
-      undoBtn.style.display = "none";
-      deleteBtn.style.display = "block";
-    };
-
-    return item;
-  };
-})();
 
 // Set up monitored host list
 let monitoredHostDiv = document.getElementById("monitored-host");
@@ -166,6 +167,10 @@ setUpHostListDiv(hosts, monitoredHostDiv, function (list) {
   console.log(list);
   setHostList(list, hostList);
 });
+
+// Set storage usage
+
+let storageEle = document.getElementById("storage-used");
 
 //////////////////// Old dirty codes /////////////////////
 let activate = document.getElementById("activate");

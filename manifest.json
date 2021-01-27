@@ -1,31 +1,29 @@
 {
-    "manifest_version": 2,
+  "manifest_version": 2,
 
-    "name": "TimeLock",
-    "version": "0.0.1",
-    "description": "Lock your time with your intension.",
-    
-    "default_locale": "en",
-    
-    "permissions": [
-      "tabs", "storage"
-    ],
+  "name": "TimeLock",
+  "version": "0.0.1",
+  "description": "Lock your time with your intension.",
 
-    "background": {
-      "page": "background.html",
-      "persistent": false
-    },
+  "default_locale": "en",
 
-    "options_page": "options.html",
-    
-    "browser_action": {
-      "default_popup": "popup.html",
-      "default_icon": {
-        "512": "images/time-lock-512.png"
-      }
-    },
-    
-    "icons": {
+  "permissions": ["tabs", "storage", "unlimitedStorage"],
+
+  "background": {
+    "page": "background.html",
+    "persistent": false
+  },
+
+  "options_page": "options.html",
+
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
       "512": "images/time-lock-512.png"
     }
+  },
+
+  "icons": {
+    "512": "images/time-lock-512.png"
   }
+}

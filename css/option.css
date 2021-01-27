@@ -7,6 +7,7 @@
   width: 80%;
   padding: 1px;
   display: block;
+  position: relative;
 }
 
 .host-list-div {
@@ -95,4 +96,16 @@
   display: inline-block;
   max-width: 100%;
   overflow: hidden;
+}
+
+
+#storage-used {
+  display: block;
+  margin: 0;
+  position: sticky;
+  float: right;
+  top: 0;
+  right: 0;
+  border-bottom-left-radius: 3px;
+  background-color: var(--light-color);
 }
