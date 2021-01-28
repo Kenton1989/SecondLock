@@ -11,3 +11,7 @@ main {
 #buttons button {
   margin: 5px 5px;
 }
+
+#other-length {
+  margin: 10px 0;
+}

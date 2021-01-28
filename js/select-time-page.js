@@ -1,8 +1,13 @@
 import {} from "./common-page.js";
 import { DynamicPage } from "./dynamic-page.js";
 import { RemoteCallable } from "./remote-callable.js";
-import { autoUnblock } from "./tab-blocker.js";
-import { blinkElement, setTextForClass } from "./utility.js";
+import { autoUnblock, notifyUnblock } from "./tab-blocker.js";
+import {
+  blinkElement,
+  closeCurrentTab,
+  setTextForClass,
+  validHostname,
+} from "./utility.js";
 
 let minUnit = chrome.i18n.getMessage("minute_single");
 let minUnits = chrome.i18n.getMessage("minute_plural");
@@ -35,6 +40,23 @@ DynamicPage.dynamicInit(function (args) {
   blockedHost = args.blockedHost;
   setTextForClass("blocked-link", blockedHost);
   autoUnblock(blockedHost);
+
+  let closeAllBtn = document.getElementById("close-all");
+  let pattern = blockedHost;
+  if (validHostname(blockedHost)) {
+    pattern = `*.${blockedHost}`;
+  }
+  closeAllBtn.onclick = function () {
+    // close all page about the hostname
+    chrome.tabs.query({ url: `*://${pattern}/*` }, function (tabs) {
+      let tabIds = tabs.map(t=>t.id);
+      chrome.tabs.remove(tabIds, function () {
+        // Close time-selection and blocking page about the hostname
+        notifyUnblock(blockedHost);
+        closeCurrentTab();
+      });
+    });
+  };
 });
 
 // Set where to show warning
@@ -82,5 +104,3 @@ enterTimeLine.onkeydown = function (e) {
   // Shortcut for entering
   if (e.key == "Enter") readUserInputTime();
 };
-
-window.addEventListener("load", doOnLoaded);
