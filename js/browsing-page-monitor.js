@@ -87,7 +87,7 @@ class BrowsingPageMonitor extends RemoteCallable {
   }
 
   set active(val) {
-    val = new Boolean(val).valueOf();
+    val = Boolean(val);
     this.#monitoring = val;
   }
 
