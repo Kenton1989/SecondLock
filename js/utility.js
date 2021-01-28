@@ -41,7 +41,7 @@ function validIPv4Address(str) {
 }
 
 // Patterns used to match a IPv6 Address.
-const k0ToFFFF = "([0-9A-F]{1,4})";
+const k0ToFFFF = "([\dA-F]{1,4})";
 const kIPv6NoCompress = `(${k0ToFFFF}:){7}${k0ToFFFF}`;
 const kIPv6Parts = `((${k0ToFFFF}(:${k0ToFFFF}){0,6})?)`;
 const kIPv6Compressed = `${kIPv6Parts}::${kIPv6Parts}`;

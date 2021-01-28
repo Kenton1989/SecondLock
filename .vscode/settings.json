@@ -4,5 +4,9 @@
         "chrome-ext"
     ],
     "i18n-ally.keystyle": "nested",
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
+    "svg.preview.background": "transparent",
+    "cSpell.words": [
+        "timelock"
+    ]
 }

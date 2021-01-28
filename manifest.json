@@ -19,11 +19,11 @@
   "browser_action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "512": "images/time-lock-512.png"
+      "256": "images/timelock-256.png"
     }
   },
 
   "icons": {
-    "512": "images/time-lock-512.png"
+    "256": "images/timelock-256.png"
   }
 }
