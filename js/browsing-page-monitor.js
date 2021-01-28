@@ -71,6 +71,8 @@ class BrowsingPageMonitor extends RemoteCallable {
       if (!monitor.active || winId == chrome.windows.WINDOW_ID_NONE) return;
       window.setTimeout(function () {
         chrome.tabs.query({ active: true, windowId: winId }, function (tabs) {
+          // If the all tabs are closed before query.
+          if (tabs.length < 1) return;
           onPageChanged(tabs[0]);
         });
       }, WINDOW_SWITCH_DELAY);
