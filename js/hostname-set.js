@@ -69,7 +69,7 @@ class HostnameSet {
 
   /**
    * add a list of hostname into the set
-   * @param {String[]} hostnameList the list of hostname to be added
+   * @param {Iterable<string>} hostnameList the list of hostname to be added
    */
   addList(hostnameList) {
     let dirty = false;
@@ -94,7 +94,7 @@ class HostnameSet {
 
   /**
    * Remove a list of hostname from the set
-   * @param {String[]} hostnameList the list of hostname to be removed
+   * @param {Iterable<string>} hostnameList the list of hostname to be removed
    */
   removeList(hostnameList) {
     let dirty = false;
@@ -112,6 +112,22 @@ class HostnameSet {
   clear() {
     this.#hostMap.clear();
     this.#matchingRegex = /$^/;
+  }
+
+  /**
+   * Reset the new hostname set as the given list
+   * @param {Iterable<string>} newHostList new hostname list
+   */
+  reset(newHostList = []) {
+    this.clear();
+    this.addList(newHostList);
+  }
+
+  /**
+   * Make hostname set iterable.
+   */
+  [Symbol.iterator]() {
+    return this.#hostMap.keys();
   }
 
   /**
