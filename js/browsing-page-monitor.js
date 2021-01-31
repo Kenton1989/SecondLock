@@ -32,7 +32,7 @@ class BrowsingPageMonitor extends RemoteCallable {
   );
   #monitoring = true;
 
-  constructor(name) {
+  constructor(name, configs) {
     super(name);
 
     // make private member public

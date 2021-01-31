@@ -13,7 +13,7 @@ class LockTimeMonitor extends RemoteCallable {
   #eventTarget = new EventTarget();
   #timesUpEvent = new CustomEventWrapper(UNLOCK_TIMES_UP, this.#eventTarget);
 
-  constructor(name) {
+  constructor(name, config) {
     super(name);
   }
 

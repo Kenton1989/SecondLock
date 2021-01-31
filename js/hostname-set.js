@@ -72,6 +72,9 @@ class HostnameSet {
    * @param {Iterable<string>} hostnameList the list of hostname to be added
    */
   addList(hostnameList) {
+    let hostnameL = [...hostnameList];
+    // Sort according to length
+    hostnameL.sort((a, b)=>a.length - b.length);
     let dirty = false;
     for (const val of hostnameList) {
       dirty = this.#addToMap(val) || dirty;
