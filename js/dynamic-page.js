@@ -33,24 +33,38 @@ class DynamicPage {
     if (DynamicPage.#setup) return;
     DynamicPage.#setup = true;
 
-    // Request arguments
+    // Active Request arguments
     chrome.runtime.sendMessage(
-      { dynamic_page_init_request: true },
+      { dynamicPageInitRequest: true },
       {},
       function (response) {
-        if (DynamicPage.#args != undefined) {
-          throw new Error("Multiple set of arguments are passed in.");
-        }
-        if (!response || !response.dynamic_page_init_args) {
+        // No argument received
+        if (!response) {
           throw new Error("Failed to get page arguments.");
         }
-        // Buffering the argument
-        DynamicPage.#args = response.dynamic_page_init_args;
-        // Trigger the argument reception event
-        let args_arrive_event = new Event(DynamicPage.#ARGS_BUFFERED_EVENT_KEY);
-        document.dispatchEvent(args_arrive_event);
+        // Argument haven't been stored in the backend
+        if (!response.dynamicPageInitArgs) { return; }
+        
+        DynamicPage.#setArgs(response.dynamicPageInitArgs);
       }
     );
+
+    // Passive receive argument
+    chrome.runtime.onMessage.addListener(function (message) {
+      if (message.dynamicPageInitArgs) {
+        DynamicPage.#setArgs(message.dynamicPageInitArgs);
+      }
+    });
+  }
+
+  static #setArgs(args) {
+    // Already buffered
+    if (DynamicPage.#args != undefined) { return; }
+    // Buffering the argument
+    DynamicPage.#args = args;
+    // Trigger the argument reception event
+    let argsArriveEvent = new Event(DynamicPage.#ARGS_BUFFERED_EVENT_KEY);
+    document.dispatchEvent(argsArriveEvent);
   }
 }
 

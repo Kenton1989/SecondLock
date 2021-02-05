@@ -13,10 +13,10 @@ class DynamicPageBackend {
       sender,
       sendResponse
     ) {
-      if (message.dynamic_page_init_request) {
+      if (message.dynamicPageInitRequest) {
         let tabId = sender.tab.id;
         let args = DynamicPageBackend.#tabArgs.get(tabId);
-        sendResponse({ dynamic_page_init_args: args });
+        sendResponse({ dynamicPageInitArgs: args });
       }
     });
 
@@ -50,7 +50,7 @@ class DynamicPageBackend {
    * @param {any} pageArgs the arguments passed to the dynamic page
    * @param {*} tabProperties the properties of the new tab passed to the method
    * chrome.tabs.create(). The tabProperties.url will be ignored if it is defined.
-   * @param {function(any)} callback the callback after the tab is created. 1st parameter is newly created tab object.
+   * @param {function(chrome.tabs.Tab)} callback the callback after the tab is created.
    */
   static openOnNewTab(
     url,
@@ -62,6 +62,9 @@ class DynamicPageBackend {
     chrome.tabs.create(tabProperties, function (tab) {
       DynamicPageBackend.#tabArgs.set(tab.id, pageArgs);
       console.debug(`Created tab #${tab.id} opened with URL:${url}.`);
+      // Active send arguments
+      chrome.tabs.sendMessage(tab.id, { dynamicPageInitArgs: pageArgs });
+      console.log("Sent argument: "+pageArgs)
       callback(tab);
     });
   }
