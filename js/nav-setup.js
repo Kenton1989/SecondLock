@@ -1,6 +1,8 @@
+import { blinkElement } from "./utility.js";
+
 /**
  * Setup the navigation list of the "section" elements in the current html page.
- * 
+ *
  * Assumptions on the html page:
  * - There is a list item template with class "nav-item".
  * - There is a link element ("a") in the item template.
@@ -14,17 +16,20 @@ function setupSectionNav() {
   let navList = document.getElementById("nav-list");
   let tempItem = document.getElementsByClassName("nav-item")[0];
   // console.debug(tempItem)
-  let link = tempItem.getElementsByTagName("a")[0];
   // console.debug(link)
 
   for (const sec of sections) {
-    let title = sec.getElementsByClassName("section-title")[0].innerText;
-    link.href = "#"+sec.id;
-    link.innerText = title;
-    // console.debug(sec)
+    let title = sec.getElementsByClassName("section-title")[0];
     let copy = tempItem.cloneNode(true);
+    let link = copy.getElementsByTagName("a")[0];
+    link.href = "#" + sec.id;
+    link.innerText = title.innerText;
+    link.onclick = function () {
+      blinkElement(title, 5);
+    };
+    // console.debug(sec)
     navList.appendChild(copy);
   }
-};
+}
 
 export { setupSectionNav };

@@ -130,24 +130,25 @@ function reformatHostname(hostname) {
 
 let blinkTimeoutMap = new Map();
 /**
- * Make a element blinking for finite times.
+ * Make a element blinking for finite times by setting its opacity.
  * @param {Element} element the doc element to blink
  * @param {number} times blink for how many times
  * @param {number} period the period of blinking in milliseconds
- * @param {string} display the way to display the element
+ * @param {string} display whether the element is shown after blinking
  */
-function blinkElement(element, times = 3, period = 200, display = "inline") {
-  element.style.display = display;
+function blinkElement(element, times = 3, period = 200, display = true) {
   if (times <= 0) {
+    element.style.opacity = (display ? 1 : 0);
     return;
+  } else {
+    element.style.opacity = 1;
   }
-  
+
   let existing = blinkTimeoutMap.get(element);
   if (existing != undefined) window.clearTimeout(existing);
-  
-  
+    
   let timeoutId = window.setTimeout(function () {
-    element.style.display = "none";
+    element.style.opacity = 0;
     let timeoutId = window.setTimeout(function () {
       blinkElement(element, times - 1, period);
     }, period / 2);

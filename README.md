@@ -23,6 +23,11 @@ Inspired by [Mr. He's video][mr_he_video].
 
 # Update
 
+### 2021/01/26 ~ 02/04
+- 小修小补
+- Celeste真好玩
+- 课业好烦
+
 ### 2021/01/25
 
 - 完善计时模块
