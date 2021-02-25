@@ -6,13 +6,12 @@ import {
 } from "./utility.js";
 
 // Different hostname type
-const HOST_TYPE = {
+const HOST_TYPE = Object.freeze({
   UNKNOWN: 0,
   NORMAL: 1,
   IPV4: 4,
   IPV6: 6,
-};
-Object.freeze(HOST_TYPE);
+});
 
 /**
  * A class of set of hostname.

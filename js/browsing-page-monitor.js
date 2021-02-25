@@ -31,7 +31,7 @@ class BrowsingPageMonitor extends RemoteCallable {
     this.#eventTarget
   );
   #monitoring = true;
-  #protocol =  new Set(["http", "https"]);
+  #protocol =  new Set(["http:", "https:"]);
 
   constructor(name, configs) {
     super(name);
@@ -49,7 +49,8 @@ class BrowsingPageMonitor extends RemoteCallable {
       let url = getUrlOfTab(tab);
 
       // Check if the protocol is monitored
-      if (!this.monitoredProtocol.has(url.protocol)) {
+      if (!monitor.monitoredProtocol.has(url.protocol)) {
+        console.debug("Protocol "+url.protocol+" is not monitored.");
         return;
       }
       
@@ -109,14 +110,17 @@ class BrowsingPageMonitor extends RemoteCallable {
   }
 
   /**
-   * Check if a hostname is monitored.
-   * @param {String} hostname the hostname to be checked.
-   * @returns {(String|undefined)} the actual monitored host suffix if the hostname is monitored.
-   *    If the hostname is not monitored, return undefined
+   * Check if a web page is monitored.
+   * @param {string} url the URL of web page to be checked.
+   * @returns {(string|undefined)} the actual monitored host suffix if the web page is monitored.
+   *    If the web page is not monitored, return undefined
    */
-  isMonitoring(hostname) {
+  isMonitoring(url) {
     if (!this.active) return undefined;
-    return this.#monitoredHost.has(hostname);
+    let urlObj = new URL(url);
+    if (!this.monitoredProtocol.has(urlObj.protocol)) return undefined;
+
+    return this.#monitoredHost.has(url.hostname);
   }
 
   /**

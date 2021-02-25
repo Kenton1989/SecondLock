@@ -1,7 +1,7 @@
 import { remoteCall } from "./remote-callable.js";
 import { getUrlOfTab } from "./utility.js";
 
-let currentHost = "";
+let currentPageUrl = "";
 let monitoredHost = undefined;
 let unlockEndTime = undefined;
 let remainTimeDiv = undefined;
@@ -36,6 +36,9 @@ function convertDur(milliseconds) {
 const TIME_BUFFER_LO = 50;
 const TIME_BUFFER_HI = 150;
 const TIME_BUFFER = (TIME_BUFFER_HI + TIME_BUFFER_LO) >> 1;
+
+remainTimeDiv = document.getElementById("remain-time");
+
 function updateRemainTime() {
   let mSec = unlockEndTime - Date.now();
   let dur = convertDur(mSec);
@@ -60,14 +63,13 @@ goOptions.onclick = function (e) {
   chrome.runtime.openOptionsPage();
 };
 
-remainTimeDiv = document.getElementById("remain-time");
 
 /**
  * Setup the time countdown
  */
 function setupCountdown() {
   // Use remote call because the browse monitor runs in the background.
-  remoteCall("browse-monitor", "isMonitoring", [currentHost],
+  remoteCall("browse-monitor", "isMonitoring", [currentPageUrl],
     function (hostname) {
       if (!hostname) return;
       monitoredHost = hostname;
@@ -89,7 +91,8 @@ function setupCountdown() {
 // set current browsing host
 let currentHostTxt = document.getElementById("current-host");
 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-  currentHost = getUrlOfTab(tabs[0]).hostname;
-  currentHostTxt.innerText = currentHost;
+  tab = tabs[0];
+  currentPageUrl = tab.url;
+  currentHostTxt.innerText = getUrlOfTab(tab).hostname;
   setupCountdown();
 });
