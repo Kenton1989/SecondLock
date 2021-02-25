@@ -54,7 +54,7 @@ class Option {
       }
     });
   }
-  
+
   /**
    * Get the cached value
    */
@@ -78,9 +78,9 @@ class Option {
   /**
    * Set the value in the storage, the cached value will
    * be updated after setting.
-   * 
+   *
    * @param {*} value the new value
-   * @param {function()} callback the callback after the setting is done, 
+   * @param {function()} callback the callback after the setting is done,
    *  regardless if the value is changed.
    *  NOTE: to check if the value is changed, use function doOnUpdated()
    */
@@ -91,15 +91,16 @@ class Option {
     }
     localStorage.set(this.#storageKey, value, callback);
   }
+
   /**
-   * Set callback when cached value is updated. 
-   * 
-   * This function can be used as a getter. In this case, if this.getCached() != undefined, 
+   * Set callback when cached value is updated.
+   *
+   * This function can be used as a getter. In this case, if this.getCached() != undefined,
    * the callback be called immediately with parameters: (this.getCached(), undefined).
-   * 
-   * NOTE: when value in the storage is updated, cached value will change accordingly. 
+   *
+   * NOTE: when value in the storage is updated, cached value will change accordingly.
    * Therefore, the callback will be triggered when value in the storage changed.
-   * 
+   *
    * @param {function(any, any)} callback the callback function on update
    *     - arg 0: the new value of the option
    *     - arg 1: the old value of the option

@@ -87,7 +87,6 @@ function setupCountdown() {
         });
     });
 }
-
 // set current browsing host
 let currentHostTxt = document.getElementById("current-host");
 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
