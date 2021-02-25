@@ -144,13 +144,14 @@ function blinkElement(element, times = 3, period = 200, display = true) {
     element.style.opacity = 1;
   }
 
+  // Clear existing timeout managing blinking of this element
   let existing = blinkTimeoutMap.get(element);
   if (existing != undefined) window.clearTimeout(existing);
     
   let timeoutId = window.setTimeout(function () {
     element.style.opacity = 0;
     let timeoutId = window.setTimeout(function () {
-      blinkElement(element, times - 1, period);
+      blinkElement(element, times - 1, period, display);
     }, period / 2);
     blinkTimeoutMap.set(element, timeoutId);
   }, period / 2);
