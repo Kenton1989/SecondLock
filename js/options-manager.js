@@ -1,20 +1,40 @@
 import { CustomEventWrapper } from "./custom-event-wrapper.js";
-import { mainStorage } from "./storage.js";
 
+/**
+ * All valid options
+ */
 const allOptionNameList = ["monitoredList", "activated"];
 const allOptionNameSet = new Set(allOptionNameList);
 
+/**
+ * short name for storage lib
+ */
+const localStorage = chrome.storage.local;
+// const syncStorage = chrome.storage.sync;
+
+/**
+ * Cache the value of the given option from the storage.
+ * Notify all listener when the value of option updated.
+ */
 class Option {
   #eventTarget;
   #onUpdatedEvent;
   #storageKey;
   #value = undefined;
-  constructor(name, eventTarget = undefined) {
+
+  /**
+   * construct a option with the given EventTarget object to
+   * manage the option updating event
+   * @param {String} name name of the option
+   * @param {EventTarget} eventTarget the given event target
+   */
+  constructor(name, eventTarget = document) {
     if (!allOptionNameSet.has(name)) {
       throw new ReferenceError(`Create invalid option: ${thisOption}.`);
     }
 
-    if (eventTarget == undefined) this.eventTarget = new EventTarget();
+    this.#eventTarget = eventTarget;
+
     this.#onUpdatedEvent = new CustomEventWrapper(
       `${name}-option-updated`,
       this.#eventTarget
@@ -22,21 +42,31 @@ class Option {
 
     this.#storageKey = `${name}Option`;
     let thisOption = this;
-    mainStorage.get(this.#storageKey, function (value) {
+    localStorage.get(this.#storageKey, function (value) {
       thisOption.setCached(value);
     });
 
     // make private member accessible in the callback.
     let storageKey = this.#storageKey;
-    mainStorage.onChanged.addListener(function (changes) {
+    localStorage.onChanged.addListener(function (changes) {
       if (changes[storageKey]) {
         thisOption.setCached(changes[storageKey].newValue);
       }
     });
   }
+  
+  /**
+   * Get the cached value
+   */
   getCached() {
     return this.#value;
   }
+
+  /**
+   * Set the value in the cache.
+   * The value in the storage will not be affected
+   * @param {*} value new value
+   */
   setCached(value) {
     if (Object.is(value, this.#value)) return;
 
@@ -44,22 +74,56 @@ class Option {
     this.#value = value;
     this.#onUpdatedEvent.trigger(value, oldValue);
   }
+
+  /**
+   * Set the value in the storage, the cached value will
+   * be updated after setting.
+   * 
+   * @param {*} value the new value
+   * @param {function()} callback the callback after the setting is done, 
+   *  regardless if the value is changed.
+   *  NOTE: to check if the value is changed, use function doOnUpdated()
+   */
   set(value, callback = undefined) {
     if (Object.is(value, this.#value)) {
       callback && callback();
       return;
     }
-    mainStorage.set(this.#storageKey, value, callback);
+    localStorage.set(this.#storageKey, value, callback);
   }
-  doOnUpdated(callback) {
-    if (this.#value != undefined) callback(this.#value);
+  /**
+   * Set callback when cached value is updated. 
+   * 
+   * This function can be used as a getter. In this case, if this.getCached() != undefined, 
+   * the callback be called immediately with parameters: (this.getCached(), undefined).
+   * 
+   * NOTE: when value in the storage is updated, cached value will change accordingly. 
+   * Therefore, the callback will be triggered when value in the storage changed.
+   * 
+   * @param {function(any, any)} callback the callback function on update
+   *     - arg 0: the new value of the option
+   *     - arg 1: the old value of the option
+   * @param {boolean} asGetter whether or not call the callback with (current value, undefined)
+   *    immediately.
+   */
+  doOnUpdated(callback, asGetter = true) {
+    if (this.#value != undefined && asGetter) callback(this.#value, undefined);
     this.#onUpdatedEvent.addListener(callback);
   }
 }
 
+/**
+ * A collection of options
+ * The options can be accessed as properties
+ */
 class OptionCollection {
   #eventTarget = new EventTarget();
 
+  /**
+   * Create a option collection with the given options
+   * @param  {...any} optionNames the option name to be included
+   * @throws when optionNames contains option that is not in the allOptionNameList
+   */
   constructor(...optionNames) {
     // remove duplication
     let optionSet = new Set(optionNames);
