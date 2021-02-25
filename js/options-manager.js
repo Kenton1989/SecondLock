@@ -1,8 +1,8 @@
 import { CustomEventWrapper } from "./custom-event-wrapper.js";
 import { mainStorage } from "./storage.js";
 
-let allOptionNameList = ["monitoredList", "activated"];
-let allOptionNameSet = new Set(allOptionNameList);
+const allOptionNameList = ["monitoredList", "activated"];
+const allOptionNameSet = new Set(allOptionNameList);
 
 class Option {
   #eventTarget;

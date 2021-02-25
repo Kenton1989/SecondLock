@@ -73,8 +73,9 @@ class HostnameSet {
    */
   addList(hostnameList) {
     let hostnameL = [...hostnameList];
-    // Sort according to length
-    hostnameL.sort((a, b)=>a.length - b.length);
+    // Sort according to length in decreasing order
+    // This guarantee that subdomain is processed before its parent domain
+    hostnameL.sort((a, b)=>b.length - a.length);
     let dirty = false;
     for (const val of hostnameList) {
       dirty = this.#addToMap(val) || dirty;

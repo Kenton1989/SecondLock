@@ -31,6 +31,7 @@ class BrowsingPageMonitor extends RemoteCallable {
     this.#eventTarget
   );
   #monitoring = true;
+  #protocol =  new Set(["http", "https"]);
 
   constructor(name, configs) {
     super(name);
@@ -40,13 +41,20 @@ class BrowsingPageMonitor extends RemoteCallable {
     // avoid ambiguity of "this"
     let monitor = this;
 
-    let onPageChanged = function (tab) {
-      if (!tab.url) return;
+    let onBrowsingPageChanged = function (tab) {
+      if (!tab || !tab.url) return;
 
       console.debug(`User are browsing: ${tab.url}`);
 
+      let url = getUrlOfTab(tab);
+
+      // Check if the protocol is monitored
+      if (!this.monitoredProtocol.has(url.protocol)) {
+        return;
+      }
+      
       // Check if the host is monitored
-      let hostname = getUrlOfTab(tab).hostname;
+      let hostname = url.hostname;
       let monitoredHost = monitor.isMonitoring(hostname);
       if (monitoredHost == undefined) return;
 
@@ -59,12 +67,12 @@ class BrowsingPageMonitor extends RemoteCallable {
 
     chrome.tabs.onUpdated.addListener(function (id, changes, tab) {
       if (!monitor.active || !tab.active || !changes.url) return;
-      onPageChanged(tab);
+      onBrowsingPageChanged(tab);
     });
 
     chrome.tabs.onActivated.addListener(function (tabInfo) {
       if (!monitor.active) return;
-      chrome.tabs.get(tabInfo.tabId, onPageChanged);
+      chrome.tabs.get(tabInfo.tabId, onBrowsingPageChanged);
     });
 
     chrome.windows.onFocusChanged.addListener(function (winId) {
@@ -73,12 +81,19 @@ class BrowsingPageMonitor extends RemoteCallable {
         chrome.tabs.query({ active: true, windowId: winId }, function (tabs) {
           // If the all tabs are closed before query.
           if (tabs.length < 1) return;
-          onPageChanged(tabs[0]);
+          onBrowsingPageChanged(tabs[0]);
         });
       }, WINDOW_SWITCH_DELAY);
     });
 
     console.debug("Browsing monitor setup.");
+  }
+
+  /**
+   * @return {Set<String>} the protocol that are monitored
+   */
+  get monitoredProtocol() {
+    return this.#protocol;
   }
 
   /**

@@ -29,35 +29,29 @@ Inspired by [Mr. He's video][mr_he_video].
 - 课业好烦
 
 ### 2021/01/25
-
 - 完善计时模块
 - 完成核心功能 1：时间选择与计时拦截
 - 完成 BrowserAction 中的倒计时显示 (popup.html)
 - 初步完成黑名单 UI
 
 ### 2021/01/24
-
 - 完善动态页面模块
 - 完善用户浏览页面监视模块
 - 实现计时模块 (lock-timing-monitor.js)
 - 完成两个障碍界面的功能 (time-selection.html & blocking.html)
 
 ### 2021/01/22
-
 - 实现动态页面模块 (dynamic-page.js & dynamic-page-backend.js)
 - 实现用户浏览页面监视模块 (browsing-page-monitor.js)
 
 ### 2021/01/21
-
 - 初步完成 UI 设计
 
 ### 2021/01/20
-
 - 加了一堆意义不明的 CSS
 - 初步确定前后端(?)结构
 
 ### 2021/01/17
-
 - 确定了拦截页面的策略：通过打开一个新 tab 来挡住页面。
 - 初步确定了侦测页面切换的逻辑。
 - 现存 Bug：
@@ -65,7 +59,6 @@ Inspired by [Mr. He's video][mr_he_video].
   - 同时出现窗口切换和 Tab 切换时可能会触发两次拦截。
 
 ### 2021/01/16
-
 - 开坑
 - 画了一个草率的 Logo
 - 嗯学 Chrome Extension 开发
