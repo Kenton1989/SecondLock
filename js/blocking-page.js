@@ -16,6 +16,7 @@ DynamicPage.dynamicInit(function (args) {
 
   closeAllBtn.onclick = function () {
     notifyUnblock(blockedHost);
-    closeCurrentTab();
+    // Delay for a while before closing to avoid potential frequent tab switching
+    window.setTimeout(closeCurrentTab, 200);
   };
 });

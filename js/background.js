@@ -15,8 +15,10 @@ chrome.runtime.onInstalled.addListener(function () {
 let monitor = new BrowsingPageMonitor("browse-monitor");
 let unlockTiming = new LockTimeMonitor("lock-time-monitor");
 
-let blackList = myBlackList;
-monitor.blackList.addList(blackList);
+options.monitoredList.doOnUpdated(function(list){
+  if (!list) return;
+  monitor.blackList.reset(list);
+});
 
 function selectTime(tab, hostname) {
   console.debug(`Blocking the tab of host: ${hostname}`);
