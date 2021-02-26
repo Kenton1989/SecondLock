@@ -27,10 +27,9 @@ function selectTime(tab, hostname) {
   }
   blockPageToSelectTime(tab, hostname);
 }
+
 monitor.onBrowse.addListener(selectTime);
 
 unlockTiming.onTimesUp.addListener(function (hostname) {
   blockAllTabsOf(hostname);
 });
-
-// monitor.active = false;

@@ -128,8 +128,10 @@ class OneOption {
       callback && callback();
       return;
     }
-    if (callback) localStorage.set(this.#storageKey, value, callback);
-    else localStorage.set(this.#storageKey, value);
+    let val = {}
+    val[this.#storageKey] = value;
+    if (callback) localStorage.set(val, callback);
+    else localStorage.set(val);
   }
 
   /**

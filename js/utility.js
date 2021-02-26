@@ -173,6 +173,17 @@ function showTxt(element, text, blink = true, ...blinkArgs) {
   if (blink) blinkElement(element, ...blinkArgs);
 }
 
+/**
+ * Format bytes size into human readable form.
+ * @param {number} bytes bytes to be formatted
+ * @returns {string} the formatted string
+ */
+const BYTE_UNIT = ["B", "KB", "MB", "GB", "TB"]
+function formatBytes(bytes) {
+  let unit = 0;
+  
+}
+
 export {
   getUrlOfTab,
   validHostname,

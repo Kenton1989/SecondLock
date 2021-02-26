@@ -1,14 +1,19 @@
 import {} from "./common-page.js";
 import { setupSectionNav } from "./nav-setup.js";
+import { ALL_OPTION_NAME, OptionCollection } from "./options-manager.js";
 import {
   reformatHostname,
   validHostname,
   validIPv4Address,
   validIPv6Hostname,
-  blinkElement,
   validIPv6Address,
   showTxt,
 } from "./utility.js";
+
+let options = new OptionCollection(...ALL_OPTION_NAME);
+
+
+//////////////////////// monitored list //////////////////////////
 
 /**
  * Make a host list item.
@@ -49,10 +54,13 @@ let makeHostListItem = (function () {
  * Add a list of hostname into the given element
  * @param {String[]} hosts array of hostname
  * @param {Element} hostListElement the element to put the list
+ * @param {Set<string>} hostSet the set of hostname
  */
-function setHostList(hosts, hostListElement) {
+function setHostList(hosts, hostListElement, hostSet = undefined) {
+  if (hostSet) hostSet.clear();
   hostListElement.innerHTML = "";
   for (const host of hosts) {
+    if (hostSet) hostSet.add(host);
     let item = makeHostListItem(host);
     hostListElement.appendChild(item);
   }
@@ -69,16 +77,18 @@ const HOSTNAME_NOT_ALLOWED_KEY = /^[^a-z0-9:\[\]\.\-]$/i;
  * @param {function(String[])} onSaveHostList callback when the hostname list is saved
  */
 function setUpHostListDiv(hosts, hostListDiv, onSaveHostList = function () {}) {
+  // set of hostname already in the list
+  let hostSet = new Set(hosts);
+  let dirty = false;
+  hostListDiv.hostSet = hostSet;
+
   // get the host list and setup
   let hostList = hostListDiv.getElementsByClassName("host-list")[0];
-  setHostList(hosts, hostList);
+  setHostList(hosts, hostList, hostSet);
 
   // prepare the element to display warning
   let warning = hostListDiv.getElementsByClassName("warning")[0];
 
-  // set of hostname already in the list
-  let hostSet = new Set(hosts);
-  let dirty = false;
 
   // prepare elements for user input
   let userInput = hostListDiv.getElementsByClassName("host-input")[0];
@@ -161,36 +171,20 @@ setupSectionNav();
 
 // Set up monitored host list
 let monitoredHostDiv = document.getElementById("monitored-host");
-let hostList = document.getElementsByClassName("host-list")[0];
-let hosts = ["bilibili.com", "youtube.com", "google.com"];
-setUpHostListDiv(hosts, monitoredHostDiv, function (list) {
+let monitoredHostListEle = document.getElementsByClassName("host-list")[0];
+setUpHostListDiv([], monitoredHostDiv, function (list) {
   console.log(list);
-  setHostList(list, hostList);
+  options.monitoredList.set(list);
 });
 
-// Set storage usage
-
-let storageEle = document.getElementById("storage-used");
-
-//////////////////// Old dirty codes /////////////////////
-let activate = document.getElementById("activate");
-let saveBtn = document.getElementById("save-general-btn");
-saveBtn.classList.add;
-
-chrome.storage.sync.get("activated", function (data) {
-  activate.checked = data.activated;
-  console.debug("Setup activated as " + data.activated);
+options.monitoredList.doOnUpdated(function(list){
+  setHostList(list, monitoredHostListEle, monitoredHostDiv.hostSet);
 });
 
-saveBtn.onclick = function () {
-  chrome.storage.sync.set(
-    {
-      activated: activate.checked,
-    },
-    function () {
-      console.debug("Options saved");
-      console.debug("activated: " + activate.checked);
-    }
-  );
-}
+////////////////////// storage & sync ////////////////////////
 
+let localUseSpaceTxt = document.getElementById("local-used-space");
+
+chrome.storage.local.getBytesInUse(function(val) {
+
+});
