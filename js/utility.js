@@ -179,9 +179,14 @@ function showTxt(element, text, blink = true, ...blinkArgs) {
  * @returns {string} the formatted string
  */
 const BYTE_UNIT = ["B", "KB", "MB", "GB", "TB"]
+const STEP = 1024.0;
 function formatBytes(bytes) {
   let unit = 0;
-  
+  while (bytes > STEP) {
+    bytes /= STEP;
+    ++unit;
+  }
+  return `${bytes.toFixed(1)}${BYTE_UNIT[unit]}`
 }
 
 export {
@@ -195,4 +200,5 @@ export {
   reformatHostname,
   blinkElement,
   showTxt,
+  formatBytes,
 };

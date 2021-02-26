@@ -8,6 +8,7 @@ import {
   validIPv6Hostname,
   validIPv6Address,
   showTxt,
+  formatBytes,
 } from "./utility.js";
 
 let options = new OptionCollection(...ALL_OPTION_NAME);
@@ -184,7 +185,15 @@ options.monitoredList.doOnUpdated(function(list){
 ////////////////////// storage & sync ////////////////////////
 
 let localUseSpaceTxt = document.getElementById("local-used-space");
+let cloudUseSpaceTxt = document.getElementById("cloud-used-space");
+let cloudMaxSpaceTxt = document.getElementById("cloud-max-space");
 
 chrome.storage.local.getBytesInUse(function(val) {
-
+  localUseSpaceTxt.innerText = formatBytes(val);
 });
+
+chrome.storage.sync.getBytesInUse(function(val) {
+  cloudUseSpaceTxt.innerText = formatBytes(val);
+});
+
+cloudMaxSpaceTxt.innerText = formatBytes(chrome.storage.sync.QUOTA_BYTES);
