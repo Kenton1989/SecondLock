@@ -1,6 +1,5 @@
 import { BrowsingPageMonitor } from "./browsing-page-monitor.js";
 import { LockTimeMonitor } from "./lock-timing-monitor.js";
-import { myBlackList } from "./my-blacklist.js";
 import { ALL_OPTION_NAME, DEFAULT_OPTIONS_IN_STORAGE, OptionCollection } from "./options-manager.js";
 import { blockAllTabsOf, blockPageToSelectTime } from "./tab-blocker.js";
 
