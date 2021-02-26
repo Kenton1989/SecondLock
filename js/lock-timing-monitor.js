@@ -12,9 +12,43 @@ class LockTimeMonitor extends RemoteCallable {
   #restTimeMap = new Map();
   #eventTarget = new EventTarget();
   #timesUpEvent = new CustomEventWrapper(UNLOCK_TIMES_UP, this.#eventTarget);
+  #notifyOn = false;
+  #notifyTimes = [];
 
-  constructor(name, config) {
+  /**
+   * Create a timing monitor with given name and config.
+   * 
+   * @param {string} name the name of monitor
+   */
+  constructor(name) {
     super(name);
+  }
+
+  /**
+   * @returns {boolean} whether the notification is active.
+   */
+  get notificationOn() {
+    return this.#notifyOn;
+  }
+
+  set notificationOn(val) {
+    this.#notifyOn = Boolean(val);
+  }
+
+  /**
+   * @returns {Array<number>} array of when the notification is sent.
+   *  Each element represents how many seconds before ending time a notification will be sent.
+   */
+  get notifyTimePoint() {
+    return this.#notifyTimes
+  }
+
+  /**
+   * @param {Iterable<number>} list list of when the notification is sent.
+   *  Each element represents how many seconds before ending time a notification will be sent.
+   */
+  set notifyTimePoint(list) {
+    this.#notifyTimes = [...list];
   }
 
   /**
@@ -82,7 +116,9 @@ class LockTimeMonitor extends RemoteCallable {
 
     window.setTimeout(function () {
       console.log(
-        `Times Up: ${hostname} unlocked between ${now} and ${new Date(Date.now())}.`
+        `Times Up: ${hostname} unlocked between ${now} and ${new Date(
+          Date.now()
+        )}.`
       );
       timesUpEvent.trigger(hostname, duration);
       restTimeMap.delete(hostname);

@@ -1,26 +1,15 @@
 import { BrowsingPageMonitor } from "./browsing-page-monitor.js";
 import { LockTimeMonitor } from "./lock-timing-monitor.js";
 import { myBlackList } from "./my-blacklist.js";
+import { ALL_OPTION_NAME, DEFAULT_OPTIONS_IN_STORAGE, OptionCollection } from "./options-manager.js";
 import { blockAllTabsOf, blockPageToSelectTime } from "./tab-blocker.js";
 
-var activated = true;
+let options = new OptionCollection(...ALL_OPTION_NAME);
 
 chrome.runtime.onInstalled.addListener(function () {
-  chrome.storage.sync.set({ activated: false }, function () {
-    console.debug("Lock is activated");
+  chrome.storage.local.get(DEFAULT_OPTIONS_IN_STORAGE, function(result){
+    chrome.storage.local.set(result);
   });
-});
-
-chrome.storage.sync.get("activated", function (data) {
-  activated = data.activated;
-  console.debug("Init activated: " + data.activated);
-});
-
-chrome.storage.onChanged.addListener(function (changes, namespace) {
-  if (changes.activated != undefined) {
-    activated = changes.activated.newValue;
-    console.debug("background buffered activated changed: " + activated);
-  }
 });
 
 let monitor = new BrowsingPageMonitor("browse-monitor");
