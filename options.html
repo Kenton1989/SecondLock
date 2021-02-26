@@ -33,6 +33,10 @@
       </section>
       <section id="monitored-host">
         <h2 class="section-title">Monitored Host</h2>
+        <details class="description">
+          <summary>Details about how the list works:</summary>
+          <p></p>
+        </details>
         <div class="host-list-div">
           <ul class="host-list">
           </ul>
@@ -46,10 +50,15 @@
       </section>
       <section id="storage-and-sync">
         <h2 class="section-title">Storage & Sync</h2>
-        <input type="checkbox" id="auto-sync" name="auto-sync" />
-        <label for="auto-sync">Auto Sync Options</label>
-        <p>Local Storage Used: 1kb</p>
-        <p>Online Storage Used: 1kb/5kb</p>
+        <div>
+          <input type="checkbox" id="auto-sync" name="auto-sync" />
+          <label for="auto-sync">Auto Sync Options</label>
+        </div>
+        <details class="description">
+          <summary>storage usage details</summary>
+          <p>Local Storage Used: 1kb</p>
+          <p>Online Storage Used: 1kb/5kb</p>
+        </details>
       </section>
       <section id="notification">
         <h2 class="section-title">Notification</h2>
@@ -140,10 +149,17 @@
       </section>
       </section>
       <section id="selection-page">
-        <h2 class="section-title">Selection Page</h2>
+        <h2 class="section-title">Select Duration Page</h2>
         <h4>Default Duration Choices (in minutes)</h4>
-        <p class="description">Values are split with comma, each value should be at least 1.</p>
-        <p class="description">At most 10 different values can be set.</p>
+        <details class="description">
+          <summary>Details about input format:</summary>
+          <ul>
+            <li>Multiple values should be split with comma.</li>
+            <li>Each value should be at least 1.</li>
+            <li>At most 10 different values can be set.</li>
+          </ul>
+        </details>
+        <p class="description"></p>
         <input type="text" id="default-time">
         <button id="save-block-msg-btn">Save</button>
       </section>

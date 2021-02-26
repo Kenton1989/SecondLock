@@ -57,3 +57,7 @@ button {
   border-radius: 5px;
   margin: 5px;
 }
+
+details {
+  margin: 5px 0;
+}

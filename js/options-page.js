@@ -7,6 +7,7 @@ import {
   validIPv6Hostname,
   blinkElement,
   validIPv6Address,
+  showTxt,
 } from "./utility.js";
 
 /**
@@ -57,6 +58,9 @@ function setHostList(hosts, hostListElement) {
   }
 }
 
+// "Enter", "Ctrl", etc. special keys are allowed, which consist of multiple chars
+// alphabet, number, colon(:), bracket([ and ]), dot(.), hyphen(-) are allowed
+// other single chars are not allowed to enter as host name
 const HOSTNAME_NOT_ALLOWED_KEY = /^[^a-z0-9:\[\]\.\-]$/i;
 /**
  * Setup hostname input division
@@ -85,8 +89,7 @@ function setUpHostListDiv(hosts, hostListDiv, onSaveHostList = function () {}) {
 
     // warn for empty input
     if (!input) {
-      warning.innerText = "Please enter a host.";
-      blinkElement(warning);
+      showTxt(warning, "Please enter a host.");
       return;
     }
 
@@ -103,15 +106,13 @@ function setUpHostListDiv(hosts, hostListDiv, onSaveHostList = function () {}) {
       hostname = reformatHostname(`[${input}]`);
     } else {
       // warn for bad format
-      warning.innerText = "Invalid host format.";
-      blinkElement(warning);
+      showTxt(warning, "Unknown host format.");
       return;
     }
 
     // warn for entering existing hostname
     if (hostSet.has(hostname)) {
-      warning.innerText = "Host already in the list.";
-      blinkElement(warning);
+      showTxt(warning, "Host already in the list.");
       return;
     }
 
@@ -157,7 +158,6 @@ function setUpHostListDiv(hosts, hostListDiv, onSaveHostList = function () {}) {
 }
 
 setupSectionNav();
-
 
 // Set up monitored host list
 let monitoredHostDiv = document.getElementById("monitored-host");

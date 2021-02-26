@@ -22,7 +22,7 @@
 
 .host-list-div {
   background-color: white;
-  border: 1px solid gray;
+  /* border: 1px solid gray; */
   max-width: 500px;
   margin: 10px 0;
 }
@@ -76,11 +76,11 @@
   display: block;
   padding: 3px 0;
   padding-left: 5px;
-  border-bottom: 1px solid gray;
+  /* border-bottom: 1px solid gray; */
 }
 
-.host-list-item:last-child {
-  border-bottom: 0;
+.host-list-item:nth-child(even) {
+  background-color: #EEEEEE;
 }
 
 .host-list-item button {
