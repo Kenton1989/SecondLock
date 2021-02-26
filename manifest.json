@@ -9,8 +9,6 @@
 
   "permissions": ["tabs", "storage", "unlimitedStorage"],
 
-  "optional_permissions": ["notifications"],
-
   "background": {
     "page": "background.html",
     "persistent": false

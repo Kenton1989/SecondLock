@@ -1,4 +1,5 @@
 import {} from "./common-page.js";
+import { HostnameSet } from "./hostname-set.js";
 import { setupSectionNav } from "./nav-setup.js";
 import { ALL_OPTION_NAME, OptionCollection } from "./options-manager.js";
 import {
@@ -55,13 +56,17 @@ let makeHostListItem = (function () {
  * Add a list of hostname into the given element
  * @param {String[]} hosts array of hostname
  * @param {Element} hostListElement the element to put the list
- * @param {Set<string>} hostSet the set of hostname
+ * @param {HostnameSet} hostSet the set of hostname
  */
 function setHostList(hosts, hostListElement, hostSet = undefined) {
-  if (hostSet) hostSet.clear();
+  if (hostSet) {
+    hostSet.clear();
+    hostSet.addList(hosts);
+    hosts = [...hostSet];
+  }
+  hosts.sort();
   hostListElement.innerHTML = "";
   for (const host of hosts) {
-    if (hostSet) hostSet.add(host);
     let item = makeHostListItem(host);
     hostListElement.appendChild(item);
   }
@@ -79,7 +84,7 @@ const HOSTNAME_NOT_ALLOWED_KEY = /^[^a-z0-9:\[\]\.\-]$/i;
  */
 function setUpHostListDiv(hosts, hostListDiv, onSaveHostList = function () {}) {
   // set of hostname already in the list
-  let hostSet = new Set(hosts);
+  let hostSet = new HostnameSet(hosts);
   let dirty = false;
   hostListDiv.hostSet = hostSet;
 
@@ -123,7 +128,7 @@ function setUpHostListDiv(hosts, hostListDiv, onSaveHostList = function () {}) {
 
     // warn for entering existing hostname
     if (hostSet.has(hostname)) {
-      showTxt(warning, "Host already in the list.");
+      showTxt(warning, "the host is already being monitored.");
       return;
     }
 
@@ -153,8 +158,7 @@ function setUpHostListDiv(hosts, hostListDiv, onSaveHostList = function () {}) {
     for (const item of items) {
       if (!item.classList.contains("deleted")) continue;
       let host = item.getElementsByClassName("host")[0];
-      hostSet.delete(host.innerText);
-      dirty = true;
+      dirty = hostSet.remove(host.innerText) || dirty;
     }
 
     if (dirty) {
@@ -175,6 +179,7 @@ let monitoredHostDiv = document.getElementById("monitored-host");
 let monitoredHostListEle = document.getElementsByClassName("host-list")[0];
 setUpHostListDiv([], monitoredHostDiv, function (list) {
   console.log(list);
+  setHostList(list, monitoredHostListEle);
   options.monitoredList.set(list);
 });
 
@@ -182,18 +187,34 @@ options.monitoredList.doOnUpdated(function(list){
   setHostList(list, monitoredHostListEle, monitoredHostDiv.hostSet);
 });
 
+///////////////////// Notification //////////////////////////
+// TODO - add notification functions
+options.notificationOn.doOnUpdated(function (notiOn) {
+
+});
+
+//////////////////// Active Days ///////////////////////////
+// TODO - add active days support
+
+/////////////////////// Selection Page ///////////////////////
+// TODO - allow customizing default selection duration
+
+////////////////////// Blocking Page ///////////////////////
+// TODO - allow customizing motto displayed on blocking page
+
 ////////////////////// storage & sync ////////////////////////
 
 let localUseSpaceTxt = document.getElementById("local-used-space");
-let cloudUseSpaceTxt = document.getElementById("cloud-used-space");
-let cloudMaxSpaceTxt = document.getElementById("cloud-max-space");
-
 chrome.storage.local.getBytesInUse(function(val) {
   localUseSpaceTxt.innerText = formatBytes(val);
 });
 
+let cloudUseSpaceTxt = document.getElementById("cloud-used-space");
 chrome.storage.sync.getBytesInUse(function(val) {
   cloudUseSpaceTxt.innerText = formatBytes(val);
 });
 
+let cloudMaxSpaceTxt = document.getElementById("cloud-max-space");
 cloudMaxSpaceTxt.innerText = formatBytes(chrome.storage.sync.QUOTA_BYTES);
+
+// TODO - add syncing support

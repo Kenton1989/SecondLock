@@ -9,6 +9,7 @@ const ALL_OPTION_NAME = [
   "notificationOn",
   "notificationTimes",
   "activeDays",
+  "pendingActiveDays",
   "syncOn",
   "defDurations",
   "motto",
@@ -24,27 +25,20 @@ const DEFAULT_OPTIONS = {
     "reddit.com",
     "zhihu.com",
     "tieba.baidu.com",
+    "tiktok.com",
     "bilibili.com",
   ],
   activated: true,
   notificationOn: false,
-  notificationTimes: [10, 60, 5*60],
+  notificationTimes: [10, 60, 5 * 60],
   activeDays: [0, 1, 2, 3, 4, 5, 6],
+  pendingActiveDays: undefined,
+  activeDayApplyTime: 0,
   syncOn: false,
   defDurations: [1, 5, 15, 30, 60, 120],
   mottos: ["Time waits for no one. – Folklore"],
 };
 
-const DEFAULT_OPTIONS_IN_STORAGE = {
-  monitoredListOption: DEFAULT_OPTIONS.monitoredList,
-  activatedOption: DEFAULT_OPTIONS.activated,
-  notificationOnOption: DEFAULT_OPTIONS.notificationOn,
-  notificationTimesOption: DEFAULT_OPTIONS.notificationTimes,
-  activeDaysOption: DEFAULT_OPTIONS.activeDays,
-  syncOnOption: DEFAULT_OPTIONS.syncOn,
-  defDurationsOption: DEFAULT_OPTIONS.defDurations,
-  mottosOption: DEFAULT_OPTIONS.mottos,
-};
 /**
  * short name for storage lib
  */
@@ -79,7 +73,7 @@ class OneOption {
       this.#eventTarget
     );
 
-    this.#storageKey = `${name}Option`;
+    this.#storageKey = name;
     // make private member accessible in the callback.
     let storageKey = this.#storageKey;
     let thisOption = this;
@@ -128,7 +122,7 @@ class OneOption {
       callback && callback();
       return;
     }
-    let val = {}
+    let val = {};
     val[this.#storageKey] = value;
     if (callback) localStorage.set(val, callback);
     else localStorage.set(val);
@@ -197,6 +191,5 @@ export {
   ALL_OPTION_NAME_SET,
   SYNC_OPTION_NAME,
   DEFAULT_OPTIONS,
-  DEFAULT_OPTIONS_IN_STORAGE,
   OptionCollection,
 };

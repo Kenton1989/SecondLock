@@ -19,6 +19,7 @@ function setupSectionNav() {
   // console.debug(link)
 
   for (const sec of sections) {
+    if (sec.style.display == "none") continue;
     let title = sec.getElementsByClassName("section-title")[0];
     let copy = tempItem.cloneNode(true);
     let link = copy.getElementsByTagName("a")[0];

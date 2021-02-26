@@ -12,6 +12,7 @@ class LockTimeMonitor extends RemoteCallable {
   #restTimeMap = new Map();
   #eventTarget = new EventTarget();
   #timesUpEvent = new CustomEventWrapper(UNLOCK_TIMES_UP, this.#eventTarget);
+  // TODO - implement notification function
   #notifyOn = false;
   #notifyTimes = [];
 

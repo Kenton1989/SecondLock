@@ -27,6 +27,16 @@ class HostnameSet {
   #matchingRegex = /$^/;
 
   /**
+   * Create a host name set with the given list of host.
+   *
+   * @param {Iterable<string>} hosts list of host to be added.
+   *  If it is not given, an empty set will be created.
+   */
+  constructor(hosts = []) {
+    this.addList(hosts);
+  }
+
+  /**
    * The size of hostname set
    */
   get size() {
@@ -64,6 +74,7 @@ class HostnameSet {
     if (!this.#addToMap(hostname)) return false;
 
     this.#updateRegex();
+    return true;
   }
 
   /**
@@ -71,17 +82,17 @@ class HostnameSet {
    * @param {Iterable<string>} hostnameList the list of hostname to be added
    */
   addList(hostnameList) {
-    let hostnameL = [...hostnameList];
+    // avoid affecting original iterable
+    hostnameList = [...hostnameList];
+
     // Sort according to length in decreasing order
     // This guarantee that subdomain is processed after its parent domain
-    hostnameL.sort((a, b)=>a.length - b.length);
-    let dirty = false;
+    hostnameList.sort((a, b) => a.length - b.length);
     for (const val of hostnameList) {
-      dirty = this.#addToMap(val) || dirty;
+      this.#addToMap(val);
+      this.#updateRegex();
     }
-    if (!dirty) return;
 
-    this.#updateRegex();
   }
 
   /**
@@ -90,9 +101,9 @@ class HostnameSet {
    * @return {boolean} true if the hostname exist in the list and being removed.
    */
   remove(hostname) {
-    if (!this.has(hostname)) return;
-
+    if (!this.#removeFromMap(hostname)) return false;
     this.#updateRegex();
+    return true;
   }
 
   /**
@@ -144,7 +155,8 @@ class HostnameSet {
       console.warn(`Invalid hostname: ${hostname}`);
       return false;
     }
-    if (this.#hostMap.has(formattedHost)) return false;
+    if (this.has(formattedHost))
+      return false;
 
     if (validHostname(formattedHost)) {
       this.#hostMap.set(formattedHost, HOST_TYPE.NORMAL);
