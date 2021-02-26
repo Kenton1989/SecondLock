@@ -33,6 +33,10 @@
       </section>
       <section id="monitored-host">
         <h2 class="section-title">Monitored Host</h2>
+        <details class="description">
+          <summary>Details about how the list works:</summary>
+          <p></p>
+        </details>
         <div class="host-list-div">
           <ul class="host-list">
           </ul>
@@ -46,10 +50,15 @@
       </section>
       <section id="storage-and-sync">
         <h2 class="section-title">Storage & Sync</h2>
-        <input type="checkbox" id="auto-sync" name="auto-sync" />
-        <label for="auto-sync">Auto Sync Options</label>
-        <p>Local Storage Used: 1kb</p>
-        <p>Online Storage Used: 1kb/5kb</p>
+        <div>
+          <input type="checkbox" id="auto-sync" name="auto-sync" />
+          <label for="auto-sync">Auto Sync Options</label>
+        </div>
+        <details class="description">
+          <summary>storage usage details</summary>
+          <p>Local Storage Used: 1kb</p>
+          <p>Online Storage Used: 1kb/5kb</p>
+        </details>
       </section>
       <section id="notification">
         <h2 class="section-title">Notification</h2>
@@ -57,18 +66,113 @@
         <label for="notification-on">Activate Notification</label>
         <div id="notification-details">
           <h3>Notification Time Points</h3>
-          <p><input type="number" min="0" max="120"> minutes before time's up</p>
-          <p><input type="number" min="0" max="120"> minutes before time's up</p>
-          <p><input type="number" min="0" max="120"> minutes before time's up</p>
+          <p>
+            <input type="number" min="1" max="120">
+            <select name="unit">
+              <option value="min">mins</option>
+              <option value="sec">secs</option>
+            </select>
+            before time's up
+          </p>
+          <button id="save-notification-btn">Save</button>
         </div>
       </section>
       <section id="active-period">
-        <h2 class="section-title">Active Period</h2>
+        <h2 class="section-title">Active Days</h2>
+        <p class="description">Selecting active days will be applied after saving.</p>
+        <p class="description">Unselecting active days will only be applied 24 hours after saving.</p>
+        <ul class="days-checklist" id="current-active-days">
+          <li>
+            <input type="checkbox" name="sunday" checked="true" value="0" />
+            <label for="sunday">Sunday</label>
+          </li>
+          <li>
+            <input type="checkbox" name="monday" checked="true" value="1" />
+            <label for="monday">Monday</label>
+          </li>
+          <li>
+            <input type="checkbox" name="tuesday" checked="true" value="2" />
+            <label for="tuesday">Tuesday</label>
+          </li>
+          <li>
+            <input type="checkbox" name="wednesday" checked="true" value="3" />
+            <label for="wednesday">Wednesday</label>
+          </li>
+          <li>
+            <input type="checkbox" name="thursday" checked="true" value="4" />
+            <label for="thursday">Thursday</label>
+          </li>
+          <li>
+            <input type="checkbox" name="friday" checked="true" value="5" />
+            <label for="friday">Friday</label>
+          </li>
+          <li>
+            <input type="checkbox" name="saturday" checked="true" value="6" />
+            <label for="saturday">Saturday</label>
+          </li>
+        </ul>
+        <button id="save-active-day-btn">Save</button>
+        <button id="save-active-day-btn">Select All</button>
+        <div id="panding-active-days">
+          <p>The following setting will be activated since <span id="active-day-active-time">2000/01/01</span></p>
+          <ul class="days-checklist" id="current-active-days">
+            <li>
+              <input type="checkbox" name="sunday" checked="true" disabled="true" />
+              <label for="sunday">Sunday</label>
+            </li>
+            <li>
+              <input type="checkbox" name="monday" checked="true" disabled="true" />
+              <label for="monday">Monday</label>
+            </li>
+            <li>
+              <input type="checkbox" name="tuesday" checked="true" disabled="true" />
+              <label for="tuesday">Tuesday</label>
+            </li>
+            <li>
+              <input type="checkbox" name="wednesday" checked="true" disabled="true" />
+              <label for="wednesday">Wednesday</label>
+            </li>
+            <li>
+              <input type="checkbox" name="thursday" checked="true" disabled="true" />
+              <label for="thursday">Thursday</label>
+            </li>
+            <li>
+              <input type="checkbox" name="friday" checked="true" disabled="true" />
+              <label for="friday">Friday</label>
+            </li>
+            <li>
+              <input type="checkbox" name="saturday" checked="true" disabled="true" />
+              <label for="saturday">Saturday</label>
+            </li>
+          </ul>
+        </div>
       </section>
+      </section>
+      <section id="selection-page">
+        <h2 class="section-title">Select Duration Page</h2>
+        <h4>Default Duration Choices (in minutes)</h4>
+        <details class="description">
+          <summary>Details about input format:</summary>
+          <ul>
+            <li>Multiple values should be split with comma.</li>
+            <li>Each value should be at least 1.</li>
+            <li>At most 10 different values can be set.</li>
+          </ul>
+        </details>
+        <p class="description"></p>
+        <input type="text" id="default-time">
+        <button id="save-block-msg-btn">Save</button>
+      </section>
+      <section id="blocking-page">
+        <h2 class="section-title">Blocking Page</h2>
+        <h4>Motto</h4>
+        <p class="description">The motto to be displayed on blocking page.</p>
+        <textarea id="blocking-motto"></textarea>
+        <button id="save-block-msg-btn">Save</button>
     </div>
   </main>
   <footer>
-    &copy;2021-<span id="copy-end-year">2020</span> Kenton. All rights
+    &copy;2021-<span id="copy-end-year">2021</span> Kenton. All rights
     reserved.
   </footer>
 
@@ -81,8 +185,17 @@
       <span class="host">hostname</span><button class="undo-btn">[undo]</button><button
         class="delete-btn">[delete]</button>
     </li>
+
+    <p class="notify-time-point">
+      <input type="number" min="1" max="120">
+      <select name="unit">
+        <option value="min">mins</option>
+        <option value="sec">secs</option>
+      </select>
+      before time's up
+    </p>
   </div>
-  </template>
+
   <script type="module" src="js/options-page.js"></script>
 </body>
 

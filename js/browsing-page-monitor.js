@@ -33,7 +33,7 @@ class BrowsingPageMonitor extends RemoteCallable {
   #monitoring = true;
   #protocol =  new Set(["http:", "https:"]);
 
-  constructor(name, configs) {
+  constructor(name) {
     super(name);
 
     // make private member public
@@ -46,21 +46,11 @@ class BrowsingPageMonitor extends RemoteCallable {
 
       console.debug(`User are browsing: ${tab.url}`);
 
-      let url = getUrlOfTab(tab);
-
-      // Check if the protocol is monitored
-      if (!monitor.monitoredProtocol.has(url.protocol)) {
-        console.debug("Protocol "+url.protocol+" is not monitored.");
-        return;
-      }
-      
-      // Check if the host is monitored
-      let hostname = url.hostname;
-      let monitoredHost = monitor.isMonitoring(hostname);
+      let monitoredHost = monitor.isMonitoring(tab.url);
       if (monitoredHost == undefined) return;
 
-      // Wait for a while to complete tab switch
-      // to avoid some weird bugs
+      // Wait for a while, to allow the browser to complete tab switching
+      // to reduce the effect of a weird bug
       window.setTimeout(function () {
         browseEvent.trigger(tab, monitoredHost);
       }, TAB_SWITCH_DELAY);
@@ -120,7 +110,7 @@ class BrowsingPageMonitor extends RemoteCallable {
     let urlObj = new URL(url);
     if (!this.monitoredProtocol.has(urlObj.protocol)) return undefined;
 
-    return this.#monitoredHost.has(url.hostname);
+    return this.#monitoredHost.has(urlObj.hostname);
   }
 
   /**

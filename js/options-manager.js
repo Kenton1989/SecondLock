@@ -3,9 +3,48 @@ import { CustomEventWrapper } from "./custom-event-wrapper.js";
 /**
  * All valid options
  */
-const allOptionNameList = ["monitoredList", "activated"];
-const allOptionNameSet = new Set(allOptionNameList);
+const ALL_OPTION_NAME = [
+  "monitoredList",
+  "activated",
+  "notificationOn",
+  "notificationTimes",
+  "activeDays",
+  "syncOn",
+  "defDurations",
+  "motto",
+];
+const ALL_OPTION_NAME_SET = new Set(ALL_OPTION_NAME);
+const SYNC_OPTION_NAME = ALL_OPTION_NAME;
+const DEFAULT_OPTIONS = {
+  monitoredList: [
+    "youtube.com",
+    "twitter.com",
+    "facebook.com",
+    "netflix.com",
+    "reddit.com",
+    "zhihu.com",
+    "tieba.baidu.com",
+    "bilibili.com",
+  ],
+  activated: true,
+  notificationOn: false,
+  notificationTimes: [10, 60, 5*60],
+  activeDays: [0, 1, 2, 3, 4, 5, 6],
+  syncOn: false,
+  defDurations: [1, 5, 15, 30, 60, 120],
+  mottos: ["Time waits for no one. – Folklore"],
+};
 
+const DEFAULT_OPTIONS_IN_STORAGE = {
+  monitoredListOption: DEFAULT_OPTIONS.monitoredList,
+  activatedOption: DEFAULT_OPTIONS.activated,
+  notificationOnOption: DEFAULT_OPTIONS.notificationOn,
+  notificationTimesOption: DEFAULT_OPTIONS.notificationTimes,
+  activeDaysOption: DEFAULT_OPTIONS.activeDays,
+  syncOnOption: DEFAULT_OPTIONS.syncOn,
+  defDurationsOption: DEFAULT_OPTIONS.defDurations,
+  mottosOption: DEFAULT_OPTIONS.mottos,
+};
 /**
  * short name for storage lib
  */
@@ -16,7 +55,7 @@ const localStorage = chrome.storage.local;
  * Cache the value of the given option from the storage.
  * Notify all listener when the value of option updated.
  */
-class Option {
+class OneOption {
   #eventTarget;
   #onUpdatedEvent;
   #storageKey;
@@ -29,7 +68,7 @@ class Option {
    * @param {EventTarget} eventTarget the given event target
    */
   constructor(name, eventTarget = document) {
-    if (!allOptionNameSet.has(name)) {
+    if (!ALL_OPTION_NAME_SET.has(name)) {
       throw new ReferenceError(`Create invalid option: ${thisOption}.`);
     }
 
@@ -41,20 +80,20 @@ class Option {
     );
 
     this.#storageKey = `${name}Option`;
-    let thisOption = this;
-    localStorage.get(this.#storageKey, function (value) {
-      thisOption.setCached(value);
-    });
-
     // make private member accessible in the callback.
     let storageKey = this.#storageKey;
+    let thisOption = this;
+    localStorage.get([storageKey], function (result) {
+      thisOption.setCached(result[storageKey]);
+    });
+
     localStorage.onChanged.addListener(function (changes) {
       if (changes[storageKey]) {
         thisOption.setCached(changes[storageKey].newValue);
       }
     });
   }
-  
+
   /**
    * Get the cached value
    */
@@ -64,7 +103,7 @@ class Option {
 
   /**
    * Set the value in the cache.
-   * The value in the storage will not be affected
+   * The value in the storage will not be affected.
    * @param {*} value new value
    */
   setCached(value) {
@@ -78,9 +117,9 @@ class Option {
   /**
    * Set the value in the storage, the cached value will
    * be updated after setting.
-   * 
+   *
    * @param {*} value the new value
-   * @param {function()} callback the callback after the setting is done, 
+   * @param {function()} callback the callback after the setting is done,
    *  regardless if the value is changed.
    *  NOTE: to check if the value is changed, use function doOnUpdated()
    */
@@ -89,17 +128,19 @@ class Option {
       callback && callback();
       return;
     }
-    localStorage.set(this.#storageKey, value, callback);
+    if (callback) localStorage.set(this.#storageKey, value, callback);
+    else localStorage.set(this.#storageKey, value);
   }
+
   /**
-   * Set callback when cached value is updated. 
-   * 
-   * This function can be used as a getter. In this case, if this.getCached() != undefined, 
+   * Set callback when cached value is updated.
+   *
+   * This function can be used as a getter. In this case, if this.getCached() != undefined,
    * the callback be called immediately with parameters: (this.getCached(), undefined).
-   * 
-   * NOTE: when value in the storage is updated, cached value will change accordingly. 
+   *
+   * NOTE: when value in the storage is updated, cached value will change accordingly.
    * Therefore, the callback will be triggered when value in the storage changed.
-   * 
+   *
    * @param {function(any, any)} callback the callback function on update
    *     - arg 0: the new value of the option
    *     - arg 1: the old value of the option
@@ -129,15 +170,31 @@ class OptionCollection {
     let optionSet = new Set(optionNames);
 
     for (const option of optionSet) {
-      if (!allOptionNameSet.has(option)) {
+      if (!ALL_OPTION_NAME_SET.has(option)) {
         throw new ReferenceError(`Referring invalid option: ${option}.`);
       }
       Object.defineProperty(this, option, {
-        value: new Option(option, this.#eventTarget),
+        value: new OneOption(option, this.#eventTarget),
         writable: false,
       });
     }
   }
+
+  /**
+   * Get the option object
+   * @param {string} name name of the option
+   * @return {OneOption} the option object
+   */
+  getOption(name) {
+    return this[name];
+  }
 }
 
-export { allOptionNameList, allOptionNameSet, OptionCollection };
+export {
+  ALL_OPTION_NAME,
+  ALL_OPTION_NAME_SET,
+  SYNC_OPTION_NAME,
+  DEFAULT_OPTIONS,
+  DEFAULT_OPTIONS_IN_STORAGE,
+  OptionCollection,
+};

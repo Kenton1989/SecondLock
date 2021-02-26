@@ -49,11 +49,12 @@ DynamicPage.dynamicInit(function (args) {
   closeAllBtn.onclick = function () {
     // close all page about the hostname
     chrome.tabs.query({ url: `*://${pattern}/*` }, function (tabs) {
-      let tabIds = tabs.map(t=>t.id);
+      let tabIds = tabs.map((t) => t.id);
       chrome.tabs.remove(tabIds, function () {
         // Close time-selection and blocking page about the hostname
         notifyUnblock(blockedHost);
-        closeCurrentTab();
+        // Delay for a while before closing to avoid potential frequent tab switching
+        window.setTimeout(closeCurrentTab, 200);
       });
     });
   };

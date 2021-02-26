@@ -41,7 +41,7 @@ function validIPv4Address(str) {
 }
 
 // Patterns used to match a IPv6 Address.
-const k0ToFFFF = "([\dA-F]{1,4})";
+const k0ToFFFF = "([dA-F]{1,4})";
 const kIPv6NoCompress = `(${k0ToFFFF}:){7}${k0ToFFFF}`;
 const kIPv6Parts = `((${k0ToFFFF}(:${k0ToFFFF}){0,6})?)`;
 const kIPv6Compressed = `${kIPv6Parts}::${kIPv6Parts}`;
@@ -114,7 +114,9 @@ const HOSTNAME_CHARS = /^[a-z0-9:\-\.\[\]]*$/i;
  * - lowercase hostname
  * - for ip hostname, omit redundancy
  *
- * @param {String} hostname a hostname
+ * @param {string} hostname a hostname
+ * @returns {(string|undefined)} the formatted hostname, or 
+ *  undefined if the input host name is invalid
  */
 function reformatHostname(hostname) {
   if (!HOSTNAME_CHARS.test(hostname)) return undefined;
@@ -138,7 +140,7 @@ let blinkTimeoutMap = new Map();
  */
 function blinkElement(element, times = 3, period = 200, display = true) {
   if (times <= 0) {
-    element.style.opacity = (display ? 1 : 0);
+    element.style.opacity = display ? 1 : 0;
     return;
   } else {
     element.style.opacity = 1;
@@ -147,7 +149,7 @@ function blinkElement(element, times = 3, period = 200, display = true) {
   // Clear existing timeout managing blinking of this element
   let existing = blinkTimeoutMap.get(element);
   if (existing != undefined) window.clearTimeout(existing);
-    
+
   let timeoutId = window.setTimeout(function () {
     element.style.opacity = 0;
     let timeoutId = window.setTimeout(function () {
@@ -156,6 +158,19 @@ function blinkElement(element, times = 3, period = 200, display = true) {
     blinkTimeoutMap.set(element, timeoutId);
   }, period / 2);
   blinkTimeoutMap.set(element, timeoutId);
+}
+
+/**
+ * Display text in the given element
+ *
+ * @param {Element} element the element used to show text
+ * @param {string} text the text to be shown
+ * @param {boolean} blink whether the element is blink after setting the text
+ * @param  {...any} blinkArgs other parameters passed to blinkElement
+ */
+function showTxt(element, text, blink = true, ...blinkArgs) {
+  element.innerText = text;
+  if (blink) blinkElement(element, ...blinkArgs);
 }
 
 export {
@@ -168,4 +183,5 @@ export {
   closeCurrentTab,
   reformatHostname,
   blinkElement,
+  showTxt,
 };

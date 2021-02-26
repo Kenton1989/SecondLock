@@ -16,6 +16,7 @@ class DynamicPageBackend {
       if (message.dynamicPageInitRequest) {
         let tabId = sender.tab.id;
         let args = DynamicPageBackend.#tabArgs.get(tabId);
+        console.debug(DynamicPageBackend.#tabArgs);
         sendResponse({ dynamicPageInitArgs: args });
       }
     });
@@ -63,8 +64,9 @@ class DynamicPageBackend {
       DynamicPageBackend.#tabArgs.set(tab.id, pageArgs);
       console.debug(`Created tab #${tab.id} opened with URL:${url}.`);
       // Active send arguments
+      console.debug(DynamicPageBackend.#tabArgs);
       chrome.tabs.sendMessage(tab.id, { dynamicPageInitArgs: pageArgs });
-      console.log("Sent argument: "+pageArgs)
+      console.debug("Sent argument: ", pageArgs)
       callback(tab);
     });
   }

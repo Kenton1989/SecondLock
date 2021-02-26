@@ -10,9 +10,19 @@
   position: relative;
 }
 
+#main-div h1,
+#main-div h2,
+#main-div h3,
+#main-div h4,
+#main-div h5,
+#main-div h6,
+#main-div p {
+  margin: 10px 0px;
+}
+
 .host-list-div {
   background-color: white;
-  border: 1px solid gray;
+  /* border: 1px solid gray; */
   max-width: 500px;
   margin: 10px 0;
 }
@@ -25,7 +35,6 @@
   padding: 0px;
   min-height: 100px;
 }
-
 
 .input-host-div {
   border-top: 1px solid gray;
@@ -67,11 +76,11 @@
   display: block;
   padding: 3px 0;
   padding-left: 5px;
-  border-bottom: 1px solid gray;
+  /* border-bottom: 1px solid gray; */
 }
 
-.host-list-item:last-child {
-  border-bottom: 0;
+.host-list-item:nth-child(even) {
+  background-color: #EEEEEE;
 }
 
 .host-list-item button {
@@ -98,7 +107,6 @@
   overflow: hidden;
 }
 
-
 #storage-used {
   display: block;
   margin: 0;
@@ -108,4 +116,28 @@
   right: 0;
   border-bottom-left-radius: 3px;
   background-color: var(--light-color);
+}
+
+.section-title {
+  border-bottom: 2px solid gray;
+  max-width: 300px;
+}
+
+.description {
+  color: rgb(110, 110, 110);
+}
+
+#default-time {
+  width: 100%;
+}
+
+#blocking-motto {
+  width: 100%;
+}
+.days-checklist {
+  padding: 0px;
+}
+.days-checklist li {
+  display: inline-block;
+  font-weight: bold;
 }
