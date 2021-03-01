@@ -1,7 +1,4 @@
-
-const TRANS_KEYS = [
-
-]
+import { TRANS_KEYS } from "./trans-keys.js";
 
 function generalTranslate() {
   for (const key of TRANS_KEYS) {
@@ -14,4 +11,4 @@ function generalTranslate() {
   }
 }
 
-export {generalTranslate};
+export { generalTranslate };

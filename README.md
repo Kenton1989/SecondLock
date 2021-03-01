@@ -25,6 +25,7 @@ Inspired by [Mr. He's video][mr_he_video].
 
 ### 2021/03/01
 - 多立了一堆flag
+- translation: 1% completed
 
 ### 2021/02/27
 - 基本完成默认设置

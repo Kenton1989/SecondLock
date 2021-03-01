@@ -1,7 +1,6 @@
 import { CustomEventWrapper } from "./custom-event-wrapper.js";
 import { HostnameSet } from "./hostname-set.js";
 import { RemoteCallable } from "./remote-callable.js";
-import { getUrlOfTab } from "./utility.js";
 
 // Different hostname type
 const HOST_TYPE = {
