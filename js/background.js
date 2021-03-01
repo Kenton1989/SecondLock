@@ -1,5 +1,5 @@
 import { BrowsingPageMonitor } from "./browsing-page-monitor.js";
-import { LockTimeMonitor } from "./lock-timing-monitor.js";
+import { HostTimingMonitor } from "./host-timing-monitor.js";
 import { ALL_OPTION_NAME, DEFAULT_OPTIONS, OptionCollection } from "./options-manager.js";
 import { blockAllTabsOf, blockPageToSelectTime } from "./tab-blocker.js";
 
@@ -14,7 +14,7 @@ chrome.runtime.onInstalled.addListener(function () {
 });
 
 let monitor = new BrowsingPageMonitor("browse-monitor");
-let unlockTiming = new LockTimeMonitor("lock-time-monitor");
+let unlockTiming = new HostTimingMonitor("lock-time-monitor");
 
 options.monitoredList.doOnUpdated(function(list){
   if (!list) return;
@@ -23,7 +23,7 @@ options.monitoredList.doOnUpdated(function(list){
 
 function selectTime(tab, hostname) {
   console.debug(`Blocking the tab of host: ${hostname}`);
-  if (unlockTiming.isUnlocked(hostname)) {
+  if (unlockTiming.isTiming(hostname)) {
     console.debug(`${hostname} is unlocked, does not block.`);
     return;
   }

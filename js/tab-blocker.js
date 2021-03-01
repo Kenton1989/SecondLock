@@ -1,7 +1,9 @@
 import { DynamicPageBackend } from "./dynamic-page-backend.js";
 import { closeCurrentTab, validHostname } from "./utility.js";
 
-const kSelectTimeURL = chrome.runtime.getURL("select-time.html");
+const selectTimeURL = chrome.runtime.getURL("select-time.html");
+const timesUpPageURL = chrome.runtime.getURL("times-up.html");
+
 /**
  * Block a tab and open the time selection page.
  *
@@ -10,24 +12,24 @@ const kSelectTimeURL = chrome.runtime.getURL("select-time.html");
  */
 function blockPageToSelectTime(tab, hostname) {
   DynamicPageBackend.openOnNewTab(
-    kSelectTimeURL,
+    selectTimeURL,
     { blockedHost: hostname },
     { windowId: tab.windowId }
   );
 }
 
-const kBlockingPageURL = chrome.runtime.getURL("blocking.html");
+const c = chrome.runtime.getURL("times-up.html");
 /**
- * Block the content of a tab completely.
+ * Block the content of a tab completely with given page and parameters.
  * @param {chrome.tabs.Tab} tab the tab on which the host is accessed.
  * @param {String} hostname the hostname to be blocked.
+ * @param {String} newPageUrl the url of page used to override existing page.
+ *  Assuming the page is dynamic page.
+ * @param {*} param the param passed to dynamic page
  */
-function blockPageCompletely(tab, hostname) {
-  DynamicPageBackend.openOnExistingTab(
-    kBlockingPageURL,
-    { blockedHost: hostname },
-    tab.id
-  );
+function blockPageCompletely(tab, hostname, newPageUrl, param = {}) {
+  param.blockedHost = hostname;
+  DynamicPageBackend.openOnExistingTab(newPageUrl, param, tab.id);
 }
 
 /**
@@ -49,7 +51,7 @@ function blockAllTabsOf(hostname) {
     },
     function (tabs) {
       for (const tab of tabs) {
-        blockPageCompletely(tab, hostname);
+        blockPageCompletely(tab, hostname, timesUpPageURL);
       }
     }
   );

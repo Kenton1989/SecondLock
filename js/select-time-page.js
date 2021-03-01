@@ -35,10 +35,14 @@ function setUnlock(minutes) {
   }
 
   let unlockDuration = Math.round(minutes * MINUTE);
-  RemoteCallable.call("lock-time-monitor", "unlockFor", [
+  RemoteCallable.call("lock-time-monitor", "setTimerFor", [
     blockedHost,
     unlockDuration,
-  ]);
+  ], function(){
+    notifyUnblock(blockedHost);
+    // Delay for a while before closing to avoid potential frequent tab switching
+    window.setTimeout(closeCurrentTab, 200);
+  });
 }
 
 // Initialize the blocked hostname

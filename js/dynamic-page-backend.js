@@ -16,7 +16,6 @@ class DynamicPageBackend {
       if (message.dynamicPageInitRequest) {
         let tabId = sender.tab.id;
         let args = DynamicPageBackend.#tabArgs.get(tabId);
-        console.debug(DynamicPageBackend.#tabArgs);
         sendResponse({ dynamicPageInitArgs: args });
       }
     });
