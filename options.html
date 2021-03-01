@@ -18,7 +18,7 @@
       <ul id="nav-list"></ul>
     </aside>
     <div id="main-div">
-      <section id="debug">
+      <section id="debug" style="display: none;">
         <h2 class="section-title">Debug</h2>
         <a id="go-select" target="_blank" href="select-time.html">To Selection Page</a>
         <br />
@@ -53,7 +53,7 @@
         <button class="save-host-btn">Save</button>
         <span class="warning"></span>
       </section>
-      <section id="notification">
+      <section id="notification" style="display: none;">
         <h2 class="section-title">Notification</h2>
         <input type="checkbox" id="notification-on" name="notification-on" />
         <label for="notification-on">Activate Notification</label>
@@ -70,31 +70,31 @@
           <button id="save-notification-btn">Save</button>
         </div>
       </section>
-      </section>
       <section id="selection-page">
-        <h2 class="section-title">Select Duration Page</h2>
+        <h2 class="section-title">Duration Selection Page</h2>
         <h4>Default Duration Choices (in minutes)</h4>
+        <p class="description">Set the list of buttons shown on the unlock duration selection page</p>
         <details class="description">
-          <summary>Details about input format:</summary>
+          <summary>Details of input format:</summary>
           <ul>
             <li>Multiple values should be split with comma.</li>
             <li>Each value should be an integer, at least 1 and at most 1000.</li>
             <li>At most 10 different values can be set, if more than 10 values are enter, first 10 valid values will be used.</li>
-            <li>All duplicated and invalid values will be filtered out before saving.</li>
+            <li>All duplicated and invalid values will be filtered out.</li>
           </ul>
         </details>
         <p class="description"></p>
         <input type="text" id="default-time">
         <button id="save-default-time-btn">Save</button>
       </section>
-      <section id="blocking-page">
+      <section id="blocking-page" style="display: none;">
         <h2 class="section-title">Blocking Page</h2>
         <h4>Motto</h4>
         <p class="description">The motto to be displayed on blocking page.</p>
         <textarea id="blocking-motto"></textarea>
         <button id="save-block-msg-btn">Save</button>
       </section>
-      <section id="storage-and-sync">
+      <section id="storage-and-sync" style="display: none;">
         <h2 class="section-title">Storage & Sync</h2>
         <div>
           <input type="checkbox" id="auto-sync" name="auto-sync" />
@@ -108,10 +108,11 @@
       </section>
       <section id="acknowledgement">
         <h2 class="section-title">Acknowledgement</h2>
-        <p>Great thanks to Mr. He. The idea of this extension is based on his video.</p>
+        <p>Great thanks to Mr. He. The idea of this extension is based on his video and app.</p>
         <ul>
-          <li><a href="https://space.bilibili.com/163637592">His channel</a></li>
-          <li><a href="https://www.bilibili.com/video/BV1ev411x7en">The video</a></li>
+          <li><a href="https://space.bilibili.com/163637592" target="_blank">His channel</a></li>
+          <li><a href="https://www.bilibili.com/video/BV1ev411x7en" target="_blank">His video</a></li>
+          <li><a href="http://download.yitangyx.cn/test/student-he/new.html?202001">His app</a></li>
         </ul>
       </section>
     </div>
