@@ -17,7 +17,6 @@ import {
 
 let options = new OptionCollection(...ALL_OPTION_NAME);
 
-
 //////////////////////// monitored list //////////////////////////
 
 /**
@@ -97,7 +96,6 @@ function setUpHostListDiv(hosts, hostListDiv, onSaveHostList = function () {}) {
 
   // prepare the element to display warning
   let warning = hostListDiv.getElementsByClassName("warning")[0];
-
 
   // prepare elements for user input
   let userInput = hostListDiv.getElementsByClassName("host-input")[0];
@@ -186,21 +184,80 @@ setUpHostListDiv([], monitoredHostDiv, function (list) {
   options.monitoredList.set(list);
 });
 
-options.monitoredList.doOnUpdated(function(list){
+options.monitoredList.doOnUpdated(function (list) {
   setHostList(list, monitoredHostListEle, monitoredHostDiv.hostSet);
 });
 
 ///////////////////// Notification //////////////////////////
 // TODO - add notification functions
-options.notificationOn.doOnUpdated(function (notiOn) {
-
-});
+options.notificationOn.doOnUpdated(function (notiOn) {});
 
 //////////////////// Active Days ///////////////////////////
 // TODO - add active days support
 
 /////////////////////// Selection Page ///////////////////////
-// TODO - allow customizing default selection duration
+
+let defaultDurInput = document.getElementById("default-time");
+let defaultDurSave = document.getElementById("save-default-time-btn");
+let lastSaveDefDur = [];
+const MIN_DUR_MIN = 1;
+const MAX_DUR_MIN = 1000;
+const MAX_DUR_CNT = 10;
+
+function loadDefaultDurations(list) {
+  defaultDurInput.value = list.toString();
+}
+
+function saveDefaultDuration(str) {
+  // clear unsaved tag
+  sectionTitle.classList.remove("unsaved");
+
+  if (str == lastSaveDefDur.toString()) {
+    console.log("list is not changed. Skip saving.");
+    return;
+  }
+
+  let sList = str.split(",");
+  let res = new Set();
+  for (let s of sList) {
+    s = s.trim();
+    let val = 0;
+    val = parseInt(s);
+    if (val >= MIN_DUR_MIN && val <= MAX_DUR_MIN) {
+      res.add(val);
+    } else {
+      continue;
+    }
+    if (res.size >= MAX_DUR_CNT) break;
+  }
+
+  let list = [...res];
+  list = list.sort((a, b) => a - b);
+  
+  // set the list to clear invalid values even if no modification happens
+  loadDefaultDurations(list);
+
+  if (list.toString() == lastSaveDefDur.toString()) {
+    console.log("list is not changed. Skip saving.");
+    return;
+  }
+  lastSaveDefDur = list;
+  options.defDurations.set(list);
+}
+
+options.defDurations.doOnUpdated(function (durList) {
+  lastSaveDefDur = durList;
+  loadDefaultDurations(durList);
+});
+
+defaultDurSave.onclick = function () {
+  saveDefaultDuration(defaultDurInput.value);
+};
+
+const sectionTitle = document.querySelector("#selection-page .section-title");
+defaultDurInput.onkeydown = function() {
+  sectionTitle.classList.add("unsaved");
+}
 
 ////////////////////// Blocking Page ///////////////////////
 // TODO - allow customizing motto displayed on blocking page
@@ -208,12 +265,12 @@ options.notificationOn.doOnUpdated(function (notiOn) {
 ////////////////////// storage & sync ////////////////////////
 
 let localUseSpaceTxt = document.getElementById("local-used-space");
-chrome.storage.local.getBytesInUse(function(val) {
+chrome.storage.local.getBytesInUse(function (val) {
   localUseSpaceTxt.innerText = formatBytes(val);
 });
 
 let cloudUseSpaceTxt = document.getElementById("cloud-used-space");
-chrome.storage.sync.getBytesInUse(function(val) {
+chrome.storage.sync.getBytesInUse(function (val) {
   cloudUseSpaceTxt.innerText = formatBytes(val);
 });
 

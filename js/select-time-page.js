@@ -3,6 +3,7 @@
  */
 import {} from "./common-page.js";
 import { DynamicPage } from "./dynamic-page.js";
+import { OptionCollection } from "./options-manager.js";
 import { RemoteCallable } from "./remote-callable.js";
 import { autoUnblock, notifyUnblock } from "./tab-blocker.js";
 import {
@@ -17,6 +18,8 @@ let minUnits = chrome.i18n.getMessage("mins");
 
 let blockedHost = undefined;
 let warningTxt = undefined;
+
+const options = new OptionCollection("defDurations");
 
 const MINUTE = 60000;
 /**
@@ -69,18 +72,25 @@ warningTxt = document.getElementsByClassName("warning")[0];
 // Prepare buttons for default time selection
 const defaultTimes = [1, 5, 10, 15, 30, 60, 120];
 let timeBtnDiv = document.getElementById("buttons");
-for (const minutes of defaultTimes) {
-  let newBtn = document.createElement("button");
-  if (minutes == 1) {
-    newBtn.innerText = `${minutes} ${minUnit}`;
-  } else {
-    newBtn.innerText = `${minutes} ${minUnits}`;
+function setDefDurBtnList(minsList) {
+  timeBtnDiv.innerHTML = "";
+  for (const minutes of minsList) {
+    let newBtn = document.createElement("button");
+    if (minutes == 1) {
+      newBtn.innerText = `${minutes} ${minUnit}`;
+    } else {
+      newBtn.innerText = `${minutes} ${minUnits}`;
+    }
+    newBtn.onclick = function () {
+      setUnlock(minutes);
+    };
+    timeBtnDiv.appendChild(newBtn);
   }
-  newBtn.onclick = function () {
-    setUnlock(minutes);
-  };
-  timeBtnDiv.appendChild(newBtn);
 }
+setDefDurBtnList(defaultTimes);
+options.defDurations.doOnUpdated(function (minsList) {
+  setDefDurBtnList(minsList);
+});
 
 const MIN_UNLOCK_MIN = 1;
 const MAX_UNLOCK_MIN = 1000;

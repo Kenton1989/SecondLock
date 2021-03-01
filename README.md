@@ -23,6 +23,9 @@ Inspired by [Mr. He's video][mr_he_video].
 
 # Update
 
+### 2021/03/02
+- 完成自定义默认时间列表
+
 ### 2021/03/01
 - 多立了一堆flag
 - translation: 1% completed
@@ -86,6 +89,7 @@ Inspired by [Mr. He's video][mr_he_video].
 - [ ] 中英双语支持
 - [ ] 倒计时通知
 - [ ] 设置同步/导出设置
+- [ ] 冷静时间
 - [ ] 白名单
 - [ ] 自定义监视启动时间
 - [ ] 自定义默认解锁时间
