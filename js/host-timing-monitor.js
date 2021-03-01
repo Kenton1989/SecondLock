@@ -4,14 +4,17 @@ import { RemoteCallable } from "./remote-callable.js";
 const TIMES_UP_EVENT_KEY = "timing-monitor-times-up";
 
 class TimingInfo {
-  timeOutHandle = -1
-  endTimePt = 0
+  timeOutHandle = -1;
+  endTimePt = 0;
   constructor(timePt = 0, handle = -1) {
     this.timeOutHandle = handle;
     this.endTimePt = timePt;
   }
 }
 
+/**
+ * Used to bind a timer with the given host
+ */
 class HostTimingMonitor extends RemoteCallable {
   static get MINIMAL_TIMER_LEN() {
     return 1000;
@@ -23,7 +26,7 @@ class HostTimingMonitor extends RemoteCallable {
 
   /**
    * Create a timing monitor with given name.
-   * 
+   *
    * @param {string} name the name of monitor
    */
   constructor(name) {
@@ -63,8 +66,10 @@ class HostTimingMonitor extends RemoteCallable {
   stopTiming(hostname, triggerEvent = true) {
     let info = this.#timingInfoMap.get(hostname);
     if (!info) return false;
+
     window.clearTimeout(info.timeOutHandle);
     this.#timingInfoMap.delete(hostname);
+
     if (triggerEvent) {
       this.onTimesUp.trigger(hostname, info.endTimePt);
     }
@@ -111,10 +116,9 @@ class HostTimingMonitor extends RemoteCallable {
     let duration = timePoint - Date.now();
     if (duration <= HostTimingMonitor.MINIMAL_TIMER_LEN) return;
 
-    
     let restTimeMap = this.#timingInfoMap;
     let timesUpEvent = this.#timesUpEvent;
-    
+
     let handle = window.setTimeout(function () {
       timesUpEvent.trigger(hostname, duration);
       restTimeMap.delete(hostname);
