@@ -1,3 +1,6 @@
+/**
+ * This is the js for blocking.html
+ */
 import {} from "./common-page.js";
 import { DynamicPage } from "./dynamic-page.js";
 import { autoUnblock, notifyUnblock } from "./tab-blocker.js";

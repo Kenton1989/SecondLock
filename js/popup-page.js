@@ -1,3 +1,6 @@
+/**
+ * This is the js for popup.html
+ */
 import { remoteCall } from "./remote-callable.js";
 import { getUrlOfTab } from "./utility.js";
 

@@ -1,3 +1,6 @@
+/**
+ * This is the js for options.html
+ */
 import {} from "./common-page.js";
 import { HostnameSet } from "./hostname-set.js";
 import { setupSectionNav } from "./nav-setup.js";

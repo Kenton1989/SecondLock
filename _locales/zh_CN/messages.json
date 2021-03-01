@@ -2,10 +2,13 @@
   "extname": {
     "message": "时间锁"
   },
-  "minute_single": {
+  "min": {
     "message": "分钟"
   },
-  "minute_plural": {
+  "mins": {
     "message": "分钟"
+  },
+  "options_title": {
+    "message": "选项"
   }
 }

@@ -1,3 +1,6 @@
+/**
+ * This is the js for select-time.html
+ */
 import {} from "./common-page.js";
 import { DynamicPage } from "./dynamic-page.js";
 import { RemoteCallable } from "./remote-callable.js";
@@ -9,8 +12,8 @@ import {
   validHostname,
 } from "./utility.js";
 
-let minUnit = chrome.i18n.getMessage("minute_single");
-let minUnits = chrome.i18n.getMessage("minute_plural");
+let minUnit = chrome.i18n.getMessage("min");
+let minUnits = chrome.i18n.getMessage("mins");
 
 let blockedHost = undefined;
 let warningTxt = undefined;

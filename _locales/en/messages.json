@@ -2,10 +2,13 @@
   "extname": {
     "message": "TimeLock"
   },
-  "minute_single": {
+  "min": {
     "message": "min"
   },
-  "minute_plural": {
+  "mins": {
     "message": "mins"
+  },
+  "options_title": {
+    "message": "Options DEF"
   }
 }
