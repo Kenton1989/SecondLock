@@ -14,7 +14,7 @@ function getUrlOfTab(tab) {
 }
 
 // Pattern used to match a hostname.
-const kHostnamePattern = /^([a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?\.)*[a-z]{2,63}$/i;
+const kHostnamePattern = /^([a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?\.)*[a-z][a-z0-9]{1,62}$/i;
 /**
  * Check if the given string is a valid hostname
  *

@@ -131,13 +131,18 @@
   width: 100%;
 }
 
-#blocking-motto {
-  width: 100%;
-}
 .days-checklist {
   padding: 0px;
 }
 .days-checklist li {
   display: inline-block;
   font-weight: bold;
+}
+
+input, select, textarea {
+  font-size: medium;
+}
+
+textarea {
+  width: 100%;
 }

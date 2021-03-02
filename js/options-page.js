@@ -74,10 +74,6 @@ function setHostList(hosts, hostListElement, hostSet = undefined) {
   }
 }
 
-// "Enter", "Ctrl", etc. special keys are allowed, which consist of multiple chars
-// alphabet, number, colon(:), bracket([ and ]), dot(.), hyphen(-) are allowed
-// other single chars are not allowed to enter as host name
-const HOSTNAME_NOT_ALLOWED_KEY = /^[^a-z0-9:\[\]\.\-]$/i;
 /**
  * Setup hostname input division
  * @param {String[]} hosts array of hostname
@@ -102,7 +98,7 @@ function setUpHostListDiv(hosts, hostListDiv, onSaveHostList = function () {}) {
   let addHostBtn = hostListDiv.getElementsByClassName("add-host-btn")[0];
 
   let enterHost = function () {
-    let input = userInput.value;
+    let input = userInput.value.trim();
 
     // warn for empty input
     if (!input) {
@@ -147,8 +143,6 @@ function setUpHostListDiv(hosts, hostListDiv, onSaveHostList = function () {}) {
   userInput.onkeydown = function (e) {
     // Shortcut for entering
     if (e.key == "Enter") enterHost();
-    // Prevent some of invalid input
-    if (HOSTNAME_NOT_ALLOWED_KEY.test(e.key)) e.preventDefault();
   };
 
   // prepare for saving list
@@ -210,7 +204,7 @@ function loadDefaultDurations(list) {
 
 function saveDefaultDuration(str) {
   // clear unsaved tag
-  sectionTitle.classList.remove("unsaved");
+  selectionPageSectionTitle.classList.remove("unsaved");
 
   if (str == lastSaveDefDur.toString()) {
     console.log("list is not changed. Skip saving.");
@@ -225,8 +219,6 @@ function saveDefaultDuration(str) {
     val = parseInt(s);
     if (val >= MIN_DUR_MIN && val <= MAX_DUR_MIN) {
       res.add(val);
-    } else {
-      continue;
     }
     if (res.size >= MAX_DUR_CNT) break;
   }
@@ -234,7 +226,7 @@ function saveDefaultDuration(str) {
   let list = [...res];
   list = list.sort((a, b) => a - b);
   
-  // set the list to clear invalid values even if no modification happens
+  // set without checking dirtiness to clear potential invalid values
   loadDefaultDurations(list);
 
   if (list.toString() == lastSaveDefDur.toString()) {
@@ -254,9 +246,9 @@ defaultDurSave.onclick = function () {
   saveDefaultDuration(defaultDurInput.value);
 };
 
-const sectionTitle = document.querySelector("#selection-page .section-title");
-defaultDurInput.onkeydown = function() {
-  sectionTitle.classList.add("unsaved");
+const selectionPageSectionTitle = document.querySelector("#selection-page .section-title");
+defaultDurInput.oninput = function() {
+  selectionPageSectionTitle.classList.add("unsaved");
 }
 
 ////////////////////// Blocking Page ///////////////////////
