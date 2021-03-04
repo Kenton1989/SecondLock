@@ -24,6 +24,7 @@ const WINDOW_SWITCH_DELAY = 300;
  */
 class BrowsingPageMonitor extends RemoteCallable {
   #monitoredHost = new HostnameSet();
+  #whitelistHost = new HostnameSet();
   #eventTarget = new EventTarget();
   #browseEvent = new CustomEventWrapper(
     BROWSING_MONITORED_PAGE,
@@ -108,15 +109,22 @@ class BrowsingPageMonitor extends RemoteCallable {
     if (!this.active) return undefined;
     let urlObj = new URL(url);
     if (!this.monitoredProtocol.has(urlObj.protocol)) return undefined;
-
-    return this.#monitoredHost.has(urlObj.hostname);
+    if (this.whitelist.has(urlObj.hostname)) return undefined;
+    return this.blacklist.has(urlObj.hostname);
   }
 
   /**
    * Get a set of host name that are monitored.
    */
-  get blackList() {
+  get blacklist() {
     return this.#monitoredHost;
+  }
+
+  /**
+   * Get a set of host name that are in the whitelist.
+   */
+  get whitelist() {
+    return this.#whitelistHost;
   }
 
   /**

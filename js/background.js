@@ -23,7 +23,12 @@ let calmDownTiming = new HostTimingMonitor("calm-down-time-monitor");
 
 options.monitoredList.doOnUpdated(function (list) {
   if (!list) return;
-  monitor.blackList.reset(list);
+  monitor.blacklist.reset(list);
+});
+
+options.whitelistHost.doOnUpdated(function (list) {
+  if (!list) return;
+  monitor.whitelist.reset(list);
 });
 
 function selectTime(tab, hostname) {

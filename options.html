@@ -1,157 +1,247 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/option.css" />
+    <title class="trans-options_title">Options</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="css/option.css" />
-  <title class="trans-options_title">Options</title>
-</head>
-
-<body>
-  <header>
-    <h1 class="ext-name">TimeLock</h1>
-    <h2 class="option-title trans-options_title">Options</h2>
-  </header>
-  <main class="container">
-    <aside>
-      <ul id="nav-list"></ul>
-    </aside>
-    <div id="main-div">
-      <section>
-        <a href="manual.html" class="trans-manual_title">User Manual</a>
-      </section>
-      <section id="debug">
-        <h2 class="section-title">Debug</h2>
-        <a id="go-select" target="_blank" href="select-time.html">To Selection Page</a>
-        <br />
-        <a id="go-block" target="_blank" href="times-up.html">To Times Up Page</a>
-      </section>
-      <section id="monitored-host">
-        <h2 class="section-title trans-">Monitored Host</h2>
-        <details class="description">
-          <summary>Details about how the list works:</summary>
-          <ul>
-            <li>All the subdomain of host will be monitored.<br>(e.g. if "youtube.com" is in the list, then
-              "www.youtube.com", "music.youtube.com", etc. will be monitored at the same time)</li>
-            <li>Adding a super domain will eliminate all its subdomains from the list.<br>(e.g. Suppose "www.youtube.com",
-              "music.youtube.com" are in the list. If "youtube.com" is then added, both of them will be replaced by
-              "youtube.com"</li>
-            <li>To add a new subdomain, you need to delete the parent domain first, and you must save the list before
-              adding the subdomain.<br>(e.g. Suppose "youtube.com" is in the list, and you want to add
-              "www.youtube.com". You must delete "youtube.com" form the list and save it before adding "www.youtube.com"
-              into the list.)</li>
-            <li>You can either hit ENTER or click "Add" button to add a new hostname after entering.</li>
-            <li>Only HTTP and HTTPS pages are monitored. Other protocols like FTP are never monitored.</li>
-          </ul>
-        </details>
-        <div class="host-list-div">
-          <ul class="host-list">
-          </ul>
-          <div class="input-host-div">
-            <input type="url" name="host-input" placeholder="Enter new hostname here" class="host-input">
-            <button class="add-host-btn">Add</button>
+  <body>
+    <header>
+      <h1 class="ext-name">TimeLock</h1>
+      <h2 class="option-title trans-options_title">Options</h2>
+    </header>
+    <main class="container">
+      <aside>
+        <ul id="nav-list"></ul>
+      </aside>
+      <div id="main-div">
+        <section>
+          <a href="manual.html" class="trans-manual_title">User Manual</a>
+        </section>
+        <section id="debug">
+          <h2 class="section-title">Debug</h2>
+          <a id="go-select" target="_blank" href="select-time.html"
+            >To Selection Page</a
+          >
+          <br />
+          <a id="go-block" target="_blank" href="times-up.html"
+            >To Times Up Page</a
+          >
+        </section>
+        <section id="monitored-host">
+          <h2 class="section-title trans-">Monitored Host</h2>
+          <details class="description">
+            <summary>Details about how the list works:</summary>
+            <ul>
+              <li>
+                All the subdomain of host will be monitored.<br />e.g. if
+                "youtube.com" is in the list, then "www.youtube.com",
+                "music.youtube.com", etc. will be monitored at the same time
+              </li>
+              <li>
+                Adding a super domain will eliminate all its subdomains from the
+                list.<br />e.g. Suppose "www.youtube.com", "music.youtube.com"
+                are in the list. If "youtube.com" is then added, both of them
+                will be replaced by "youtube.com"
+              </li>
+              <li>
+                To add a new subdomain, you need to delete the parent domain
+                first, and you must save the list before adding the
+                subdomain.<br />e.g. Suppose "youtube.com" is in the list, and
+                you want to add "www.youtube.com". You must delete "youtube.com"
+                form the list and save it before adding "www.youtube.com" into
+                the list.
+              </li>
+              <li>
+                You can either hit ENTER or click "Add" button to add a new
+                hostname after entering.
+              </li>
+              <li>
+                Only HTTP and HTTPS pages are monitored. Other protocols like
+                FTP are never monitored.
+              </li>
+            </ul>
+          </details>
+          <div class="host-list-div">
+            <ul class="host-list"></ul>
+            <div class="input-host-div">
+              <input
+                type="url"
+                name="host-input"
+                placeholder="Enter new hostname here"
+                class="host-input"
+              />
+              <button class="add-host-btn">Add</button>
+            </div>
           </div>
-        </div>
-        <button class="save-host-btn">Save</button>
-        <span class="warning"></span>
-      </section>
-      <section id="notification">
-        <h2 class="section-title">Notification</h2>
-        <input type="checkbox" id="notification-on" name="notification-on" />
-        <label for="notification-on">Activate Notification</label>
-        <div id="notification-details">
-          <h3>Notification Time Points</h3>
-          <p>
-            <input type="number" min="1" max="120">
-            <select name="unit">
-              <option value="min">mins</option>
-              <option value="sec">secs</option>
-            </select>
-            before time's up
+          <button class="save-host-btn">Save</button>
+          <span class="warning"></span>
+        </section>
+        <section id="whitelist-host">
+          <h2 class="section-title trans-white_list">Whitelist Host</h2>
+          <details class="description">
+            <summary>Details about how the list works:</summary>
+            <ul>
+              <li>
+                The hostname matching rule and adding rule are the same to the
+                "Monitor Host" above.
+              </li>
+              <li>
+                Whitelist takes privilege over blacklist. <br />e.g. If
+                "youtube.com" is in the black list, while "music.youtube.com" is
+                in the white list, the "music.youtube.com" will not be monitored
+              </li>
+            </ul>
+          </details>
+          <div class="host-list-div">
+            <ul class="host-list"></ul>
+            <div class="input-host-div">
+              <input
+                type="url"
+                name="host-input"
+                placeholder="Enter new hostname here"
+                class="host-input"
+              />
+              <button class="add-host-btn">Add</button>
+            </div>
+          </div>
+          <button class="save-host-btn">Save</button>
+          <span class="warning"></span>
+        </section>
+        <section id="notification">
+          <h2 class="section-title">Notification</h2>
+          <input type="checkbox" id="notification-on" name="notification-on" />
+          <label for="notification-on">Activate Notification</label>
+          <div id="notification-details">
+            <h3>Notification Time Points</h3>
+            <p>
+              <input type="number" min="1" max="120" />
+              <select name="unit">
+                <option value="min">mins</option>
+                <option value="sec">secs</option>
+              </select>
+              before time's up
+            </p>
+            <button id="save-notification-btn">Save</button>
+          </div>
+        </section>
+        <section id="selection-page">
+          <h2 class="section-title">Duration Selection Page</h2>
+          <h4>Default Duration Choices (in minutes)</h4>
+          <p class="description">
+            Set the list of buttons shown on the unlock duration selection page
           </p>
-          <button id="save-notification-btn">Save</button>
-        </div>
-      </section>
-      <section id="selection-page">
-        <h2 class="section-title">Duration Selection Page</h2>
-        <h4>Default Duration Choices (in minutes)</h4>
-        <p class="description">Set the list of buttons shown on the unlock duration selection page</p>
-        <details class="description">
-          <summary>Details of input format:</summary>
+          <details class="description">
+            <summary>Details of input format:</summary>
+            <ul>
+              <li>Multiple values should be split with comma.</li>
+              <li>
+                Each value should be an integer, at least 1 and at most 1000.
+              </li>
+              <li>
+                At most 10 different values can be set, if more than 10 values
+                are enter, first 10 valid values will be used.
+              </li>
+              <li>All duplicated and invalid values will be filtered out.</li>
+            </ul>
+          </details>
+          <p class="description"></p>
+          <input type="text" id="default-time" />
+          <button id="save-default-time-btn">Save</button>
+        </section>
+        <section id="times-up-page">
+          <h2 class="section-title">Times Up Page</h2>
+          <h4>Motto</h4>
+          <p class="description">The motto to be displayed on times up page.</p>
+          <textarea id="times-up-motto"></textarea>
+          <button id="save-block-msg-btn">Save</button>
+        </section>
+        <section id="storage-and-sync">
+          <h2 class="section-title">Storage & Sync</h2>
+          <div>
+            <input type="checkbox" id="auto-sync" name="auto-sync" disabled />
+            <label for="auto-sync">Auto Sync Options</label>
+          </div>
+          <details class="description">
+            <summary>storage usage details</summary>
+            <p>Local Storage Used: <span id="local-used-space">1kb</span></p>
+            <p>
+              Cloud Storage Used: <span id="cloud-used-space">1kb</span>/<span
+                id="cloud-max-space"
+                >5kb</span
+              >
+            </p>
+          </details>
+        </section>
+        <section id="acknowledgement">
+          <h2 class="section-title">Acknowledgement</h2>
+          <p>
+            Great thanks to Mr. He. The idea of this extension is based on his
+            video and app.
+          </p>
           <ul>
-            <li>Multiple values should be split with comma.</li>
-            <li>Each value should be an integer, at least 1 and at most 1000.</li>
-            <li>At most 10 different values can be set, if more than 10 values are enter, first 10 valid values will be used.</li>
-            <li>All duplicated and invalid values will be filtered out.</li>
+            <li>
+              <a href="https://space.bilibili.com/163637592" target="_blank"
+                >His channel</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://www.bilibili.com/video/BV1ev411x7en"
+                target="_blank"
+                >His video</a
+              >
+            </li>
+            <li>
+              <a
+                href="http://download.yitangyx.cn/test/student-he/new.html?202001"
+                >His app</a
+              >
+            </li>
           </ul>
-        </details>
-        <p class="description"></p>
-        <input type="text" id="default-time">
-        <button id="save-default-time-btn">Save</button>
-      </section>
-      <section id="times-up-page">
-        <h2 class="section-title">Times Up Page</h2>
-        <h4>Motto</h4>
-        <p class="description">The motto to be displayed on times up page.</p>
-        <textarea id="times-up-motto"></textarea>
-        <button id="save-block-msg-btn">Save</button>
-      </section>
-      <section id="storage-and-sync">
-        <h2 class="section-title">Storage & Sync</h2>
-        <div>
-          <input type="checkbox" id="auto-sync" name="auto-sync" disabled/>
-          <label for="auto-sync">Auto Sync Options</label>
-        </div>
-        <details class="description">
-          <summary>storage usage details</summary>
-          <p>Local Storage Used: <span id="local-used-space">1kb</span></p>
-          <p>Cloud Storage Used: <span id="cloud-used-space">1kb</span>/<span id="cloud-max-space">5kb</span></p>
-        </details>
-      </section>
-      <section id="acknowledgement">
-        <h2 class="section-title">Acknowledgement</h2>
-        <p>Great thanks to Mr. He. The idea of this extension is based on his video and app.</p>
-        <ul>
-          <li><a href="https://space.bilibili.com/163637592" target="_blank">His channel</a></li>
-          <li><a href="https://www.bilibili.com/video/BV1ev411x7en" target="_blank">His video</a></li>
-          <li><a href="http://download.yitangyx.cn/test/student-he/new.html?202001">His app</a></li>
-        </ul>
-      </section>
-      <section id="external-links">
-        <h2 class="section-title">External Links</h2>
-        <ul>
-          <li><a href="https://github.com/Kenton1989/timelock-chrome" target="_blank">The source code</a></li>
-        </ul>
-      </section>
+        </section>
+        <section id="external-links">
+          <h2 class="section-title">External Links</h2>
+          <ul>
+            <li>
+              <a
+                href="https://github.com/Kenton1989/timelock-chrome"
+                target="_blank"
+                >The source code</a
+              >
+            </li>
+          </ul>
+        </section>
+      </div>
+    </main>
+    <footer>
+      &copy;2021-<span id="copy-end-year">2021</span> Kenton. All rights
+      reserved.
+    </footer>
+
+    <div id="templates">
+      <li class="nav-item">
+        <a href="#">Something</a>
+      </li>
+
+      <li class="host-list-item">
+        <span class="host">hostname</span
+        ><button class="undo-btn">[undo]</button
+        ><button class="delete-btn">[delete]</button>
+      </li>
+
+      <p class="notify-time-point">
+        <input type="number" min="1" max="120" />
+        <select name="unit">
+          <option value="min">mins</option>
+          <option value="sec">secs</option>
+        </select>
+        before time's up
+      </p>
     </div>
-  </main>
-  <footer>
-    &copy;2021-<span id="copy-end-year">2021</span> Kenton. All rights
-    reserved.
-  </footer>
 
-  <div id="templates">
-    <li class="nav-item">
-      <a href="#">Something</a>
-    </li>
-
-    <li class="host-list-item">
-      <span class="host">hostname</span><button class="undo-btn">[undo]</button><button
-        class="delete-btn">[delete]</button>
-    </li>
-
-    <p class="notify-time-point">
-      <input type="number" min="1" max="120">
-      <select name="unit">
-        <option value="min">mins</option>
-        <option value="sec">secs</option>
-      </select>
-      before time's up
-    </p>
-  </div>
-
-  <script type="module" src="js/options-page.js"></script>
-</body>
-
+    <script type="module" src="js/options-page.js"></script>
+  </body>
 </html>

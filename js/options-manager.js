@@ -5,6 +5,7 @@ import { CustomEventWrapper } from "./custom-event-wrapper.js";
  */
 const ALL_OPTION_NAME = [
   "monitoredList",
+  "whitelistHost",
   "activated",
   "notificationOn",
   "notificationTimes",
@@ -26,6 +27,7 @@ const DEFAULT_OPTIONS = {
     "zhihu.com",
     "tiktok.com",
   ],
+  whitelistHost: [],
   activated: true,
   notificationOn: false,
   notificationTimes: [10, 60, 5 * 60],

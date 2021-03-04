@@ -169,9 +169,9 @@ function setUpHostListDiv(hosts, hostListDiv, onSaveHostList = function () {}) {
 
 setupSectionNav();
 
-// Set up monitored host list
+//////////////////// monitored host list ///////////////////////
 let monitoredHostDiv = document.getElementById("monitored-host");
-let monitoredHostListEle = document.getElementsByClassName("host-list")[0];
+let monitoredHostListEle = monitoredHostDiv.getElementsByClassName("host-list")[0];
 setUpHostListDiv([], monitoredHostDiv, function (list) {
   console.log(list);
   setHostList(list, monitoredHostListEle);
@@ -181,6 +181,20 @@ setUpHostListDiv([], monitoredHostDiv, function (list) {
 options.monitoredList.doOnUpdated(function (list) {
   setHostList(list, monitoredHostListEle, monitoredHostDiv.hostSet);
 });
+
+///////////////////// Whitelist ////////////////////////
+let whitelistHostDiv = document.getElementById("whitelist-host");
+let whitelistHostListEle = whitelistHostDiv.getElementsByClassName("host-list")[0];
+setUpHostListDiv([], whitelistHostDiv, function (list) {
+  console.log(list);
+  setHostList(list, whitelistHostListEle);
+  options.whitelistHost.set(list);
+});
+
+options.whitelistHost.doOnUpdated(function (list) {
+  setHostList(list, whitelistHostListEle, whitelistHostDiv.hostSet);
+});
+
 
 ///////////////////// Notification //////////////////////////
 // TODO - add notification functions
