@@ -66,29 +66,28 @@ goOptions.onclick = function (e) {
   chrome.runtime.openOptionsPage();
 };
 
-
 /**
  * Setup the time countdown
  */
-function setupCountdown() {
-  // Use remote call because the browse monitor runs in the background.
-  remoteCall("browse-monitor", "isMonitoring", [currentPageUrl],
-    function (hostname) {
-      if (!hostname) return;
-      monitoredHost = hostname;
-
-      // Use remote call because the timing monitor runs in the background.
-      remoteCall("lock-time-monitor", "endTimePoint", [monitoredHost],
-        function (endTimePoint) {
-          if (endTimePoint == undefined) {
-            remainTimeDiv.innerText = "ERROR!";
-            console.error("Accessing monitored page without unlocking.");
-            return;
-          }
-          unlockEndTime = endTimePoint;
-          updateRemainTime();
-        });
-    });
+function setupCountdown(state) {
+  // state = {
+  //   isMonitored: ???,
+  //   monitoredHost: ???,
+  //   isUnlocked: ???,
+  //   unlockEndTime: ???,
+  //   needCalmDown: ???,
+  //   calmDownEndTime: ???,
+  // };
+  if (state.isMonitored) {
+    monitoredHost = state.monitoredHost;
+    if (!state.isUnlocked) {
+      remainTimeDiv.innerText = "ERROR!";
+      console.error("Accessing monitored page without unlocking.");
+      return;
+    }
+    unlockEndTime = state.unlockEndTime;
+    updateRemainTime();
+  }
 }
 // set current browsing host
 let currentHostTxt = document.getElementById("current-host");
@@ -96,5 +95,11 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
   let tab = tabs[0];
   currentPageUrl = tab.url;
   currentHostTxt.innerText = getUrlOfTab(tab).hostname;
-  setupCountdown();
+  let query = {
+    queryHostMonitoredState: {
+      url: tab.url,
+    },
+  };
+  console.debug("Query: ", query);
+  chrome.runtime.sendMessage(query, setupCountdown);
 });
