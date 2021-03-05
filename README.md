@@ -23,6 +23,9 @@ Inspired by [Mr. He's video][mr_he_video].
 
 # Update
 
+### 2021/03/05
+- 完成快速结束倒计时功能
+
 ### 2021/03/04
 - 完成白名单
 

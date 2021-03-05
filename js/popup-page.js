@@ -2,7 +2,7 @@
  * This is the js for popup.html
  */
 import { remoteCall, RemoteCallable } from "./remote-callable.js";
-import { getUrlOfTab } from "./utility.js";
+import { closeTabs, getUrlOfTab, queryTabsUnder } from "./utility.js";
 
 let currentPageUrl = "";
 let monitoredHost = undefined;
@@ -66,9 +66,15 @@ goOptions.onclick = function (e) {
   chrome.runtime.openOptionsPage();
 };
 
+// TODO - add quick adding blacklist support
+function quickAddBlacklist() {
+  let urlObj = new URL(currentPageUrl);
+}
+
 /**
  * Setup the time countdown
  */
+const MONITORED_PROTOCOL = new Set(["http:", "https:"]);
 function setupCountdownDiv(state) {
   // state = {
   //   isMonitored: ???,
@@ -91,13 +97,25 @@ function setupCountdownDiv(state) {
     let stopBtn = document.getElementById("stop-timer-btn");
     stopBtn.style.display = "inline-block";
     stopBtn.onclick = function () {
-      RemoteCallable.call(
-        "lock-time-monitor",
-        "stopTiming",
-        [monitoredHost],
-        window.close
-      );
+      // close all monitored tabs and tell the end the timer
+      queryTabsUnder(monitoredHost, function (tabs) {
+        closeTabs(tabs);
+        RemoteCallable.call(
+          "lock-time-monitor",
+          "stopTiming",
+          [monitoredHost],
+          window.close
+        );
+      });
     };
+  } else {
+    // TODO - add quick adding blacklist support
+    // let urlObj = new URL(currentPageUrl);
+    // if (MONITORED_PROTOCOL.has(urlObj.protocol)) {
+    //   let addBlacklistBtn = document.getElementById("add-blacklist-btn");
+    //   addBlacklistBtn.style.display = "inline-block";
+    //   addBlacklistBtn.onclick = quickAddBlacklist;
+    // }
   }
 }
 
@@ -106,7 +124,10 @@ let currentHostTxt = document.getElementById("current-host");
 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
   let tab = tabs[0];
   currentPageUrl = tab.url;
-  currentHostTxt.innerText = getUrlOfTab(tab).hostname;
+  let urlObj = getUrlOfTab(tab);
+
+  currentHostTxt.innerText = urlObj.hostname;
+
   let query = {
     queryHostMonitoredState: {
       url: tab.url,

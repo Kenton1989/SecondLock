@@ -1,5 +1,10 @@
 import { DynamicPageBackend } from "./dynamic-page-backend.js";
-import { closeCurrentTab, validHostname } from "./utility.js";
+import {
+  closeCurrentTab,
+  queryTabsUnder,
+  validHostname,
+  closeTabs,
+} from "./utility.js";
 
 const selectTimeURL = chrome.runtime.getURL("select-time.html");
 const timesUpPageURL = chrome.runtime.getURL("times-up.html");
@@ -44,30 +49,19 @@ function blockAllTabsOf(hostname) {
   }
 
   // block active page
-  chrome.tabs.query(
-    {
-      url: `*://${pattern}/*`,
-      active: true,
-    },
+  queryTabsUnder(
+    hostname,
     function (tabs) {
       for (const tab of tabs) {
         blockPageCompletely(tab, hostname, timesUpPageURL);
       }
-    }
+    },
+    { active: true }
   );
 
   // close all inactive page
-  chrome.tabs.query(
-    {
-      url: `*://${pattern}/*`,
-      active: false,
-    },
-    function (tabs) {
-      for (const tab of tabs) {
-        chrome.tabs.remove(tab.id);
-      }
-    }
-  );
+
+  queryTabsUnder(hostname, closeTabs, { active: false });
 }
 
 /**

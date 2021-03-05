@@ -115,7 +115,7 @@ const HOSTNAME_CHARS = /^[a-z0-9:\-\.\[\]]*$/i;
  * - for ip hostname, omit redundancy
  *
  * @param {string} hostname a hostname
- * @returns {(string|undefined)} the formatted hostname, or 
+ * @returns {(string|undefined)} the formatted hostname, or
  *  undefined if the input host name is invalid
  */
 function reformatHostname(hostname) {
@@ -178,7 +178,7 @@ function showTxt(element, text, blink = true, ...blinkArgs) {
  * @param {number} bytes bytes to be formatted
  * @returns {string} the formatted string
  */
-const BYTE_UNIT = ["B", "KB", "MB", "GB", "TB"]
+const BYTE_UNIT = ["B", "KB", "MB", "GB", "TB"];
 const STEP = 1024.0;
 function formatBytes(bytes) {
   let unit = 0;
@@ -186,7 +186,35 @@ function formatBytes(bytes) {
     bytes /= STEP;
     ++unit;
   }
-  return `${bytes.toFixed(1)}${BYTE_UNIT[unit]}`
+  return `${bytes.toFixed(1)}${BYTE_UNIT[unit]}`;
+}
+
+/**
+ * close a list of tabs
+ * @param {chrome.tabs.Tab[]} tabs the tabs to be closed
+ */
+function closeTabs(tabs) {
+  let tabIds = tabs.map((tab) => tab.id);
+  chrome.tabs.remove(tabIds);
+}
+
+/**
+ * query tabs under the given hostname.
+ *
+ * @param {string} hostname the hostname to be query
+ * @param {function(chrome.tabs.Tab[])} callback the result
+ * @param {*} args other arguments to be passed to chrome.tabs.query
+ */
+function queryTabsUnder(hostname, callback, args = {}) {
+  let pattern = hostname;
+
+  if (validHostname(hostname)) {
+    pattern = `*.${hostname}`;
+  }
+
+  args.url = `*://${pattern}/*`;
+
+  chrome.tabs.query(args, callback);
 }
 
 export {
@@ -201,4 +229,6 @@ export {
   blinkElement,
   showTxt,
   formatBytes,
+  queryTabsUnder,
+  closeTabs,
 };
