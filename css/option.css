@@ -146,3 +146,7 @@ input, select, textarea {
 textarea {
   width: 100%;
 }
+
+#times-up-mottos {
+  height: 100px;
+}
