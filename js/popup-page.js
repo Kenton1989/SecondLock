@@ -1,7 +1,7 @@
 /**
  * This is the js for popup.html
  */
-import { remoteCall } from "./remote-callable.js";
+import { remoteCall, RemoteCallable } from "./remote-callable.js";
 import { getUrlOfTab } from "./utility.js";
 
 let currentPageUrl = "";
@@ -69,7 +69,7 @@ goOptions.onclick = function (e) {
 /**
  * Setup the time countdown
  */
-function setupCountdown(state) {
+function setupCountdownDiv(state) {
   // state = {
   //   isMonitored: ???,
   //   monitoredHost: ???,
@@ -87,9 +87,21 @@ function setupCountdown(state) {
     }
     unlockEndTime = state.unlockEndTime;
     updateRemainTime();
+
+    let stopBtn = document.getElementById("stop-timer-btn");
+    stopBtn.style.display = "inline-block";
+    stopBtn.onclick = function () {
+      RemoteCallable.call(
+        "lock-time-monitor",
+        "stopTiming",
+        [monitoredHost],
+        window.close
+      );
+    };
   }
 }
-// set current browsing host
+
+// get current browsing host and display
 let currentHostTxt = document.getElementById("current-host");
 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
   let tab = tabs[0];
@@ -101,5 +113,5 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     },
   };
   console.debug("Query: ", query);
-  chrome.runtime.sendMessage(query, setupCountdown);
+  chrome.runtime.sendMessage(query, setupCountdownDiv);
 });

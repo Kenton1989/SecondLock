@@ -1,0 +1,38 @@
+* {
+  box-sizing: border-box;
+  /* margin: 0px; */
+}
+
+.container {
+  position: relative;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+button {
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin: 5px 0;
+}
+
+li {
+  margin: 10px 0;
+}
+
+#templates {
+  display: none;
+}
+
+.templates {
+  display: none;
+}

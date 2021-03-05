@@ -1,5 +1,6 @@
 @import "color.css";
 @import "typography.css";
+@import "layout.css";
 
 body {
   min-width: 200px;

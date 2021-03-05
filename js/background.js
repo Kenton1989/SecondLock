@@ -20,7 +20,7 @@ chrome.runtime.onInstalled.addListener(function () {
 let monitor = new BrowsingPageMonitor("browse-monitor");
 let unlockTiming = new HostTimingMonitor("lock-time-monitor");
 let calmDownTiming = new HostTimingMonitor("calm-down-time-monitor");
-
+unlockTiming.stopTiming
 options.monitoredList.doOnUpdated(function (list) {
   if (!list) return;
   monitor.blacklist.reset(list);

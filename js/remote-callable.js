@@ -55,24 +55,22 @@ class RemoteCallable {
    * @param {function(any)} callOnReturn callback on function return.
    *    The parameter will be the value returned by the called function
    */
-  static call(
-    name,
-    funcName,
-    args = [],
-    callOnReturn = RemoteCallable.doNothing
-  ) {
-    chrome.runtime.sendMessage(
-      {
-        remoteCallInfo: {
-          targetName: name,
-          funcName: funcName,
-          args: args,
-        },
+  static call(name, funcName, args = [], callOnReturn = undefined) {
+    let remoteCallQuery = {
+      remoteCallInfo: {
+        targetName: name,
+        funcName: funcName,
+        args: args,
       },
-      function (val) {
+    };
+  
+    if (callOnReturn != undefined) {
+      chrome.runtime.sendMessage(remoteCallQuery, function (val) {
         callOnReturn(val.ret);
-      }
-    );
+      });
+    } else {
+      chrome.runtime.sendMessage(remoteCallQuery);
+    }
   }
 }
 

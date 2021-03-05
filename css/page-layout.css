@@ -1,11 +1,4 @@
-* {
-  box-sizing: border-box;
-  /* margin: 0px; */
-}
-
-.container {
-  position: relative;
-}
+@import "layout.css";
 
 body {
   max-width: 1000px;
@@ -13,16 +6,6 @@ body {
   padding: 0px;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
-  margin-left: 0;
-  margin-right: 0;
-}
 
 header {
   min-height: 100px;
@@ -61,27 +44,4 @@ footer {
   text-align: center;
   min-height: 80px;
   padding: 20px 20px;
-}
-
-button {
-  border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
-  margin: 5px 0;
-}
-
-details {
-  margin: 5px 0;
-}
-
-li {
-  margin: 10px 0;
-}
-
-#templates {
-  display: none;
-}
-
-.templates {
-  display: none;
 }
