@@ -35,7 +35,7 @@ const DEFAULT_OPTIONS = {
   pendingActiveDays: undefined,
   activeDayApplyTime: 0,
   syncOn: false,
-  defDurations: [1, 5, 15, 30, 60, 120],
+  defDurations: [1, 5, 10, 15, 30, 60],
   mottos: ["Time waits for no one. – Folklore"],
 };
 
