@@ -192,10 +192,11 @@ function formatBytes(bytes) {
 /**
  * close a list of tabs
  * @param {chrome.tabs.Tab[]} tabs the tabs to be closed
+ * @param {function()} callback the callback on tabs are closed.
  */
-function closeTabs(tabs) {
+function closeTabs(tabs, callback = undefined) {
   let tabIds = tabs.map((tab) => tab.id);
-  chrome.tabs.remove(tabIds);
+  chrome.tabs.remove(tabIds, callback);
 }
 
 /**

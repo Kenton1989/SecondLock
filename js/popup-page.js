@@ -74,7 +74,6 @@ function quickAddBlacklist() {
 /**
  * Setup the time countdown
  */
-const MONITORED_PROTOCOL = new Set(["http:", "https:"]);
 function setupCountdownDiv(state) {
   // state = {
   //   isMonitored: ???,
@@ -97,14 +96,15 @@ function setupCountdownDiv(state) {
     let stopBtn = document.getElementById("stop-timer-btn");
     stopBtn.style.display = "inline-block";
     stopBtn.onclick = function () {
-      // close all monitored tabs and tell the end the timer
+      // close all monitored tabs and end the timer
       queryTabsUnder(monitoredHost, function (tabs) {
-        closeTabs(tabs);
-        RemoteCallable.call(
-          "lock-time-monitor",
-          "stopTiming",
-          [monitoredHost],
-          window.close
+        closeTabs(tabs, () =>
+          RemoteCallable.call(
+            "lock-time-monitor",
+            "stopTiming",
+            [monitoredHost],
+            window.close
+          )
         );
       });
     };
@@ -133,6 +133,6 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       url: tab.url,
     },
   };
-  console.debug("Query: ", query);
+  // console.debug("Query: ", query);
   chrome.runtime.sendMessage(query, setupCountdownDiv);
 });
