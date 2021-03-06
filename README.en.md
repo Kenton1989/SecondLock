@@ -14,7 +14,7 @@ Internet is NOT interesting before you have MIND. Wasting time mindlessly is nev
 
 TimeLock will help you, who has mind but not mindful enough. Before entering any attractive website, you must think twice for what to do and estimate the time needed, that is the last second your are mindful. Then, set a time limit with TimeLock and enjoy your mindless time. TimeLock will block the webpage when time's up and try to remind you.
 
-> Ask yourself before opening a app:
+> Ask yourself before opening an app:
 > - Why you open it?
 > - How long will you spend?
 > - Do you have any alternative to do?
