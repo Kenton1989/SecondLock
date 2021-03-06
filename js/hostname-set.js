@@ -82,21 +82,14 @@ class HostnameSet {
    * @param {Iterable<string>} hostnameList the list of hostname to be added
    */
   addList(hostnameList) {
-    // avoid affecting original iterable
-    hostnameList = [...hostnameList];
+    hostnameList = [...hostnameList, ...this];
 
-    // Sort according to length in decreasing order
-    // This guarantee that subdomain is processed after its parent domain
-    hostnameList.sort((a, b) => a.length - b.length);
-    for (const val of hostnameList) {
-      this.#addToMap(val);
-      this.#updateRegex();
-    }
-
+    this.reset(hostnameList);
   }
 
   /**
    * Remove a hostname from the set.
+   * Exact match will be perform. (removing google.com will not affect www.google.com)
    * @param {String} hostname the hostname to be removed.
    * @return {boolean} true if the hostname exist in the list and being removed.
    */
@@ -134,7 +127,14 @@ class HostnameSet {
    */
   reset(newHostList = []) {
     this.clear();
-    this.addList(newHostList);
+    
+    // Sort according to length in increasing order
+    // This guarantee that subdomain is processed after its parent domain
+    newHostList.sort((a, b) => a.length - b.length);
+    for (const val of newHostList) {
+      this.#addToMap(val);
+      this.#updateRegex();
+    }
   }
 
   /**
@@ -145,7 +145,7 @@ class HostnameSet {
   }
 
   /**
-   * add a hostname into map, without updating matcher.
+   * add a hostname into map, without updating regex matcher.
    * @param {String} hostname a hostname
    * @returns {boolean} true if a hostname is successfully added.
    */
