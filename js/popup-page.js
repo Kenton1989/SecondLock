@@ -97,16 +97,13 @@ function setupCountdownDiv(state) {
     stopBtn.style.display = "inline-block";
     stopBtn.onclick = function () {
       // close all monitored tabs and then end the timer
-      queryTabsUnder(monitoredHost, function (tabs) {
-        closeTabs(tabs, function () {
-          RemoteCallable.call(
-            "lock-time-monitor",
-            "stopTiming",
-            [monitoredHost],
-            window.close
-          );
-        });
-      });
+      queryTabsUnder(monitoredHost, closeTabs);
+      RemoteCallable.call(
+        "lock-time-monitor",
+        "stopTiming",
+        [monitoredHost],
+        window.close
+      );
     };
   } else {
     // TODO - add quick adding blacklist support
