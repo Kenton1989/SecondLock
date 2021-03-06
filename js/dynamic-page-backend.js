@@ -1,11 +1,13 @@
-class DynamicPageBackend {
-  static #tabArgs = new Map();
-  static #setup = false;
+import { RemoteCallable } from "./remote-callable.js";
 
-  static setup() {
-    // avoid multiple setup
-    if (DynamicPageBackend.#setup) return;
-    DynamicPageBackend.#setup = true;
+class DynamicPageBackend extends RemoteCallable {
+  #tabArgs = new Map();
+
+  constructor(name) {
+    super(name);
+
+    // make private member visible in callback
+    let tabArgs = this.#tabArgs;
 
     // send arguments back on request.
     chrome.runtime.onMessage.addListener(function (
@@ -15,7 +17,7 @@ class DynamicPageBackend {
     ) {
       if (message.dynamicPageInitRequest) {
         let tabId = sender.tab.id;
-        let args = DynamicPageBackend.#tabArgs.get(tabId);
+        let args = tabArgs.get(tabId);
         sendResponse({ dynamicPageInitArgs: args });
       }
     });
@@ -23,7 +25,7 @@ class DynamicPageBackend {
     // remove args of tab on close
     chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
       console.debug(`Tab #${tabId} closed.`);
-      if (DynamicPageBackend.#tabArgs.delete(tabId)) {
+      if (tabArgs.delete(tabId)) {
         console.debug(`Argument for tab #${tabId} deleted.`);
       }
     });
@@ -37,8 +39,8 @@ class DynamicPageBackend {
    * @param {Number} tabId tab id of the page on which the page is opened.
    * @param {function(any)} callback the callback after the tab is created. 1st parameter is updated tab object.
    */
-  static openOnExistingTab(url, pageArgs, tabId, callback = function (tab) {}) {
-    DynamicPageBackend.#tabArgs.set(tabId, pageArgs);
+  openOnExistingTab(url, pageArgs, tabId, callback = function (tab) {}) {
+    this.#tabArgs.set(tabId, pageArgs);
     chrome.tabs.update(tabId, { url: url }, callback);
     console.debug(`Overwriting tab #${tabId} with URL:${url}.`);
   }
@@ -52,25 +54,25 @@ class DynamicPageBackend {
    * chrome.tabs.create(). The tabProperties.url will be ignored if it is defined.
    * @param {function(chrome.tabs.Tab)} callback the callback after the tab is created.
    */
-  static openOnNewTab(
+  openOnNewTab(
     url,
     pageArgs,
     tabProperties = {},
-    callback = function (tab) {}
+    callback = (tab)=>{}
   ) {
     tabProperties.url = url;
+
+    // make private member visible in callback
+    let tabArgs = this.#tabArgs;
     chrome.tabs.create(tabProperties, function (tab) {
-      DynamicPageBackend.#tabArgs.set(tab.id, pageArgs);
+      tabArgs.set(tab.id, pageArgs);
       console.debug(`Created tab #${tab.id} opened with URL:${url}.`);
-      // Active send arguments
-      console.debug(DynamicPageBackend.#tabArgs);
+      // Actively send arguments
       chrome.tabs.sendMessage(tab.id, { dynamicPageInitArgs: pageArgs });
       console.debug("Sent argument: ", pageArgs)
       callback(tab);
     });
   }
 }
-
-DynamicPageBackend.setup();
 
 export { DynamicPageBackend };

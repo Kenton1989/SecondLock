@@ -1,4 +1,5 @@
 import { BrowsingPageMonitor } from "./browsing-page-monitor.js";
+import { DynamicPageBackend } from "./dynamic-page-backend.js";
 import { HostTimingMonitor } from "./host-timing-monitor.js";
 import {
   ALL_OPTION_NAME,
@@ -9,6 +10,7 @@ import { blockAllTabsOf, blockPageToSelectTime } from "./tab-blocker.js";
 
 let options = new OptionCollection(...ALL_OPTION_NAME);
 
+// Set default options
 chrome.runtime.onInstalled.addListener(function () {
   chrome.storage.local.get(DEFAULT_OPTIONS, function (result) {
     chrome.storage.local.set(result, function () {
@@ -17,10 +19,11 @@ chrome.runtime.onInstalled.addListener(function () {
   });
 });
 
+let dynamicPageBack = new DynamicPageBackend("dynamic-page-backend");
 let monitor = new BrowsingPageMonitor("browse-monitor");
 let unlockTiming = new HostTimingMonitor("lock-time-monitor");
 let calmDownTiming = new HostTimingMonitor("calm-down-time-monitor");
-unlockTiming.stopTiming
+
 options.monitoredList.doOnUpdated(function (list) {
   if (!list) return;
   monitor.blacklist.reset(list);
@@ -37,13 +40,13 @@ function selectTime(tab, hostname) {
     console.debug(`${hostname} is unlocked, does not block.`);
     return;
   }
-  blockPageToSelectTime(tab, hostname);
+  blockPageToSelectTime(dynamicPageBack, tab, hostname);
 }
 
 monitor.onBrowse.addListener(selectTime);
 
 unlockTiming.onTimesUp.addListener(function (hostname) {
-  blockAllTabsOf(hostname);
+  blockAllTabsOf(dynamicPageBack, hostname);
 });
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
@@ -68,7 +71,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
         state.isUnlocked = true;
         state.unlockEndTime = unlockEndTime;
       }
-      
+
       let calmDownEndTime = calmDownTiming.endTimePoint(actualMonitored);
       if (calmDownEndTime != undefined) {
         state.needCalmDown = true;

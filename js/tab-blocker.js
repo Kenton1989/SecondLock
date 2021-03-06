@@ -12,36 +12,37 @@ const timesUpPageURL = chrome.runtime.getURL("times-up.html");
 /**
  * Block a tab and open the time selection page.
  *
+ * @param {DynamicPageBackend} backend the dynamic page backend used to open blocking page
  * @param {chrome.tabs.Tab} tab the tab on which the host is accessed.
  * @param {String} hostname the hostname to be blocked.
  */
-function blockPageToSelectTime(tab, hostname) {
-  DynamicPageBackend.openOnNewTab(
+function blockPageToSelectTime(backend, tab, hostname) {
+  backend.openOnNewTab(
     selectTimeURL,
     { blockedHost: hostname },
     { windowId: tab.windowId }
   );
 }
 
-const c = chrome.runtime.getURL("times-up.html");
 /**
  * Block the content of a tab completely with given page and parameters.
+ * @param {DynamicPageBackend} backend the dynamic page backend used to open blocking page
  * @param {chrome.tabs.Tab} tab the tab on which the host is accessed.
  * @param {String} hostname the hostname to be blocked.
  * @param {String} newPageUrl the url of page used to override existing page.
  *  Assuming the page is dynamic page.
  * @param {*} param the param passed to dynamic page
  */
-function blockPageCompletely(tab, hostname, newPageUrl, param = {}) {
+function blockPageCompletely(backend, tab, hostname, newPageUrl, param = {}) {
   param.blockedHost = hostname;
-  DynamicPageBackend.openOnExistingTab(newPageUrl, param, tab.id);
+  backend.openOnExistingTab(newPageUrl, param, tab.id);
 }
 
 /**
  * Block all tabs with the given hostname.
  * @param {String } hostname the hostname to be blocked
  */
-function blockAllTabsOf(hostname) {
+function blockAllTabsOf(backend, hostname) {
   let pattern = hostname;
 
   if (validHostname(hostname)) {
@@ -53,14 +54,13 @@ function blockAllTabsOf(hostname) {
     hostname,
     function (tabs) {
       for (const tab of tabs) {
-        blockPageCompletely(tab, hostname, timesUpPageURL);
+        blockPageCompletely(backend, tab, hostname, timesUpPageURL);
       }
     },
     { active: true }
   );
 
   // close all inactive page
-
   queryTabsUnder(hostname, closeTabs, { active: false });
 }
 
@@ -76,7 +76,7 @@ function notifyUnblock(hostname) {
 }
 
 /**
- * [For content script only] Auto unblock the given page
+ * [For content script] Auto unblock the given page
  * when the given tab should be unblocked.
  *
  * @param {String} hostname the hostname to be unblocked.
