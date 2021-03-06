@@ -170,16 +170,16 @@ function setUpHostListDiv(hosts, hostListDiv, onSaveHostList = function () {}) {
 setupSectionNav();
 
 //////////////////// monitored host list ///////////////////////
-let monitoredHostDiv = document.getElementById("monitored-host");
-let monitoredHostListEle = monitoredHostDiv.getElementsByClassName("host-list")[0];
-setUpHostListDiv([], monitoredHostDiv, function (list) {
+let blacklistHostDiv = document.getElementById("blacklist-host");
+let blacklistHostListEle = blacklistHostDiv.getElementsByClassName("host-list")[0];
+setUpHostListDiv([], blacklistHostDiv, function (list) {
   console.log(list);
-  setHostList(list, monitoredHostListEle);
+  setHostList(list, blacklistHostListEle);
   options.monitoredList.set(list);
 });
 
 options.monitoredList.doOnUpdated(function (list) {
-  setHostList(list, monitoredHostListEle, monitoredHostDiv.hostSet);
+  setHostList(list, blacklistHostListEle, blacklistHostDiv.hostSet);
 });
 
 ///////////////////// Whitelist ////////////////////////

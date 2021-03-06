@@ -33,70 +33,75 @@
           <summary>Details about how the list works:</summary>
           <ul>
             <li>
-              All the subdomain of host will be monitored.<br />e.g. if
-              "youtube.com" is in the list, then "www.youtube.com",
-              "music.youtube.com", etc. will be monitored at the same time
+              Hostname matching rules:
+              <ul>
+                <li>
+                  All the subdomain of the hosts in the list will be monitored.<br />
+                  e.g. if "youtube.com" is in the list, then "www.youtube.com",
+                  "music.youtube.com", etc. will be monitored at the same time
+                </li>
+                <li>
+                  Only HTTP and HTTPS pages are monitored. Other protocols like
+                  FTP are never monitored.
+                </li>
+              </ul>
             </li>
             <li>
-              Adding a super domain will eliminate all its subdomains from the
-              list.<br />e.g. Suppose "www.youtube.com", "music.youtube.com"
-              are in the list. If "youtube.com" is then added, both of them
-              will be replaced by "youtube.com"
-            </li>
-            <li>
-              To add a new subdomain, you need to delete the parent domain
-              first, and you must save the list before adding the
-              subdomain.<br />e.g. Suppose "youtube.com" is in the list, and
-              you want to add "www.youtube.com". You must delete "youtube.com"
-              form the list and save it before adding "www.youtube.com" into
-              the list.
-            </li>
-            <li>
-              You can either hit ENTER or click "Add" button to add a new
-              hostname after entering.
-            </li>
-            <li>
-              Only HTTP and HTTPS pages are monitored. Other protocols like
-              FTP are never monitored.
-            </li>
-          </ul>
-        </details>
-        <div class="host-list-div">
-          <ul class="host-list"></ul>
-          <div class="input-host-div">
-            <input type="url" name="host-input" placeholder="Enter new hostname here" class="host-input" />
-            <button class="add-host-btn">Add</button>
-          </div>
-        </div>
-        <button class="save-host-btn">Save</button>
-        <span class="warning"></span>
-      </section>
-      <section id="whitelist-host">
-        <h2 class="section-title trans-white_list">Whitelist Host</h2>
-        <details class="description">
-          <summary>Details about how the list works:</summary>
-          <ul>
-            <li>
-              The hostname matching rule and adding rule are the same to the
-              "Monitored Host" above.
+              Hostname editing rules:
+              <ul>
+                <li>
+                  Adding a super domain will eliminate all its subdomains from the
+                  list.<br />e.g. Suppose "www.youtube.com", "music.youtube.com"
+                  are in the list. If "youtube.com" is then added, both of them
+                  will be replaced by "youtube.com"
+                </li>
+                <li>
+                  To add a new subdomain, you need to delete the parent domain
+                  first, and you must save the list before adding the
+                  subdomain.<br />e.g. Suppose "youtube.com" is in the list, and
+                  you want to add "www.youtube.com". You must delete "youtube.com"
+                  form the list and save it before adding "www.youtube.com" into
+                  the list.
+                </li>
+              </ul>
             </li>
             <li>
               Whitelist takes privilege over blacklist. <br />e.g. If
               "youtube.com" is in the black list, while "music.youtube.com" is
               in the white list, the "music.youtube.com" will not be monitored
             </li>
+            <li>
+              You can either hit ENTER or click "Add" button to add a new
+              hostname after entering.
+            </li>
           </ul>
         </details>
-        <div class="host-list-div">
-          <ul class="host-list"></ul>
-          <div class="input-host-div">
-            <input type="url" name="host-input" placeholder="Enter new hostname here" class="host-input" />
-            <button class="add-host-btn">Add</button>
+        <div id="blacklist-host">
+          <h3>Blacklist</h3>
+          <div class="host-list-div">
+            <ul class="host-list"></ul>
+            <div class="input-host-div">
+              <input type="url" name="host-input" placeholder="Enter new hostname here" class="host-input" />
+              <button class="add-host-btn">Add</button>
+            </div>
           </div>
+          <button class="save-host-btn">Save</button>
+          <span class="warning"></span>
         </div>
-        <button class="save-host-btn">Save</button>
-        <span class="warning"></span>
+        <div id="whitelist-host">
+          <h3 class="trans-white_list">Whitelist</h2>
+            <div class="host-list-div">
+              <ul class="host-list"></ul>
+              <div class="input-host-div">
+                <input type="url" name="host-input" placeholder="Enter new hostname here" class="host-input" />
+                <button class="add-host-btn">Add</button>
+              </div>
+            </div>
+            <button class="save-host-btn">Save</button>
+            <span class="warning"></span>
+        </div>
       </section>
+
       <section id="notification" style="display: block;">
         <h2 class="section-title">Notification</h2>
         <input type="checkbox" id="notification-on" name="notification-on" />
