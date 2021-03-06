@@ -26,12 +26,9 @@
 ---
 
 # 功能
-- 自动网页监控，拦截，计时，解锁  
-  Automatic webpage monitoring, blocking, timing and unblocking
-- 自定义网站黑/白名单  
-  Customize website blacklist
-- 多功能弹窗  
-  Functional popup
+- 自动网页监控，拦截，计时，解锁
+- 自定义网站黑/白名单
+- 多功能弹窗
   - 倒计时显示
   - 提前结束倒计时
 
