@@ -19,13 +19,15 @@ const ALL_OPTION_NAME_SET = new Set(ALL_OPTION_NAME);
 const SYNC_OPTION_NAME = ALL_OPTION_NAME;
 const DEFAULT_OPTIONS = {
   monitoredList: [
-    "youtube.com",
-    "twitter.com",
+    "bilibili.com",
     "facebook.com",
     "netflix.com",
     "reddit.com",
-    "zhihu.com",
     "tiktok.com",
+    "twitter.com",
+    "wikipedia.org",
+    "youtube.com",
+    "zhihu.com",
   ],
   whitelistHost: [],
   activated: true,
