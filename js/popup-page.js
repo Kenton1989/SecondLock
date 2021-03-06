@@ -96,16 +96,16 @@ function setupCountdownDiv(state) {
     let stopBtn = document.getElementById("stop-timer-btn");
     stopBtn.style.display = "inline-block";
     stopBtn.onclick = function () {
-      // close all monitored tabs and end the timer
+      // close all monitored tabs and then end the timer
       queryTabsUnder(monitoredHost, function (tabs) {
-        closeTabs(tabs, () =>
+        closeTabs(tabs, function () {
           RemoteCallable.call(
             "lock-time-monitor",
             "stopTiming",
             [monitoredHost],
             window.close
-          )
-        );
+          );
+        });
       });
     };
   } else {
