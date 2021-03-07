@@ -2,8 +2,8 @@
   "manifest_version": 2,
 
   "name": "TimeLock",
-  "version": "0.1.2",
-  "description": "Lock your time with your intension.",
+  "version": "0.2.0",
+  "description": "Make internet truly interesting with your mind.",
 
   "default_locale": "en",
 

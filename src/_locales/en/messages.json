@@ -169,5 +169,17 @@
   },
   "timesUpDescript": {
     "message": "is forbidden."
+  },
+  "emptyInputWarn": {
+    "message": "Empty input is invalid."
+  },
+  "unknownHostFormatWarn": {
+    "message": "Unknown host format."
+  },
+  "hostMonitoredWarn": {
+    "message": "The host is already being monitored."
+  },
+  "hostMatchRule3": {
+    "message": "Matching IPv4 and IPv6 address is supported. Exact matching will be perform for these addresses."
   }
 }

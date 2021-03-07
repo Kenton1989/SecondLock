@@ -1,4 +1,4 @@
-<img src="./images/timelock-logo.svg" alt="Logo of the project" align="right" width="128px">
+<img src="./src/images/timelock-logo.svg" alt="Logo of the project" align="right" width="128px">
 
 # TimeLock 时间锁 (Chrome 插件)
 

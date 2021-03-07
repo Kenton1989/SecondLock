@@ -111,7 +111,7 @@
     "message": "鸣谢"
   },
   "thanksMrHe": {
-    "message": "在此给\"老师好我叫何同学\"致以最高谢意。本插件的核心思想是基于他的一个视频和App的。"
+    "message": "在此给\"老师好我叫何同学\"致以诚挚谢意。本插件的核心思想基于他的一个视频和App。"
   },
   "hisChannel": {
     "message": "何同学的频道"
@@ -169,5 +169,17 @@
   },
   "timesUpDescript": {
     "message": "解锁时间已结束。"
+  },
+  "emptyInputWarn": {
+    "message": "请输入一个网址"
+  },
+  "hostMonitoredWarn": {
+    "message": "该网址已经在列表中"
+  },
+  "unknownHostFormatWarn": {
+    "message": "未知网址格式"
+  },
+  "hostMatchRule3": {
+    "message": "支持匹配完整的IPv4和IPv6地址。不支持用IP地址+掩码匹配网络区域。"
   }
 }

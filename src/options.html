@@ -18,10 +18,10 @@
       <ul id="nav-list"></ul>
     </aside>
     <div id="main-div">
-      <section style="display: block;">
+      <section style="display: none;">
         <a href="manual.html" class="trans-manualTitle">User Manual</a>
       </section>
-      <section id="debug" style="display: block;">
+      <section id="debug" style="display: none;">
         <h2 class="section-title">Debug</h2>
         <a id="go-select" target="_blank" href="select-time.html">To Selection Page</a>
         <br />
@@ -40,6 +40,9 @@
                 </li>
                 <li class="trans-hostMatchRule2">
                   Only HTTP and HTTPS pages are monitored. Other protocols like FTP are never monitored.
+                </li>
+                <li class="trans-hostMatchRule3">
+                  Exact matching of full IPv4 and IPv6 address is supported. Matching network area based on IP address + mask is not supported.
                 </li>
               </ul>
             </li>
@@ -87,7 +90,7 @@
         </div>
       </section>
 
-      <section id="notification" style="display: block;">
+      <section id="notification" style="display: none;">
         <h2 class="section-title trans-notification">Notification</h2>
         <input type="checkbox" id="notification-on" name="notification-on" />
         <label for="notification-on" class="trans-activeCountdownNotify">Activate Countdown Notification</label>
@@ -125,7 +128,7 @@
         <input type="text" id="default-time" />
         <button id="save-default-time-btn" class="trans-save">Save</button>
       </section>
-      <section id="times-up-page" style="display: block;">
+      <section id="times-up-page" style="display: none;">
         <h2 class="section-title trans-timesUpPage">Times Up Page</h2>
         <h3 class="trans-motto">Motto</h3>
         <p class="description trans-timesUpMottoDetail">The motto to be displayed on times up page.</p>

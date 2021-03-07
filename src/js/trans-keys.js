@@ -59,6 +59,10 @@ const TRANS_KEYS = [
   "timesUpTitle",
   "timesUpWarn",
   "timesUpDescript",
+  "emptyInputWarn",
+  "unknownHostFormatWarn",
+  "hostMonitoredWarn",
+  "hostMatchRule3",
 ];
 
 export { TRANS_KEYS };

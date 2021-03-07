@@ -17,6 +17,10 @@ import {
 
 let options = new OptionCollection(...ALL_OPTION_NAME);
 
+const kEmptyInputWarn = chrome.i18n.getMessage("emptyInputWarn");
+const kUnknownHostFormat = chrome.i18n.getMessage("unknownHostFormatWarn");
+const kHostMonitoredWarn = chrome.i18n.getMessage("hostMonitoredWarn");
+
 //////////////////////// monitored list //////////////////////////
 
 /**
@@ -99,10 +103,9 @@ function setUpHostListDiv(hosts, hostListDiv, onSaveHostList = function () {}) {
 
   let enterHost = function () {
     let input = userInput.value.trim();
-
     // warn for empty input
     if (!input) {
-      showTxt(warning, "Please enter a host.");
+      showTxt(warning, kEmptyInputWarn);
       return;
     }
 
@@ -119,13 +122,13 @@ function setUpHostListDiv(hosts, hostListDiv, onSaveHostList = function () {}) {
       hostname = reformatHostname(`[${input}]`);
     } else {
       // warn for bad format
-      showTxt(warning, "Unknown host format.");
+      showTxt(warning, kUnknownHostFormat);
       return;
     }
 
     // warn for entering existing hostname
     if (hostSet.has(hostname)) {
-      showTxt(warning, "the host is already being monitored.");
+      showTxt(warning, kHostMonitoredWarn);
       return;
     }
 
@@ -171,7 +174,9 @@ setupSectionNav();
 
 //////////////////// monitored host list ///////////////////////
 let blacklistHostDiv = document.getElementById("blacklist-host");
-let blacklistHostListEle = blacklistHostDiv.getElementsByClassName("host-list")[0];
+let blacklistHostListEle = blacklistHostDiv.getElementsByClassName(
+  "host-list"
+)[0];
 setUpHostListDiv([], blacklistHostDiv, function (list) {
   console.log(list);
   setHostList(list, blacklistHostListEle);
@@ -184,7 +189,9 @@ options.monitoredList.doOnUpdated(function (list) {
 
 ///////////////////// Whitelist ////////////////////////
 let whitelistHostDiv = document.getElementById("whitelist-host");
-let whitelistHostListEle = whitelistHostDiv.getElementsByClassName("host-list")[0];
+let whitelistHostListEle = whitelistHostDiv.getElementsByClassName(
+  "host-list"
+)[0];
 setUpHostListDiv([], whitelistHostDiv, function (list) {
   console.log(list);
   setHostList(list, whitelistHostListEle);
@@ -194,7 +201,6 @@ setUpHostListDiv([], whitelistHostDiv, function (list) {
 options.whitelistHost.doOnUpdated(function (list) {
   setHostList(list, whitelistHostListEle, whitelistHostDiv.hostSet);
 });
-
 
 ///////////////////// Notification //////////////////////////
 // TODO - add notification functions
@@ -239,7 +245,7 @@ function saveDefaultDuration(str) {
 
   let list = [...res];
   list = list.sort((a, b) => a - b);
-  
+
   // set without checking dirtiness to clear potential invalid values
   loadDefaultDurations(list);
 
@@ -260,10 +266,12 @@ defaultDurSave.onclick = function () {
   saveDefaultDuration(defaultDurInput.value);
 };
 
-const selectionPageSectionTitle = document.querySelector("#selection-page .section-title");
-defaultDurInput.oninput = function() {
+const selectionPageSectionTitle = document.querySelector(
+  "#selection-page .section-title"
+);
+defaultDurInput.oninput = function () {
   selectionPageSectionTitle.classList.add("unsaved");
-}
+};
 
 ////////////////////// Blocking Page ///////////////////////
 // TODO - allow customizing motto displayed on blocking page
