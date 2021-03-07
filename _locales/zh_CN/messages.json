@@ -1,5 +1,5 @@
 {
-  "extname": {
+  "extName": {
     "message": "时间锁"
   },
   "min": {
@@ -8,7 +8,140 @@
   "mins": {
     "message": "分钟"
   },
-  "options_title": {
+  "optionsTitle": {
     "message": "选项"
+  },
+  "beforeTimesUp": {
+    "message": "倒计时结束之前"
+  },
+  "save": {
+    "message": "保存"
+  },
+  "manualTitle": {
+    "message": "使用指南"
+  },
+  "monitorHost": {
+    "message": "网址监控列表"
+  },
+  "moniListDetails": {
+    "message": "此列表运作细节："
+  },
+  "hostMatchRules": {
+    "message": "网址匹配原则："
+  },
+  "hostMatchRule1": {
+    "message": "若一个网站域名在列表中，则其所有子域名都会被匹配。<br/>例： 如果 \"baidu.com\" 在列表中，则\"www.baidu.com\"，\"tieba.baido.com\" 等网址也都会被匹配。"
+  },
+  "hostMatchRule2": {
+    "message": "只有使用HTTP和HTTPS访问网站时会被监控。使用其它协议时（如FTP等）不会进行监控。"
+  },
+  "hostEditRules": {
+    "message": "网址列表编辑原则："
+  },
+  "hostEditRule1": {
+    "message": "添加并保存一个母域名会将子域名覆盖。<br/>例：如果 \"www.baidu.com\"，\"tieba.baido.com\" 在列表中，添加 \"baidu.com\" 会导致这两个网址被覆盖。"
+  },
+  "hostEditRule2": {
+    "message": "在列表中存在一个母域名的情况下，想添加其子域名，需要先将母域名删除并保存，然后才可以添加子域名。<br/>例： 如果\"baidu.com\"在列表中, 在往列表里添加\"tieba.baidu.com\"之前。必须先删除\"baidu.com\"并保存，然后再添加\"www.youtube.com\""
+  },
+  "whiteOverBlack": {
+    "message": "白名单的优先级高于黑名单。<br/>例： 若\"youtube.com\"在黑名单中，而\"music.youtube.com\"在白名单中，则\"music.youtube.com\"不会被监控和拦截"
+  },
+  "blacklist": {
+    "message": "黑名单"
+  },
+  "whitelist": {
+    "message": "白名单"
+  },
+  "enterNewHost": {
+    "message": "在此输入新网址"
+  },
+  "notification": {
+    "message": "通知"
+  },
+  "activeCountdownNotify": {
+    "message": "启用倒计时通知"
+  },
+  "notifyTimePoints": {
+    "message": "通知时间点"
+  },
+  "secs": {
+    "message": "秒"
+  },
+  "durSelectPage": {
+    "message": "解锁时长选择页面"
+  },
+  "setDefDurDescription": {
+    "message": "设定在解锁时长选择页面中，那一排按钮的时长的值"
+  },
+  "defDurFormatSummary": {
+    "message": "输入格式要求："
+  },
+  "defDurFormat1": {
+    "message": "多个不同的值之间要用半角逗号（,）隔开"
+  },
+  "defDurFormat2": {
+    "message": "每个值要是介于1和1000中间的一个整数"
+  },
+  "defDurFormat3": {
+    "message": "最多可以设置10个不同的值。若输入值超过10个，最前面的10个有效的，不重复的值会被选用"
+  },
+  "timesUpPage": {
+    "message": "倒计时结束页面"
+  },
+  "motto": {
+    "message": "格言"
+  },
+  "timesUpMottoDetail": {
+    "message": "在倒计时结束页面显示的格言"
+  },
+  "storageAndSync": {
+    "message": "储存"
+  },
+  "autoSync": {
+    "message": "自动同步选项"
+  },
+  "localStorageUsed": {
+    "message": "本地储存占用量："
+  },
+  "cloudStorageUsed": {
+    "message": "云端储存占用量："
+  },
+  "acknowledgement": {
+    "message": "鸣谢"
+  },
+  "thanksMrHe": {
+    "message": "在此给\"老师好我叫何同学\"致以最高谢意。本插件的核心思想是基于他的一个视频和App的。"
+  },
+  "hisChannel": {
+    "message": "何同学的频道"
+  },
+  "hisVideo": {
+    "message": "何同学的视频"
+  },
+  "hisApp": {
+    "message": "何同学的App"
+  },
+  "externalLinks": {
+    "message": "外部链接"
+  },
+  "sourceCode": {
+    "message": "源代码"
+  },
+  "allRightsReserved": {
+    "message": "版权所有"
+  },
+  "undo": {
+    "message": "撤销"
+  },
+  "delete": {
+    "message": "删除"
+  },
+  "unsavedHint": {
+    "message": "(未保存)"
+  },
+  "defDurChoices": {
+    "message": "默认解锁时长列表（单位：分钟）"
   }
 }
+

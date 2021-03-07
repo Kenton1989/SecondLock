@@ -1,5 +1,5 @@
 {
-  "extname": {
+  "extName": {
     "message": "TimeLock"
   },
   "min": {
@@ -8,7 +8,139 @@
   "mins": {
     "message": "mins"
   },
-  "options_title": {
+  "optionsTitle": {
     "message": "Options"
+  },
+  "beforeTimesUp": {
+    "message": "before time's up"
+  },
+  "save": {
+    "message": "Save"
+  },
+  "manualTitle": {
+    "message": "User Manual"
+  },
+  "monitorHost": {
+    "message": "Monitored Host"
+  },
+  "moniListDetails": {
+    "message": "Details about how monitored list works:"
+  },
+  "hostMatchRules": {
+    "message": "Hostname matching rules:"
+  },
+  "hostMatchRule1": {
+    "message": "All the subdomain of the hosts in the list will be monitored.<br/>e.g. if \"youtube.com\" is in the list, then \"www.youtube.com\", \"music.youtube.com\", etc. will be monitored at the same time"
+  },
+  "hostMatchRule2": {
+    "message": "Only HTTP and HTTPS pages are monitored. Other protocols like FTP are never monitored."
+  },
+  "hostEditRules": {
+    "message": "Hostname editing rules:"
+  },
+  "hostEditRule1": {
+    "message": "Adding a super domain will eliminate all its subdomains from the list.<br />e.g. Suppose \"www.youtube.com\", \"music.youtube.com\" are in the list. If \"youtube.com\" is then added, both of them will be replaced by \"youtube.com"
+  },
+  "hostEditRule2": {
+    "message": "To add a new subdomain, you need to delete the parent domain first, and you must save the list before adding the subdomain.<br />e.g. Suppose \"youtube.com\" is in the list, and you want to add \"www.youtube.com\". You must delete \"youtube.com\" form the list and save it before adding \"www.youtube.com\" into the list."
+  },
+  "whiteOverBlack": {
+    "message": "Whitelist takes privilege over blacklist. <br />e.g. If \"youtube.com\" is in the black list, while \"music.youtube.com\" is in the white list, the \"music.youtube.com\" will not be monitored"
+  },
+  "blacklist": {
+    "message": "Blacklist"
+  },
+  "whitelist": {
+    "message": "Whitelist"
+  },
+  "enterNewHost": {
+    "message": "Enter new hostname here"
+  },
+  "notification": {
+    "message": "Notification"
+  },
+  "activeCountdownNotify": {
+    "message": "Activate Countdown Notification"
+  },
+  "notifyTimePoints": {
+    "message": "Notification Time Points"
+  },
+  "secs": {
+    "message": "secs"
+  },
+  "durSelectPage": {
+    "message": "Duration Selection Page"
+  },
+  "setDefDurDescription": {
+    "message": "Set the list of buttons shown on the unlock duration selection page"
+  },
+  "defDurFormatSummary": {
+    "message": "Details of input format:"
+  },
+  "defDurFormat1": {
+    "message": "Multiple values should be split with comma."
+  },
+  "defDurFormat2": {
+    "message": "Each value should be an integer, at least 1 and at most 1000."
+  },
+  "defDurFormat3": {
+    "message": "At most 10 different values can be set, if more than 10 values are enter, first 10 valid values will be used."
+  },
+  "timesUpPage": {
+    "message": "Times Up Page"
+  },
+  "motto": {
+    "message": "Motto"
+  },
+  "timesUpMottoDetail": {
+    "message": "The motto to be displayed on times up page."
+  },
+  "storageAndSync": {
+    "message": "Storage"
+  },
+  "autoSync": {
+    "message": "Auto Sync"
+  },
+  "localStorageUsed": {
+    "message": "Local Storage Used:"
+  },
+  "cloudStorageUsed": {
+    "message": "Cloud Storage Used:"
+  },
+  "acknowledgement": {
+    "message": "Acknowledgement"
+  },
+  "thanksMrHe": {
+    "message": "Great thanks to Mr. He. The idea of this extension is based on his video and app."
+  },
+  "hisChannel": {
+    "message": "His channel"
+  },
+  "hisVideo": {
+    "message": "His video"
+  },
+  "hisApp": {
+    "message": "His app"
+  },
+  "externalLinks": {
+    "message": "External Links"
+  },
+  "sourceCode": {
+    "message": "Source code"
+  },
+  "allRightsReserved": {
+    "message": "All rights reserved"
+  },
+  "undo": {
+    "message": "undo"
+  },
+  "delete": {
+    "message": "delete"
+  },
+  "unsavedHint": {
+    "message": "(unsaved)"
+  },
+  "defDurChoices": {
+    "message": "Default Duration Choices (in minutes)"
   }
 }

@@ -62,14 +62,14 @@
 }
 
 .unsaved::after {
-  content: " (unsaved)";
+  content: "__MSG_unsavedHint__";
 }
 
 .deleted .host {
   text-decoration: line-through;
 }
 .deleted::after {
-  content: " (unsaved)";
+  content: "__MSG_unsavedHint__";
 }
 
 .host-list-item {
