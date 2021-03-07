@@ -2,7 +2,7 @@
 
 # TimeLock 时间锁 (Chrome 插件)
 
-[English README](README.en.md)
+[English README](README.md)
 
 > 灵感来自[老师好我叫何同学的视频][mr_he_video]。  
 
