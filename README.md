@@ -46,8 +46,7 @@ Use the latest Chrome is always fine.
 - [ ] popup: add current website to blacklist
 - [ ] user manual
 - [ ] selection page：set unlock time by ending point
-- [ ] internationalization (at least zh_CN + en)
-- [ ] notification ending time approaching
+- [ ] notification on ending time approaching
 - [ ] calm down time
 - [ ] customize monitor working days
 - [ ] display motto on blocking page
@@ -55,6 +54,7 @@ Use the latest Chrome is always fine.
 - [ ] option exporting & importing
 - [ ] option syncing
 - [ ] options: close website on time's up without showing time's up page
+- [x] internationalization (at least zh-CN + en)
 - [x] refine README.md
 - [x] customize default unlock time
 - [x] acknowledgement in options page
