@@ -159,7 +159,7 @@
     "message": "关闭所有相关页面"
   },
   "durSelectHint": {
-    "message": "选择页面解锁时间"
+    "message": "选择页面解锁时长"
   },
   "timesUpTitle": {
     "message": "倒计时结束"
@@ -167,7 +167,7 @@
   "timesUpWarn": {
     "message": "时间到！"
   },
-  "timesUpDescript": {
+  "timesUpDescribe": {
     "message": "解锁时间已结束。"
   },
   "emptyInputWarn": {

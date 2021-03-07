@@ -58,7 +58,7 @@ const TRANS_KEYS = [
   "durSelectHint",
   "timesUpTitle",
   "timesUpWarn",
-  "timesUpDescript",
+  "timesUpDescribe",
   "emptyInputWarn",
   "unknownHostFormatWarn",
   "hostMonitoredWarn",

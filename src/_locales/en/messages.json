@@ -167,7 +167,7 @@
   "timesUpWarn": {
     "message": "Time's Up!"
   },
-  "timesUpDescript": {
+  "timesUpDescribe": {
     "message": "is forbidden."
   },
   "emptyInputWarn": {
