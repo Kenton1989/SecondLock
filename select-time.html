@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/select-time.css" />
-    <title class="time-select-title">Unlock Time Selection</title>
+    <title class="trans-durSelectTitle">Unlock Duration Selection</title>
   </head>
   <body>
     <header>
-      <h1 class="ext-name">TimeLock</h1>
-      <h2 class="time-select-title">Unlock Time Selection</h2>
+      <h1 class="trans-extName">TimeLock</h1>
+      <h2 class="trans-durSelectTitle">Unlock Duration Selection</h2>
     </header>
     <main>
       <h1 class="time-select-hint">Select the duration to unlock host:</h1>
@@ -22,7 +22,7 @@
           id="enter-time-line"
           min="1"
         />
-        <span class="min-units">minutes</span>
+        <span class="trans-mins">mins</span>
         <button id="enter-time-btn">GO</button>
       </div>
       <button id="close-all">
@@ -32,8 +32,8 @@
       <p class="warning"></p>
     </main>
     <footer>
-      &copy;2021-<span id="copy-end-year">2021</span> Kenton. All rights
-      reserved.
+      &copy;2021-<span id="copy-end-year">2021</span> Kenton. 
+      <span class="trans-allRightsReserved">All rights reserved.</span>
     </footer>
     <script type="module" src="js/select-time-page.js"></script>
   </body>

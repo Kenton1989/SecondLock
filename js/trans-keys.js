@@ -50,6 +50,7 @@ const TRANS_KEYS = [
   "delete",
   "unsavedHint",
   "defDurChoices",
+  "durSelectTitle",
 ];
 
 export { TRANS_KEYS };

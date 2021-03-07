@@ -142,5 +142,8 @@
   },
   "defDurChoices": {
     "message": "Default Duration Choices (in minutes)"
+  },
+  "durSelectTitle": {
+    "message": "Unlock Duration Selection"
   }
 }

@@ -142,6 +142,8 @@
   },
   "defDurChoices": {
     "message": "默认解锁时长列表（单位：分钟）"
+  },
+  "durSelectTitle": {
+    "message": "解锁时长选择"
   }
 }
-
