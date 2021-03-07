@@ -2,23 +2,24 @@
 
 # TimeLock (Chrome Extension)
 
-[中文README](README.zh_CN.md)
+[中文 README](README.zh_CN.md)
 
 > Inspired by [Mr. He's video][mr_he_video].
 
 Internet is NOT interesting before you have MIND. Wasting time mindlessly is never interesting.
 
-***As a mindful person***, you should think twice for what are supposed to be done before entering any website. Then, finish the task quickly, or entertain yourself with plan.
+**_As a mindful person_**, you should think twice for what are supposed to be done before entering any website. Then, finish the task quickly, or entertain yourself with plan.
 
-***However, most of you are not mindful enough***. Your mind and time will easily fly away when you are attracted by all kinds of fancy contents. 
+**_However, most of you are not mindful enough_**. Your mind and time will easily fly away when you are attracted by all kinds of fancy contents.
 
 TimeLock will help you, who has mind but not mindful enough. Before entering any attractive website, you must think twice for what to do and estimate the time needed, that is the last second your are mindful. Then, set a time limit with TimeLock and enjoy your mindless time. TimeLock will block the webpage when time's up and try to remind you.
 
 > Ask yourself before opening an app:
-> - Why you open it?
+>
+> - Why do you open it?
 > - How long will you spend?
 > - Do you have any alternative to do?
-> 
+>
 > -- Mr. He
 
 Three questions above also applies before browsing any website.
@@ -26,6 +27,7 @@ Three questions above also applies before browsing any website.
 ---
 
 # Features
+
 - Automatic webpage monitoring, blocking, timing and unblocking
 - Customize website blacklist & whitelist
 - Functional popup
@@ -48,14 +50,17 @@ Capability on Chromium and Microsoft Edge (Chromium Kernel) haven't been tested.
 # Update
 
 - v0.2.0
+
   - Support simplified Chinese (zh-CN)
   - Stop timing earlier manually
   - Display local storage usage
 
 - v0.1.2
+
   - Customize website whitelist
 
 - v0.1.1
+
   - Customize default unlock durations choices
 
 - v0.1.0
@@ -67,7 +72,6 @@ Capability on Chromium and Microsoft Edge (Chromium Kernel) haven't been tested.
 
 - [ ] popup: add current website to blacklist
 - [ ] user manual
-- [ ] selection page：set unlock time by ending point
 - [ ] notification on ending time approaching
 - [ ] calm down time
 - [ ] customize monitor working days
@@ -76,6 +80,7 @@ Capability on Chromium and Microsoft Edge (Chromium Kernel) haven't been tested.
 - [ ] option exporting & importing
 - [ ] option syncing
 - [ ] options: close website on time's up without showing time's up page
+- [x] selection page：set unlock time by ending point
 - [x] internationalization (at least zh-CN + en)
 - [x] refine README.md
 - [x] customize default unlock time
