@@ -37,6 +37,9 @@ function setupRemainTimeDisplay() {
       updateRemainTimeDisplay(unlockEndTime - Date.now());
     }, 1000);
   }, offset);
+
+  // Close the popup on time's up
+  window.setTimeout(window.close, mSec+1000);
 }
 
 // open the option page with special method.

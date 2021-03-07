@@ -222,9 +222,11 @@ function loadDefaultDurations(list) {
   defaultDurInput.value = list.toString();
 }
 
+const defDurChoiceTitle = document.getElementById("def-dur-choice-title");
+
 function saveDefaultDuration(str) {
   // clear unsaved tag
-  selectionPageSectionTitle.classList.remove("unsaved");
+  defDurChoiceTitle.classList.remove("unsaved");
 
   if (str == lastSaveDefDur.toString()) {
     console.log("list is not changed. Skip saving.");
@@ -266,11 +268,8 @@ defaultDurSave.onclick = function () {
   saveDefaultDuration(defaultDurInput.value);
 };
 
-const selectionPageSectionTitle = document.querySelector(
-  "#selection-page .section-title"
-);
 defaultDurInput.oninput = function () {
-  selectionPageSectionTitle.classList.add("unsaved");
+  defDurChoiceTitle.classList.add("unsaved");
 };
 
 ////////////////////// Blocking Page ///////////////////////

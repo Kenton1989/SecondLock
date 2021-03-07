@@ -63,6 +63,7 @@ const TRANS_KEYS = [
   "unknownHostFormatWarn",
   "hostMonitoredWarn",
   "hostMatchRule3",
+  "orUntilTimePoint",
 ];
 
 export { TRANS_KEYS };

@@ -36,13 +36,15 @@
               <span class="trans-hostMatchRules">Hostname matching rules:</span>
               <ul>
                 <li class="trans-hostMatchRule1">
-                  All the subdomain of the hosts in the list will be monitored.<br/>e.g. if "youtube.com" is in the list, then "www.youtube.com", "music.youtube.com", etc. will be monitored at the same time
+                  All the subdomain of the hosts in the list will be monitored.<br />e.g. if "youtube.com" is in the
+                  list, then "www.youtube.com", "music.youtube.com", etc. will be monitored at the same time
                 </li>
                 <li class="trans-hostMatchRule2">
                   Only HTTP and HTTPS pages are monitored. Other protocols like FTP are never monitored.
                 </li>
                 <li class="trans-hostMatchRule3">
-                  Exact matching of full IPv4 and IPv6 address is supported. Matching network area based on IP address + mask is not supported.
+                  Exact matching of full IPv4 and IPv6 address is supported. Matching network area based on IP address +
+                  mask is not supported.
                 </li>
               </ul>
             </li>
@@ -50,15 +52,21 @@
               <span class="trans-hostEditRules">Hostname editing rules:</span>
               <ul>
                 <li class="trans-hostEditRule1">
-                  Adding a super domain will eliminate all its subdomains from the list.<br />e.g. Suppose "www.youtube.com", "music.youtube.com" are in the list. If "youtube.com" is then added, both of them will be replaced by "youtube.com"
+                  Adding a super domain will eliminate all its subdomains from the list.<br />e.g. Suppose
+                  "www.youtube.com", "music.youtube.com" are in the list. If "youtube.com" is then added, both of them
+                  will be replaced by "youtube.com"
                 </li>
                 <li class="trans-hostEditRule2">
-                  To add a new subdomain, you need to delete the parent domain first, and you must save the list before adding the subdomain.<br />e.g. Suppose "youtube.com" is in the list, and you want to add "www.youtube.com". You must delete "youtube.com" form the list and save it before adding "www.youtube.com" into the list.
+                  To add a new subdomain, you need to delete the parent domain first, and you must save the list before
+                  adding the subdomain.<br />e.g. Suppose "youtube.com" is in the list, and you want to add
+                  "www.youtube.com". You must delete "youtube.com" form the list and save it before adding
+                  "www.youtube.com" into the list.
                 </li>
               </ul>
             </li>
             <li class="trans-whiteOverBlack">
-              Whitelist takes privilege over blacklist. <br />e.g. If "youtube.com" is in the black list, while "music.youtube.com" is in the white list, the "music.youtube.com" will not be monitored
+              Whitelist takes privilege over blacklist. <br />e.g. If "youtube.com" is in the black list, while
+              "music.youtube.com" is in the white list, the "music.youtube.com" will not be monitored
             </li>
           </ul>
         </details>
@@ -109,7 +117,7 @@
       </section>
       <section id="selection-page">
         <h2 class="section-title trans-durSelectPage">Duration Selection Page</h2>
-        <h3 class="trans-defDurChoices">Default Duration Choices (in minutes)</h3>
+        <h3 id="def-dur-choice-title" class="trans-defDurChoices">Default Duration Choices (in minutes)</h3>
         <p class="description trans-setDefDurDescription">
           Set the list of buttons shown on the unlock duration selection page
         </p>
@@ -121,7 +129,8 @@
               Each value should be an integer, at least 1 and at most 1000.
             </li>
             <li class="trans-defDurFormat3">
-              At most 10 different values can be set, if more than 10 values are enter, first 10 valid values will be used.
+              At most 10 different values can be set, if more than 10 values are enter, first 10 valid values will be
+              used.
             </li>
           </ul>
         </details>
@@ -170,14 +179,16 @@
         <h2 class="section-title trans-externalLinks">External Links</h2>
         <ul>
           <li>
-            <a href="https://github.com/Kenton1989/timelock-chrome" target="_blank" class="trans-sourceCode">Source code</a>
+            <a href="https://github.com/Kenton1989/timelock-chrome" target="_blank" class="trans-sourceCode">Source
+              code</a>
           </li>
         </ul>
       </section>
     </div>
   </main>
   <footer>
-    &copy;2021-<span id="copy-end-year">2021</span> Kenton. <span class="trans-allRightsReserved">All rights reserved</span>
+    &copy;2021-<span id="copy-end-year">2021</span> Kenton. <span class="trans-allRightsReserved">All rights
+      reserved</span>
   </footer>
 
   <div id="templates">

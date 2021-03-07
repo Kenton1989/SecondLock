@@ -181,5 +181,8 @@
   },
   "hostMatchRule3": {
     "message": "Matching IPv4 and IPv6 address is supported. Exact matching will be perform for these addresses."
+  },
+  "orUntilTimePoint": {
+    "message": "or, unlock until"
   }
 }
