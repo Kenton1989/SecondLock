@@ -31,6 +31,7 @@ Three questions above also applies before browsing any website.
 - Functional popup
   - Countdown display
   - Stop timing earlier
+- Customize default unlock durations choices
 
 # Installation
 
@@ -38,8 +39,29 @@ The extension haven't been published in Chrome Web Store.
 
 # Requirement
 
-Use the latest Chrome is always fine.  
-(I'm too lazy to test capability on old version Chrome)
+Use the latest Chrome is always fine.
+
+I'm just too lazy to test capability on old version Chrome (XD).
+
+Capability on Chromium and Microsoft Edge (Chromium Kernel) haven't been tested.
+
+# Update
+
+- v0.2.0
+  - Support simplified Chinese (zh-CN)
+  - Stop timing earlier manually
+  - Display local storage usage
+
+- v0.1.2
+  - Customize website whitelist
+
+- v0.1.1
+  - Customize default unlock durations choices
+
+- v0.1.0
+  - Automatic webpage monitoring, blocking, timing and unblocking
+  - Customize website blacklist
+  - Countdown display
 
 # TODO
 
