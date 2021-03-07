@@ -6,5 +6,4 @@ let thisYear = new Date(Date.now()).getFullYear();
 let copyEndYear = document.getElementById("copy-end-year");
 if (copyEndYear != undefined) copyEndYear.innerText = thisYear;
 
-// delay the translation until fully loaded
-window.addEventListener("load", generalTranslate);
+generalTranslate();

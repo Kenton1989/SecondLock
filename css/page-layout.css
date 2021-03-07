@@ -23,7 +23,7 @@ header h1 {
 }
 
 header h1::before {
-  background-image: url('../images/timelock-logo.svg');
+  background-image: url('/images/timelock-logo.svg');
   background-size: 50px 50px;
   display: inline-block;
   content: "";
