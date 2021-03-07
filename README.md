@@ -54,6 +54,7 @@ Use the latest Chrome is always fine.
 - [ ] display mottos
 - [ ] option exporting & importing
 - [ ] option syncing
+- [ ] options: close website on time's up without showing time's up page
 - [x] refine README.md
 - [x] customize default unlock time
 - [x] acknowledgement in options page
