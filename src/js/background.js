@@ -6,9 +6,14 @@ import {
   DEFAULT_OPTIONS,
   OptionCollection,
 } from "./options-manager.js";
-import { blockAllTabsOf, blockPageToSelectTime } from "./tab-blocker.js";
+import { RemoteCallable } from "./remote-callable.js";
+import { TabBlocker } from "./tab-blocker.js";
+import { queryTabsUnder } from "./utility.js";
 
 let options = new OptionCollection(...ALL_OPTION_NAME);
+
+const kSelectTimeURL = chrome.runtime.getURL("select-time.html");
+const kTimesUpPageURL = chrome.runtime.getURL("times-up.html");
 
 // Set default options
 chrome.runtime.onInstalled.addListener(function () {
@@ -23,6 +28,8 @@ let dynamicPageBack = new DynamicPageBackend("dynamic-page-backend");
 let monitor = new BrowsingPageMonitor("browse-monitor");
 let unlockTiming = new HostTimingMonitor("lock-time-monitor");
 let calmDownTiming = new HostTimingMonitor("calm-down-time-monitor");
+let tabBlocker = new TabBlocker("tab-blocker", dynamicPageBack, monitor);
+let backgroundAux = new RemoteCallable("background-aux");
 
 options.monitoredList.doOnUpdated(function (list) {
   if (!list) return;
@@ -40,44 +47,53 @@ function selectTime(tab, hostname) {
     console.debug(`${hostname} is unlocked, does not block.`);
     return;
   }
-  blockPageToSelectTime(dynamicPageBack, tab, hostname);
+  tabBlocker.blockPageWithNewTab(tab, hostname, kSelectTimeURL);
 }
 
 monitor.onBrowse.addListener(selectTime);
 
 unlockTiming.onTimesUp.addListener(function (hostname) {
-  blockAllTabsOf(dynamicPageBack, hostname);
+  tabBlocker.blockAllTabsOf(hostname, kTimesUpPageURL);
 });
 
-chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-  if (message.queryHostMonitoredState) {
-    let url = message.queryHostMonitoredState.url;
-    let state = {
-      isMonitored: false,
-      monitoredHost: undefined,
-      isUnlocked: undefined,
-      unlockEndTime: undefined,
-      needCalmDown: undefined,
-      calmDownEndTime: undefined,
-    };
+backgroundAux.queryPageState = function (url) {
+  let state = {
+    isMonitored: false,
+    monitoredHost: undefined,
+    isUnlocked: undefined,
+    unlockEndTime: undefined,
+    needCalmDown: undefined,
+    calmDownEndTime: undefined,
+  };
 
-    let actualMonitored = monitor.isMonitoring(url);
-    if (actualMonitored) {
-      state.isMonitored = true;
-      state.monitoredHost = actualMonitored;
+  let actualMonitored = monitor.findMonitoredSuffix(url);
+  if (actualMonitored) {
+    state.isMonitored = true;
+    state.monitoredHost = actualMonitored;
 
-      let unlockEndTime = unlockTiming.endTimePoint(actualMonitored);
-      if (unlockEndTime != undefined) {
-        state.isUnlocked = true;
-        state.unlockEndTime = unlockEndTime;
-      }
-
-      let calmDownEndTime = calmDownTiming.endTimePoint(actualMonitored);
-      if (calmDownEndTime != undefined) {
-        state.needCalmDown = true;
-        state.calmDownEndTime = calmDownEndTime;
-      }
+    let unlockEndTime = unlockTiming.endTimePoint(actualMonitored);
+    if (unlockEndTime != undefined) {
+      state.isUnlocked = true;
+      state.unlockEndTime = unlockEndTime;
     }
-    sendResponse(state);
+
+    let calmDownEndTime = calmDownTiming.endTimePoint(actualMonitored);
+    if (calmDownEndTime != undefined) {
+      state.needCalmDown = true;
+      state.calmDownEndTime = calmDownEndTime;
+    }
   }
-});
+  return state;
+}
+
+backgroundAux.stopTimingAndClose = function (hostname) {
+  queryTabsUnder(hostname, function(tabs) {
+    let toClose = [];
+    for (const tab of tabs) {
+      if (monitor.isMonitoring(tab.url)) toClose.push(tab.id);
+    }
+    chrome.tabs.remove(toClose, function(){
+      unlockTiming.stopTiming(hostname);
+    });
+  });
+}

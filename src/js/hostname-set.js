@@ -49,7 +49,7 @@ class HostnameSet {
    * @returns {*} the actual monitored host suffix if the hostname is monitored.
    *    If the hostname is not monitored, return undefined
    */
-  has(hostname) {
+  findSuffix(hostname) {
     hostname = reformatHostname(hostname);
     if (!hostname) return undefined;
 
@@ -62,6 +62,20 @@ class HostnameSet {
     }
 
     return actualHost;
+  }
+
+  /**
+   * 
+   * @param {string} hostname the host name to be check
+   * @return {boolean} true if the hostname is in the set
+   */
+  has(hostname) {
+    hostname = reformatHostname(hostname);
+    if (!hostname) return false;
+
+    let result = this.#matchingRegex.exec(hostname);
+
+    return Boolean(result);
   }
 
   /**

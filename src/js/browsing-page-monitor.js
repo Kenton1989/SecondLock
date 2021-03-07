@@ -46,7 +46,7 @@ class BrowsingPageMonitor extends RemoteCallable {
 
       console.debug(`User are browsing: ${tab.url}`);
 
-      let monitoredHost = monitor.isMonitoring(tab.url);
+      let monitoredHost = monitor.findMonitoredSuffix(tab.url);
       if (monitoredHost == undefined) return;
 
       // Wait for a while, to allow the browser to complete tab switching
@@ -105,6 +105,14 @@ class BrowsingPageMonitor extends RemoteCallable {
    * @returns {(string|undefined)} the actual monitored host suffix if the web page is monitored.
    *    If the web page is not monitored, return undefined
    */
+  findMonitoredSuffix(url) {
+    if (!this.active) return undefined;
+    let urlObj = new URL(url);
+    if (!this.monitoredProtocol.has(urlObj.protocol)) return undefined;
+    if (this.whitelist.has(urlObj.hostname)) return undefined;
+    return this.blacklist.findSuffix(urlObj.hostname);
+  }
+
   isMonitoring(url) {
     if (!this.active) return undefined;
     let urlObj = new URL(url);

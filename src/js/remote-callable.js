@@ -5,7 +5,7 @@
  * from the front end.
  */
 class RemoteCallable {
-  static doNothing(...args) {}
+  static doNothing(arg) {}
 
   #name = undefined;
 

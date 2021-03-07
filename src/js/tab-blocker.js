@@ -1,4 +1,6 @@
+import { BrowsingPageMonitor } from "./browsing-page-monitor.js";
 import { DynamicPageBackend } from "./dynamic-page-backend.js";
+import { RemoteCallable } from "./remote-callable.js";
 import {
   closeCurrentTab,
   queryTabsUnder,
@@ -6,95 +8,132 @@ import {
   closeTabs,
 } from "./utility.js";
 
-const selectTimeURL = chrome.runtime.getURL("select-time.html");
-const timesUpPageURL = chrome.runtime.getURL("times-up.html");
+const kSelectTimeURL = chrome.runtime.getURL("select-time.html");
+const kTimesUpPageURL = chrome.runtime.getURL("times-up.html");
 
-/**
- * Block a tab and open the time selection page.
- *
- * @param {DynamicPageBackend} backend the dynamic page backend used to open blocking page
- * @param {chrome.tabs.Tab} tab the tab on which the host is accessed.
- * @param {String} hostname the hostname to be blocked.
- */
-function blockPageToSelectTime(backend, tab, hostname) {
-  backend.openOnNewTab(
-    selectTimeURL,
-    { blockedHost: hostname },
-    { windowId: tab.windowId }
-  );
-}
-
-/**
- * Block the content of a tab completely with given page and parameters.
- * @param {DynamicPageBackend} backend the dynamic page backend used to open blocking page
- * @param {chrome.tabs.Tab} tab the tab on which the host is accessed.
- * @param {String} hostname the hostname to be blocked.
- * @param {String} newPageUrl the url of page used to override existing page.
- *  Assuming the page is dynamic page.
- * @param {*} param the param passed to dynamic page
- */
-function blockPageCompletely(backend, tab, hostname, newPageUrl, param = {}) {
-  param.blockedHost = hostname;
-  backend.openOnExistingTab(newPageUrl, param, tab.id);
-}
-
-/**
- * Block all tabs with the given hostname.
- * @param {String } hostname the hostname to be blocked
- */
-function blockAllTabsOf(backend, hostname) {
-  let pattern = hostname;
-
-  if (validHostname(hostname)) {
-    pattern = `*.${hostname}`;
+class TabBlocker extends RemoteCallable {
+  #monitor;
+  #backend;
+  /**
+   * Create a tab blocker backing with the given dynamic page backend and monitor
+   *
+   * @param {string} name the name as an remote callable
+   * @param {DynamicPageBackend} backend the dynamic page backend used to open blocking page
+   * @param {BrowsingPageMonitor} monitor the monitor used to verify if the blocking is valid
+   */
+  constructor(name, backend, monitor) {
+    super(name);
+    this.#backend = backend;
+    this.#monitor = monitor;
   }
 
-  // block active page
-  queryTabsUnder(
-    hostname,
-    function (tabs) {
-      for (const tab of tabs) {
-        blockPageCompletely(backend, tab, hostname, timesUpPageURL);
-      }
-    },
-    { active: true }
-  );
+  /**
+   * Block a tab by opening a new tab in the same window.
+   *
+   * @param {chrome.tabs.Tab} tab the tab to be blocked.
+   * @param {string} hostname the hostname to be blocked.
+   * @param {string} blockingPageUrl the URL of the new page used for blocking
+   */
+  blockPageWithNewTab(tab, hostname, blockingPageUrl = kSelectTimeURL) {
+    this.#backend.openOnNewTab(
+      blockingPageUrl,
+      { blockedHost: hostname },
+      { windowId: tab.windowId }
+    );
+  }
 
-  // close all inactive page
-  queryTabsUnder(hostname, closeTabs, { active: false });
-}
+  /**
+   * Block the content of a tab completely with given page and parameters.
+   *
+   * @param {chrome.tabs.Tab} tab the tab on which the host is accessed.
+   * @param {String} hostname the hostname to be blocked.
+   * @param {String} newPageUrl the url of page used to override existing page.
+   *  Assuming the page is dynamic page.
+   * @param {*} param the param passed to dynamic page
+   */
+  blockPageByOverwriting(tab, hostname, newPageUrl, param = {}) {
+    param.blockedHost = hostname;
+    this.#backend.openOnExistingTab(newPageUrl, param, tab.id);
+  }
 
-/**
- * Notify all tabs that are blocking the given hostname to unblock.
- *
- * @param {String} hostname the hostname to be unblocked.
- */
-function notifyUnblock(hostname) {
-  chrome.runtime.sendMessage({
-    doNotBlockHost: hostname,
-  });
-}
+  /**
+   * Block all tabs under the given hostname, unless the hostname is in the whitelist of monitor
+   *
+   * @param {string} hostname the hostname to be blocked
+   * @param {(string|undefined)} blockingPageUrl the URL of new page used to block the tab.
+   *  If it is undefined, all host under the given host name will be close. Otherwise, all active
+   *  tabs will be overwrite with blockingPageUrl through method this.blockPageByOverwriting
+   */
+  blockAllTabsOf(hostname, blockingPageUrl = kTimesUpPageURL) {
+    let pattern = hostname;
 
-/**
- * [For content script] Auto unblock the given page
- * when the given tab should be unblocked.
- *
- * @param {String} hostname the hostname to be unblocked.
- */
-function autoUnblock(hostname) {
-  if (!hostname) return;
-  chrome.runtime.onMessage.addListener(function (message) {
-    if (message.doNotBlockHost) {
-      let unlockedHost = message.doNotBlockHost;
-      if (unlockedHost == hostname) closeCurrentTab();
+    if (validHostname(hostname)) {
+      pattern = `*.${hostname}`;
     }
-  });
+
+    // make private member visible
+    let monitor = this.#monitor;
+    let blocker = this;
+
+    // block active page if blockingPageUrl is set
+    if (blockingPageUrl != undefined) {
+      queryTabsUnder(
+        hostname,
+        function (tabs) {
+          for (const tab of tabs) {
+            if (monitor.isMonitoring(tab.url))
+              blocker.blockPageByOverwriting(tab, hostname, kTimesUpPageURL);
+          }
+        },
+        { active: true }
+      );
+    }
+
+    let param2 = {};
+    if (blockingPageUrl != undefined) param2.active = false;
+    // close the other pages
+    queryTabsUnder(
+      hostname,
+      function (tabs) {
+        let toClose = [];
+        for (const tab of tabs) {
+          if (monitor.isMonitoring(tab.url)) toClose.push(tab.id);
+        }
+        chrome.tabs.remove(toClose);
+      },
+      param2
+    );
+  }
+
+  /**
+   * Notify all tabs that are blocking the given hostname to unblock.
+   *
+   * @param {String} hostname the hostname to be unblocked.
+   */
+  static notifyUnblock(hostname) {
+    chrome.runtime.sendMessage({
+      doNotBlockHost: hostname,
+    });
+  }
+
+  /**
+   * [For content script] Auto unblock the given page
+   * when the given tab should be unblocked.
+   *
+   * @param {String} hostname the hostname to be unblocked.
+   */
+  static autoUnblock(hostname) {
+    if (!hostname) return;
+    chrome.runtime.onMessage.addListener(function (message) {
+      if (message.doNotBlockHost) {
+        let unlockedHost = message.doNotBlockHost;
+        if (unlockedHost == hostname) closeCurrentTab();
+      }
+    });
+  }
 }
 
-export {
-  notifyUnblock,
-  autoUnblock,
-  blockPageToSelectTime,
-  blockPageCompletely,
-  blockAllTabsOf,
-};
+let notifyUnblock = TabBlocker.notifyUnblock;
+let autoUnblock = TabBlocker.autoUnblock;
+
+export { notifyUnblock, autoUnblock, TabBlocker };

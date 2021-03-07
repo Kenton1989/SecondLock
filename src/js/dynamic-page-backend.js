@@ -48,7 +48,8 @@ class DynamicPageBackend extends RemoteCallable {
   /**
    * Open the given dynamic page with the given arguments on a new tab.
    *
-   * @param {String} url the url to the dynamic page to be opened
+   * @param {(String|undefined)} url the url to the dynamic page to be opened,
+   *  if it is undefined, default new tab of chrome will be opened.
    * @param {any} pageArgs the arguments passed to the dynamic page
    * @param {*} tabProperties the properties of the new tab passed to the method
    * chrome.tabs.create(). The tabProperties.url will be ignored if it is defined.
@@ -60,7 +61,8 @@ class DynamicPageBackend extends RemoteCallable {
     tabProperties = {},
     callback = (tab)=>{}
   ) {
-    tabProperties.url = url;
+    if (url == undefined) delete tabProperties.url;
+    else tabProperties.url = url;
 
     // make private member visible in callback
     let tabArgs = this.#tabArgs;
