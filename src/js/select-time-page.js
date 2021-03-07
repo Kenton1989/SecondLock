@@ -10,6 +10,7 @@ import {
   blinkElement,
   closeCurrentTab,
   setTextForClass,
+  showTxt,
   validHostname,
 } from "./utility.js";
 
@@ -22,6 +23,8 @@ let warningTxt = undefined;
 const options = new OptionCollection("defDurations");
 
 const MINUTE = 60000;
+const MIN_UNLOCK_MINUTES = 1;
+const MAX_UNLOCK_MINUTES = 1439;
 /**
  * Unlock the blocked host of this page for the given duration.
  * @param {Number} minutes the duration in minute.
@@ -29,20 +32,36 @@ const MINUTE = 60000;
 function setUnlock(minutes) {
   console.debug(`Unlock ${blockedHost} for ${minutes} mins.`);
 
+  if (minutes < MIN_UNLOCK_MINUTES) {
+    showTxt(
+      warningTxt,
+      `The minimal unlock period is ${MIN_UNLOCK_MINUTES} mins.`
+    );
+    return;
+  } else if (minutes > MAX_UNLOCK_MINUTES) {
+    showTxt(
+      warningTxt,
+      `The maximal unlock period is ${MAX_UNLOCK_MINUTES} mins.`
+    );
+    return;
+  }
+
   if (!blockedHost) {
-    warningTxt.innerText = "Blocked hostname is not set";
+    showTxt(warningTxt, "Blocked hostname is not set");
     return;
   }
 
   let unlockDuration = Math.round(minutes * MINUTE);
-  RemoteCallable.call("lock-time-monitor", "setTimerFor", [
-    blockedHost,
-    unlockDuration,
-  ], function(){
-    notifyUnblock(blockedHost);
-    // Delay for a while before closing to avoid potential frequent tab switching
-    window.setTimeout(closeCurrentTab, 200);
-  });
+  RemoteCallable.call(
+    "lock-time-monitor",
+    "setTimerFor",
+    [blockedHost, unlockDuration],
+    function () {
+      notifyUnblock(blockedHost);
+      // Delay for a while before closing to avoid potential frequent tab switching
+      window.setTimeout(closeCurrentTab, 200);
+    }
+  );
 }
 
 // Initialize the blocked hostname
@@ -96,8 +115,6 @@ options.defDurations.doOnUpdated(function (minsList) {
   setDefDurBtnList(minsList);
 });
 
-const MIN_UNLOCK_MIN = 1;
-const MAX_UNLOCK_MIN = 1000;
 // Prepare for read user input minutes
 let enterTimeBtn = document.getElementById("enter-time-btn");
 let enterTimeLine = document.getElementById("enter-time-line");
@@ -105,15 +122,10 @@ let readUserInputTime = function () {
   let val = parseFloat(enterTimeLine.value);
   if (isNaN(val)) {
     warningTxt.innerText = "Please enter a number.";
-  } else if (val < MIN_UNLOCK_MIN) {
-    warningTxt.innerText = `The minimal unlock period is ${MIN_UNLOCK_MIN} mins.`;
-  } else if (val > MAX_UNLOCK_MIN) {
-    warningTxt.innerText = `The maximal unlock period is ${MAX_UNLOCK_MIN} mins.`;
-  } else {
-    warningTxt.innerText = "";
-    setUnlock(val);
+    return;
   }
-  blinkElement(warningTxt);
+  warningTxt.innerText = "";
+  setUnlock(val);
 };
 enterTimeBtn.onclick = readUserInputTime;
 enterTimeLine.onkeydown = function (e) {
@@ -122,3 +134,53 @@ enterTimeLine.onkeydown = function (e) {
   // Shortcut for entering
   if (e.key == "Enter") readUserInputTime();
 };
+
+//////////// Unlock by entering end time point ////////////////
+{
+  let endTimePointInput = document.getElementById("end-time-point-input");
+  let enterTimePointBtn = document.getElementById("enter-time-point-btn");
+
+  let time = new Date(Date.now());
+  let curH = time.getHours();
+  let curM = time.getMinutes();
+
+  // advance to nearest half hour / full hour
+  // but at least 3 minutes unlock time is guaranteed
+  const MIN_UNLOCK_TIME = 2;
+  if (curM < 30 - MIN_UNLOCK_TIME) {
+    time.setMinutes(30);
+  } else if (curM >= 60 - MIN_UNLOCK_TIME) {
+    time.setMinutes(30);
+    time.setHours(curH + 1);
+  } else {
+    time.setMinutes(0);
+    time.setHours(curH + 1);
+  }
+
+  // convert to HH:MM
+  let timeStr = time.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+
+  endTimePointInput.value = timeStr;
+  const ONE_DAY = 1000 * 60 * 60 * 24;
+  enterTimePointBtn.onclick = function () {
+    // Parse input
+    let endTime = endTimePointInput.value;
+    let endH = parseInt(endTime.substr(0, 2), 10);
+    let endM = parseInt(endTime.substr(3, 2), 10);
+    // Find end time point
+    let now = Date.now();
+    let endDateTime = new Date(now);
+    endDateTime.setHours(endH);
+    endDateTime.setMinutes(endM);
+    endDateTime.setSeconds(0);
+    endDateTime.setMilliseconds(0);
+    let end = endDateTime.getTime();
+    if (end <= now) end += ONE_DAY;
+    // set unlock time
+    setUnlock((end - now) / MINUTE);
+  };
+}
