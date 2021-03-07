@@ -51,6 +51,11 @@ const TRANS_KEYS = [
   "unsavedHint",
   "defDurChoices",
   "durSelectTitle",
+  "remainTime",
+  "currentHost",
+  "stopTimingClose",
+  "closeAllRelated",
+  "durSelectHint",
 ];
 
 export { TRANS_KEYS };

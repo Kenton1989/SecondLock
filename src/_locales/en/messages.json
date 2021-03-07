@@ -145,5 +145,20 @@
   },
   "durSelectTitle": {
     "message": "Unlock Duration Selection"
+  },
+  "remainTime": {
+    "message": "remain time"
+  },
+  "currentHost": {
+    "message": "Current host"
+  },
+  "stopTimingClose": {
+    "message": "Stop Timing & Close"
+  },
+  "closeAllRelated": {
+    "message": "close all related pages"
+  },
+  "durSelectHint": {
+    "message": "Select the duration to unlock host:"
   }
 }

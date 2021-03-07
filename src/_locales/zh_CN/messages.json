@@ -27,7 +27,7 @@
     "message": "此列表运作细节："
   },
   "hostMatchRules": {
-    "message": "网址匹配原则："
+    "message": "网址匹配规则："
   },
   "hostMatchRule1": {
     "message": "若一个网站域名在列表中，则其所有子域名都会被匹配。<br/>例： 如果 \"baidu.com\" 在列表中，则\"www.baidu.com\"，\"tieba.baido.com\" 等网址也都会被匹配。"
@@ -36,7 +36,7 @@
     "message": "只有使用HTTP和HTTPS访问网站时会被监控。使用其它协议时（如FTP等）不会进行监控。"
   },
   "hostEditRules": {
-    "message": "网址列表编辑原则："
+    "message": "网址列表编辑规则："
   },
   "hostEditRule1": {
     "message": "添加并保存一个母域名会将子域名覆盖。<br/>例：如果 \"www.baidu.com\"，\"tieba.baido.com\" 在列表中，添加 \"baidu.com\" 会导致这两个网址被覆盖。"
@@ -145,5 +145,20 @@
   },
   "durSelectTitle": {
     "message": "解锁时长选择"
+  },
+  "currentHost": {
+    "message": "当前网址"
+  },
+  "remainTime": {
+    "message": "剩余时间"
+  },
+  "stopTimingClose": {
+    "message": "结束计时并关闭"
+  },
+  "closeAllRelated": {
+    "message": "关闭所有相关页面"
+  },
+  "durSelectHint": {
+    "message": "选择页面解锁时间"
   }
 }

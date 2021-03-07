@@ -1,8 +1,11 @@
 /**
  * This is the js for popup.html
  */
-import { remoteCall, RemoteCallable } from "./remote-callable.js";
+import { RemoteCallable } from "./remote-callable.js";
+import { generalTranslate } from "./translation.js";
 import { closeTabs, getUrlOfTab, queryTabsUnder } from "./utility.js";
+
+generalTranslate();
 
 let currentPageUrl = "";
 let monitoredHost = undefined;

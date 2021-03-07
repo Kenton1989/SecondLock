@@ -4,23 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/popup.css" />
-    <title>TimeLock</title>
+    <title class="trans-extName">TimeLock</title>
   </head>
   <body>
     <section id="page-info">
-      <p>Current host:</p>
+      <p class="trans-currentHost">Current host</p>
       <p id="current-host"></p>
       <!-- <button id="add-blacklist-btn" style="display: none">Add into Blacklist</button> -->
     </section>
     <section>
       <div id="timer-display">
-        remain time:
-        <div id="remain-time">INACTIVE</div>
+        <span class="trans-remainTime">remain time</span>
+        <div id="remain-time">--:--:--</div>
       </div>
-      <button id="stop-timer-btn" style="display: none">Stop Timing & Close</button>
+      <button id="stop-timer-btn" style="display: none" class="trans-stopTimingClose">Stop Timing & Close</button>
     </section>
     <section id="links-div">
-      <a id="go-options" href="#">Options</a>
+      <a id="go-options" href="#" class="trans-optionsTitle">Options</a>
     </section>
     <script type="module" src="js/popup-page.js"></script>
   </body>
