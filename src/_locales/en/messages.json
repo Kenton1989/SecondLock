@@ -160,5 +160,14 @@
   },
   "durSelectHint": {
     "message": "Select the duration to unlock host:"
+  },
+  "timesUpTitle": {
+    "message": "Time's Up"
+  },
+  "timesUpWarn": {
+    "message": "Time's Up!"
+  },
+  "timesUpDescript": {
+    "message": "is forbidden."
   }
 }

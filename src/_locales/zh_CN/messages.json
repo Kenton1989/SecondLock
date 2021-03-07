@@ -160,5 +160,14 @@
   },
   "durSelectHint": {
     "message": "选择页面解锁时间"
+  },
+  "timesUpTitle": {
+    "message": "倒计时结束"
+  },
+  "timesUpWarn": {
+    "message": "时间到！"
+  },
+  "timesUpDescript": {
+    "message": "解锁时间已结束。"
   }
 }

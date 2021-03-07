@@ -56,6 +56,9 @@ const TRANS_KEYS = [
   "stopTimingClose",
   "closeAllRelated",
   "durSelectHint",
+  "timesUpTitle",
+  "timesUpWarn",
+  "timesUpDescript",
 ];
 
 export { TRANS_KEYS };
