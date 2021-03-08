@@ -80,6 +80,8 @@ Capability on Chromium and Microsoft Edge (Chromium Kernel) haven't been tested.
 - [ ] option exporting & importing
 - [ ] option syncing
 - [ ] options: close website on time's up without showing time's up page
+- [ ] options: customize blocking page on time's up
+- [ ] rewrite frontend with a framework
 - [x] selection page：set unlock time by ending point
 - [x] internationalization (at least zh-CN + en)
 - [x] refine README.md
