@@ -1,6 +1,6 @@
-<img src="./src/images/timelock-logo.svg" alt="Logo of the project" align="right" width="128px">
+<img src="./src/images/logo.svg" alt="Logo of the project" align="right" width="128px">
 
-# TimeLock (Chrome Extension)
+# SecondLock (Chrome Extension)
 
 [中文 README](README.zh_CN.md)
 
@@ -12,7 +12,7 @@ Internet is NOT interesting before you have MIND. Wasting time mindlessly is nev
 
 **_However, most of you are not mindful enough_**. Your mind and time will easily fly away when you are attracted by all kinds of fancy contents.
 
-TimeLock will help you, who has mind but not mindful enough. Before entering any attractive website, you must think twice for what to do and estimate the time needed, that is the last second your are mindful. Then, set a time limit with TimeLock and enjoy your mindless time. TimeLock will block the webpage when time's up and try to remind you.
+SecondLock will help you, who has mind but not mindful enough. Before entering any attractive website, you must think twice for what to do and estimate the time needed, that is the last second your are mindful. Then, set a time limit with SecondLock and enjoy your mindless time. SecondLock will block the webpage when time's up and try to remind you.
 
 > Ask yourself before opening an app:
 >

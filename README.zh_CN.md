@@ -1,6 +1,6 @@
-<img src="./src/images/timelock-logo.svg" alt="Logo of the project" align="right" width="128px">
+<img src="./src/images/logo.svg" alt="Logo of the project" align="right" width="128px">
 
-# TimeLock 时间锁 (Chrome 插件)
+# SecondLock (Chrome 插件)
 
 [English README](README.md)
 
@@ -12,7 +12,7 @@
 
 **_但多数人容易失智_**，网上吸引人的内容能够轻易让一个人丢失意志。时间也好，先前制定的计划也好，都不复存在。
 
-时间锁正是为这类人所设计，有意识但不够坚定的人。在打开网页之前，在你还有最后一丝意识残留之时，请三思你要干什么，并估测所需时间。然后用时间锁设定时间限额，就可以进入网页随意浏览了。即使你忘了时间，时间锁也会在倒计时结束之时挡住页面并提醒你。
+SecondLock正是为这类人所设计，有意识但不够坚定的人。在打开网页之前，在你还有最后一丝意识残留之时，请三思你要干什么，并估测所需时间。然后用SecondLock设定时间限额，就可以进入网页随意浏览了。即使你忘了时间，SecondLock也会在倒计时结束之时挡住页面并提醒你。
 
 > 打开手机之前问问自己
 >

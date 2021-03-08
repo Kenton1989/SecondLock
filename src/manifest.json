@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
 
-  "name": "TimeLock",
+  "name": "SecondLock",
   "version": "0.2.0",
   "description": "Make internet truly interesting with your clear mind.",
 
@@ -19,11 +19,11 @@
   "browser_action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "256": "images/timelock-256.png"
+      "256": "images/logo-256.png"
     }
   },
 
   "icons": {
-    "256": "images/timelock-256.png"
+    "256": "images/logo-256.png"
   }
 }

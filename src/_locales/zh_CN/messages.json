@@ -1,6 +1,6 @@
 {
   "extName": {
-    "message": "时间锁"
+    "message": "SecondLock"
   },
   "min": {
     "message": "分钟"
