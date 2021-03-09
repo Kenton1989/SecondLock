@@ -1,10 +1,10 @@
 /**
  * This is the js for options.html
  */
-import {} from "/js/frontend/common-page.js";
-import { HostnameSet } from "/js/hostname-set.js";
-import { setupSectionNav } from "/js/frontend/nav-setup.js";
-import { ALL_OPTION_NAME, OptionCollection } from "/js/options-manager.js";
+import {} from "./common-page.js";
+import { HostnameSet } from "./hostname-set.js";
+import { setupSectionNav } from "./nav-setup.js";
+import { ALL_OPTION_NAME, OptionCollection } from "./options-manager.js";
 import {
   reformatHostname,
   validHostname,
