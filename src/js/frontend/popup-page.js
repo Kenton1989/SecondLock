@@ -1,9 +1,9 @@
 /**
  * This is the js for popup.html
  */
-import { RemoteCallable } from "./remote-callable.js";
-import { generalTranslate } from "./translation.js";
-import { closeTabs, getUrlOfTab, queryTabsUnder } from "./utility.js";
+import { RemoteCallable } from "/js/remote-callable.js";
+import { generalTranslate } from "/js/translation.js";
+import { getUrlOfTab } from "/js/utility.js";
 
 generalTranslate();
 
@@ -31,7 +31,7 @@ function setupRemainTimeDisplay() {
 
   let offset = (mSec % 1000) - 100;
   if (offset < 50) offset += 1000;
-  
+
   window.setTimeout(function () {
     window.setInterval(function () {
       updateRemainTimeDisplay(unlockEndTime - Date.now());
@@ -39,7 +39,7 @@ function setupRemainTimeDisplay() {
   }, offset);
 
   // Close the popup on time's up
-  window.setTimeout(window.close, mSec+1000);
+  window.setTimeout(window.close, mSec + 1000);
 }
 
 // open the option page with special method.

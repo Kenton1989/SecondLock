@@ -84,16 +84,16 @@ backgroundAux.queryPageState = function (url) {
     }
   }
   return state;
-}
+};
 
 backgroundAux.stopTimingAndClose = function (hostname) {
-  queryTabsUnder(hostname, function(tabs) {
+  queryTabsUnder(hostname, function (tabs) {
     let toClose = [];
     for (const tab of tabs) {
       if (monitor.isMonitoring(tab.url)) toClose.push(tab.id);
     }
-    chrome.tabs.remove(toClose, function(){
+    chrome.tabs.remove(toClose, function () {
       unlockTiming.stopTiming(hostname);
     });
   });
-}
+};

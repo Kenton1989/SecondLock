@@ -1,18 +1,17 @@
 /**
  * This is the js for select-time.html
  */
-import {} from "./common-page.js";
-import { DynamicPage } from "./dynamic-page.js";
-import { OptionCollection } from "./options-manager.js";
-import { RemoteCallable } from "./remote-callable.js";
-import { autoUnblock, notifyUnblock } from "./tab-blocker.js";
+import {} from "/js/frontend/common-page.js";
+import { DynamicPage } from "/js/dynamic-page.js";
+import { OptionCollection } from "/js/options-manager.js";
+import { RemoteCallable } from "/js/remote-callable.js";
+import { autoUnblock, notifyUnblock } from "/js/tab-blocker.js";
 import {
-  blinkElement,
   closeCurrentTab,
   setTextForClass,
   showTxt,
   validHostname,
-} from "./utility.js";
+} from "/js/utility.js";
 
 let minUnit = chrome.i18n.getMessage("min");
 let minUnits = chrome.i18n.getMessage("mins");
