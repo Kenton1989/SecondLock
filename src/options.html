@@ -102,10 +102,10 @@
         <h2 class="section-title trans-notification">Notification</h2>
         <input type="checkbox" id="notification-on" name="notification-on" />
         <label for="notification-on" class="trans-activeCountdownNotify">Activate Countdown Notification</label>
-        <div id="notification-details">
+        <div id="notification-countdowns">
           <h3 class="trans-notifyTimePoints">Notification Time Points</h3>
           <p>
-            <input type="number" min="1" max="120" />
+            <input type="number" min="1" max="1000" />
             <select name="unit">
               <option value="min" class="trans-mins">mins</option>
               <option value="sec" class="trans-secs">secs</option>
@@ -202,7 +202,7 @@
     </li>
 
     <p class="notify-time-point">
-      <input type="number" min="1" max="120" />
+      <input type="number" min="1" max="1000" />
       <select name="unit">
         <option value="min" class="trans-mins">mins</option>
         <option value="sec" class="trans-secs">secs</option>

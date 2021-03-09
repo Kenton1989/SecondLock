@@ -200,6 +200,15 @@ options.whitelistHost.doOnUpdated(function (list) {
 // TODO - add notification functions
 options.notificationOn.doOnUpdated(function (notiOn) {});
 
+{
+  let notiOnChecker = $id("notification-on");
+  let notiCountDownDiv = $id("notification-countdowns");
+  notiCountDownDiv.style.display = notiOnChecker.checked ? "block" : "none";
+
+  notiOnChecker.onchange = function () {
+    notiCountDownDiv.style.display = notiOnChecker.checked ? "block" : "none";
+  };
+}
 //////////////////// Active Days ///////////////////////////
 // TODO - add active days support
 

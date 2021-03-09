@@ -1,4 +1,4 @@
-import { $id, $tag } from "./common-page.js";
+import { $id, $tag, $cls } from "./common-page.js";
 import { blinkElement } from "./utility.js";
 
 /**
