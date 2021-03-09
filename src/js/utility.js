@@ -1,5 +1,3 @@
-import { $cls } from "./common-page.js";
-
 // Short name for selectors
 function $(selector, element = document) {
   return element.querySelector(selector);
