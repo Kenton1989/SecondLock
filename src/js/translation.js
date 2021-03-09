@@ -1,3 +1,4 @@
+import { $cls } from "./common-page.js";
 import { TRANS_KEYS } from "./trans-keys.js";
 
 const SUPPORTED_LANG = new Set(["zh-CN"]);
@@ -15,14 +16,14 @@ function generalTranslate(transKeys = TRANS_KEYS) {
   }
   for (const key of transKeys) {
     let txt = chrome.i18n.getMessage(key);
-    
-    let elements = document.getElementsByClassName(`trans-${key}`);
+
+    let elements = $cls(`trans-${key}`);
     for (const ele of elements) {
       // use innerHTML to allow simple styling
       ele.innerHTML = txt;
     }
 
-    let phElements = document.getElementsByClassName(`transPh-${key}`);
+    let phElements = $cls(`transPh-${key}`);
     for (const ele of phElements) {
       ele.placeholder = txt;
     }

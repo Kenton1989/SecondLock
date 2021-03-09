@@ -1,3 +1,4 @@
+import { $id, $tag } from "./common-page.js";
 import { blinkElement } from "./utility.js";
 
 /**
@@ -12,18 +13,18 @@ import { blinkElement } from "./utility.js";
  *   containing the title of the section.
  */
 function setupSectionNav() {
-  let sections = document.getElementsByTagName("section");
-  let navList = document.getElementById("nav-list");
-  let tempItem = document.getElementsByClassName("nav-item")[0];
+  let sections = $tag("section");
+  let navList = $id("nav-list");
+  let tempItem = $cls("nav-item")[0];
   // console.debug(tempItem)
   // console.debug(link)
 
   for (const sec of sections) {
     if (sec.style.display == "none") continue;
     if (!sec.id) continue;
-    let title = sec.getElementsByClassName("section-title")[0];
+    let title = $cls("section-title", sec)[0];
     let copy = tempItem.cloneNode(true);
-    let link = copy.getElementsByTagName("a")[0];
+    let link = $tag("a", copy)[0];
     link.href = "#" + sec.id;
     link.innerText = title.innerText;
     link.onclick = function () {

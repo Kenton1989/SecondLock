@@ -147,13 +147,13 @@ function setUpHostListDiv(hosts, hostListDiv, onSaveHostList = function () {}) {
   };
 
   // prepare for saving list
-  let saveListBtn = hostListDiv.getElementsByClassName("save-host-btn")[0];
+  let saveListBtn = $cls("save-host-btn", hostListDiv)[0];
   saveListBtn.onclick = function () {
     // filter out the deleted item
     let items = hostList.childNodes;
     for (const item of items) {
       if (!item.classList.contains("deleted")) continue;
-      let host = item.getElementsByClassName("host")[0];
+      let host = $cls("host", item)[0];
       dirty = hostSet.remove(host.innerText) || dirty;
     }
 
@@ -172,9 +172,7 @@ setupSectionNav();
 
 //////////////////// monitored host list ///////////////////////
 let blacklistHostDiv = $id("blacklist-host");
-let blacklistHostListEle = blacklistHostDiv.getElementsByClassName(
-  "host-list"
-)[0];
+let blacklistHostListEle = $cls("host-list", blacklistHostDiv)[0];
 setUpHostListDiv([], blacklistHostDiv, function (list) {
   console.log(list);
   setHostList(list, blacklistHostListEle);
@@ -187,9 +185,7 @@ options.monitoredList.doOnUpdated(function (list) {
 
 ///////////////////// Whitelist ////////////////////////
 let whitelistHostDiv = $id("whitelist-host");
-let whitelistHostListEle = whitelistHostDiv.getElementsByClassName(
-  "host-list"
-)[0];
+let whitelistHostListEle = $cls("host-list", whitelistHostDiv)[0];
 setUpHostListDiv([], whitelistHostDiv, function (list) {
   console.log(list);
   setHostList(list, whitelistHostListEle);

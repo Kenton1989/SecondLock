@@ -1,6 +1,7 @@
 /**
  * This is the js for popup.html
  */
+import { $id } from "./common-page.js";
 import { RemoteCallable } from "./remote-callable.js";
 import { generalTranslate } from "./translation.js";
 import { closeTabs, getUrlOfTab, queryTabsUnder } from "./utility.js";
@@ -17,7 +18,7 @@ const SECOND = 1000;
 const MINUTE = 60000;
 const HOUR = 3600000;
 
-remainTimeDiv = document.getElementById("remain-time");
+remainTimeDiv = $id("remain-time");
 
 function updateRemainTimeDisplay(remainTimeInMs) {
   // format the rest time to HH:MM:SS format
@@ -31,7 +32,7 @@ function setupRemainTimeDisplay() {
 
   let offset = (mSec % 1000) - 100;
   if (offset < 50) offset += 1000;
-  
+
   window.setTimeout(function () {
     window.setInterval(function () {
       updateRemainTimeDisplay(unlockEndTime - Date.now());
@@ -39,12 +40,12 @@ function setupRemainTimeDisplay() {
   }, offset);
 
   // Close the popup on time's up
-  window.setTimeout(window.close, mSec+1000);
+  window.setTimeout(window.close, mSec + 1000);
 }
 
 // open the option page with special method.
 // Using hyperlink directly will open the page in the popup window
-let goOptions = document.getElementById("go-options");
+let goOptions = $id("go-options");
 goOptions.onclick = function (e) {
   chrome.runtime.openOptionsPage();
 };
@@ -76,7 +77,7 @@ function setupCountdownDiv(state) {
     unlockEndTime = state.unlockEndTime;
     setupRemainTimeDisplay();
 
-    let stopBtn = document.getElementById("stop-timer-btn");
+    let stopBtn = $id("stop-timer-btn");
     stopBtn.style.display = "inline-block";
     stopBtn.onclick = function () {
       // close all monitored tabs and end the timer
@@ -88,7 +89,7 @@ function setupCountdownDiv(state) {
     // TODO - add quick adding blacklist support
     // let urlObj = new URL(currentPageUrl);
     // if (MONITORED_PROTOCOL.has(urlObj.protocol)) {
-    //   let addBlacklistBtn = document.getElementById("add-blacklist-btn");
+    //   let addBlacklistBtn = $id("add-blacklist-btn");
     //   addBlacklistBtn.style.display = "inline-block";
     //   addBlacklistBtn.onclick = quickAddBlacklist;
     // }
@@ -96,7 +97,7 @@ function setupCountdownDiv(state) {
 }
 
 // get current browsing host and display
-let currentHostTxt = document.getElementById("current-host");
+let currentHostTxt = $id("current-host");
 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
   currentTab = tabs[0];
   currentPageUrl = currentTab.url;

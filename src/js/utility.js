@@ -92,7 +92,7 @@ function validIPv6Hostname(str) {
  * @param {String} text text to be set as innerText property of elements.
  */
 function setTextForClass(className, text) {
-  let elements = document.getElementsByClassName(className);
+  let elements = $cls(className);
   for (const element of elements) {
     element.innerText = text;
   }

@@ -1,14 +1,14 @@
 /**
  * This is the js for blocking.html
  */
-import {} from "./common-page.js";
+import { $id } from "./common-page.js";
 import { DynamicPage } from "./dynamic-page.js";
 import { autoUnblock, notifyUnblock } from "./tab-blocker.js";
 import { closeCurrentTab, setTextForClass } from "./utility.js";
 
 let blockedHost = undefined;
 
-let closeAllBtn = document.getElementById("close-all-about");
+let closeAllBtn = $id("close-all-about");
 
 DynamicPage.dynamicInit(function (args) {
   blockedHost = args.blockedHost;

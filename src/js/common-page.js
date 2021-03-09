@@ -25,9 +25,13 @@ function $cls(cls, element = document) {
   return element.getElementsByClassName(cls);
 }
 
+function $tag(tag, element = document) {
+  return element.getElementsByTagName(tag);
+}
+
 // Translate
 function $t(msgKey, ...param) {
   return chrome.i18n.getMessage(msgKey, ...param);
 }
 
-export { $, $$, $id, $cls, $t };
+export { $, $$, $id, $cls, $tag, $t };
