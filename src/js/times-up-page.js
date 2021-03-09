@@ -1,10 +1,9 @@
 /**
  * This is the js for blocking.html
  */
-import { $id } from "./common-page.js";
 import { DynamicPage } from "./dynamic-page.js";
 import { autoUnblock, notifyUnblock } from "./tab-blocker.js";
-import { closeCurrentTab, setTextForClass } from "./utility.js";
+import { closeCurrentTab, setTextForClass, $id } from "./utility.js";
 
 let blockedHost = undefined;
 

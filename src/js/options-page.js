@@ -13,8 +13,10 @@ import {
   validIPv6Address,
   showTxt,
   formatBytes,
+  $cls,
+  $id,
+  $t,
 } from "/js/utility.js";
-import { $cls, $id, $t } from "./common-page.js";
 
 let options = new OptionCollection(...ALL_OPTION_NAME);
 

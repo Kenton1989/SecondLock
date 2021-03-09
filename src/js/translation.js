@@ -1,4 +1,4 @@
-import { $cls } from "./common-page.js";
+import { $cls } from "./utility.js";
 import { TRANS_KEYS } from "./trans-keys.js";
 
 const SUPPORTED_LANG = new Set(["zh-CN"]);

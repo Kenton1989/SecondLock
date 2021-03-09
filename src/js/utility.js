@@ -1,3 +1,31 @@
+import { $cls } from "./common-page.js";
+
+// Short name for selectors
+function $(selector, element = document) {
+  return element.querySelector(selector);
+}
+
+function $$(selector, element = document) {
+  return element.querySelectorAll(selector);
+}
+
+function $id(id, element = document) {
+  return element.getElementById(id);
+}
+
+function $cls(cls, element = document) {
+  return element.getElementsByClassName(cls);
+}
+
+function $tag(tag, element = document) {
+  return element.getElementsByTagName(tag);
+}
+
+// Translate
+function $t(msgKey, ...param) {
+  return chrome.i18n.getMessage(msgKey, ...param);
+}
+
 /**
  * Get the URL object of the url of the given tab.
  *
@@ -232,4 +260,10 @@ export {
   formatBytes,
   queryTabsUnder,
   closeTabs,
+  $,
+  $$,
+  $id,
+  $cls,
+  $tag,
+  $t,
 };

@@ -40,12 +40,14 @@ const DEFAULT_OPTIONS = {
   defDurations: [1, 5, 10, 15, 30, 60],
   mottos: ["Time waits for no one. – Folklore"],
 };
+const SYNCED_OPTION_NAME = [];
 
-/**
- * short name for storage lib
- */
+// short name for storage lib
 const localStorage = chrome.storage.local;
-// const syncStorage = chrome.storage.sync;
+const syncStorage = chrome.storage.sync;
+
+// Dirty bit
+let dirtyLocal = false;
 
 /**
  * Cache the value of the given option from the storage.
@@ -130,8 +132,12 @@ class OneOption {
     }
     let val = {};
     val[this.#storageKey] = value;
-    if (callback) localStorage.set(val, callback);
-    else localStorage.set(val);
+    if (callback) {
+      localStorage.set(val, function (...params) {
+        callback(params);
+        dirtyLocal = true;
+      });
+    } else localStorage.set(val, () => (dirtyLocal = true));
   }
 
   /**
@@ -202,6 +208,9 @@ class OptionCollection {
     return this[name];
   }
 }
+
+// sync options every 5 seconds
+window.setInterval(function () {}, 5000);
 
 export {
   ALL_OPTION_NAME,

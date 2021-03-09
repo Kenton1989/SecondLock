@@ -7,31 +7,3 @@ let copyEndYear = document.getElementById("copy-end-year");
 if (copyEndYear != undefined) copyEndYear.innerText = thisYear;
 
 generalTranslate();
-
-// Short name for selectors
-function $(selector, element = document) {
-  return element.querySelector(selector);
-}
-
-function $$(selector, element = document) {
-  return element.querySelectorAll(selector);
-}
-
-function $id(id, element = document) {
-  return element.getElementById(id);
-}
-
-function $cls(cls, element = document) {
-  return element.getElementsByClassName(cls);
-}
-
-function $tag(tag, element = document) {
-  return element.getElementsByTagName(tag);
-}
-
-// Translate
-function $t(msgKey, ...param) {
-  return chrome.i18n.getMessage(msgKey, ...param);
-}
-
-export { $, $$, $id, $cls, $tag, $t };

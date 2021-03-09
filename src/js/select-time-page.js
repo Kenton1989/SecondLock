@@ -1,7 +1,6 @@
 /**
  * This is the js for select-time.html
  */
-import { $, $$, $id, $cls } from "./common-page.js";
 import {} from "./common-page.js";
 import { DynamicPage } from "./dynamic-page.js";
 import { OptionCollection } from "./options-manager.js";
@@ -12,6 +11,8 @@ import {
   setTextForClass,
   showTxt,
   validHostname,
+  $id,
+  $cls,
 } from "./utility.js";
 
 let minUnit = chrome.i18n.getMessage("min");
