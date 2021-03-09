@@ -8,6 +8,7 @@ if (copyEndYear != undefined) copyEndYear.innerText = thisYear;
 
 generalTranslate();
 
+// Short name for selectors
 function $(selector, element = document) {
   return element.querySelector(selector);
 }
@@ -24,4 +25,9 @@ function $cls(cls, element = document) {
   return element.getElementsByClassName(cls);
 }
 
-export { $, $$, $id, $cls };
+// Translate
+function $t(msgKey, ...param) {
+  return chrome.i18n.getMessage(msgKey, ...param);
+}
+
+export { $, $$, $id, $cls, $t };

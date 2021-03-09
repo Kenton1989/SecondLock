@@ -1,7 +1,7 @@
 /**
  * This is the js for select-time.html
  */
-import {} from "/js/frontend/common-page.js";
+import { $, $$, $id, $cls } from "/js/frontend/common-page.js";
 import { DynamicPage } from "/js/dynamic-page.js";
 import { OptionCollection } from "/js/options-manager.js";
 import { RemoteCallable } from "/js/remote-callable.js";
@@ -69,7 +69,7 @@ DynamicPage.dynamicInit(function (args) {
   setTextForClass("blocked-link", blockedHost);
   autoUnblock(blockedHost);
 
-  let closeAllBtn = document.getElementById("close-all");
+  let closeAllBtn = $id("close-all");
   let pattern = blockedHost;
   if (validHostname(blockedHost)) {
     pattern = `*.${blockedHost}`;
@@ -89,11 +89,11 @@ DynamicPage.dynamicInit(function (args) {
 });
 
 // Set where to show warning
-warningTxt = document.getElementsByClassName("warning")[0];
+warningTxt = $cls("warning")[0];
 
 // Prepare buttons for default time selection
 const defaultTimes = [1, 5, 10, 15, 30, 60, 120];
-let timeBtnDiv = document.getElementById("buttons");
+let timeBtnDiv = $id("buttons");
 function setDefDurBtnList(minsList) {
   timeBtnDiv.innerHTML = "";
   for (const minutes of minsList) {
@@ -115,12 +115,12 @@ options.defDurations.doOnUpdated(function (minsList) {
 });
 
 // Prepare for read user input minutes
-let enterTimeBtn = document.getElementById("enter-time-btn");
-let enterTimeLine = document.getElementById("enter-time-line");
+let enterTimeBtn = $id("enter-time-btn");
+let enterTimeLine = $id("enter-time-line");
 let readUserInputTime = function () {
   let val = parseFloat(enterTimeLine.value);
   if (isNaN(val)) {
-    warningTxt.innerText = "Please enter a number.";
+    showTxt(warningTxt, "Please enter a number.");
     return;
   }
   warningTxt.innerText = "";
@@ -136,8 +136,8 @@ enterTimeLine.onkeydown = function (e) {
 
 //////////// Unlock by entering end time point ////////////////
 {
-  let endTimePointInput = document.getElementById("end-time-point-input");
-  let enterTimePointBtn = document.getElementById("enter-time-point-btn");
+  let endTimePointInput = $id("end-time-point-input");
+  let enterTimePointBtn = $id("enter-time-point-btn");
 
   let time = new Date(Date.now());
   let curH = time.getHours();

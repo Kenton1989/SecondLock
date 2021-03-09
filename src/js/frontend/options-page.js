@@ -14,31 +14,31 @@ import {
   showTxt,
   formatBytes,
 } from "/js/utility.js";
+import { $cls, $id, $t } from "./common-page.js";
 
 let options = new OptionCollection(...ALL_OPTION_NAME);
 
-const kEmptyInputWarn = chrome.i18n.getMessage("emptyInputWarn");
-const kUnknownHostFormat = chrome.i18n.getMessage("unknownHostFormatWarn");
-const kHostMonitoredWarn = chrome.i18n.getMessage("hostMonitoredWarn");
+const kEmptyInputWarn = $t("emptyInputWarn");
+const kUnknownHostFormat = $t("unknownHostFormatWarn");
+const kHostMonitoredWarn = $t("hostMonitoredWarn");
 
 //////////////////////// monitored list //////////////////////////
-
 /**
  * Make a host list item.
  * @param {String} host the hostname stored in the item
  */
 let makeHostListItem = (function () {
   // Local variable encapsulation
-  let tempItem = document.getElementsByClassName("host-list-item")[0];
-  let hostnameTxt = tempItem.getElementsByClassName("host")[0];
+  let tempItem = $cls("host-list-item")[0];
+  let hostnameTxt = $cls("host", tempItem)[0];
 
   // actual function
   return function (host) {
     // Set hostname before clone the node.
     hostnameTxt.innerText = host;
     let item = tempItem.cloneNode(true);
-    let deleteBtn = item.getElementsByClassName("delete-btn")[0];
-    let undoBtn = item.getElementsByClassName("undo-btn")[0];
+    let deleteBtn = $cls("delete-btn", item)[0];
+    let undoBtn = $cls("undo-btn", item)[0];
 
     undoBtn.style.display = "none";
     // delete and undo buttons will hide themselves, display the other one
@@ -71,11 +71,9 @@ function setHostList(hosts, hostListElement, hostSet = undefined) {
     hosts = [...hostSet];
   }
   hosts.sort();
-  hostListElement.innerHTML = "";
-  for (const host of hosts) {
-    let item = makeHostListItem(host);
-    hostListElement.appendChild(item);
-  }
+  hostListElement.replaceChildren();
+  let items = hosts.map((host) => makeHostListItem(host));
+  hostListElement.append(...items);
 }
 
 /**
@@ -91,15 +89,15 @@ function setUpHostListDiv(hosts, hostListDiv, onSaveHostList = function () {}) {
   hostListDiv.hostSet = hostSet;
 
   // get the host list and setup
-  let hostList = hostListDiv.getElementsByClassName("host-list")[0];
+  let hostList = $cls("host-list", hostListDiv)[0];
   setHostList(hosts, hostList, hostSet);
 
   // prepare the element to display warning
-  let warning = hostListDiv.getElementsByClassName("warning")[0];
+  let warning = $cls("warning", hostListDiv)[0];
 
   // prepare elements for user input
-  let userInput = hostListDiv.getElementsByClassName("host-input")[0];
-  let addHostBtn = hostListDiv.getElementsByClassName("add-host-btn")[0];
+  let userInput = $cls("host-input", hostListDiv)[0];
+  let addHostBtn = $cls("add-host-btn", hostListDiv)[0];
 
   let enterHost = function () {
     let input = userInput.value.trim();
@@ -134,7 +132,7 @@ function setUpHostListDiv(hosts, hostListDiv, onSaveHostList = function () {}) {
 
     // accept input hostname
     userInput.value = "";
-    warning.innerText = "";
+    warning.replaceChildren();
     let item = makeHostListItem(hostname);
     item.classList.add("unsaved");
     hostSet.add(hostname);
@@ -166,14 +164,14 @@ function setUpHostListDiv(hosts, hostListDiv, onSaveHostList = function () {}) {
       console.log("Host list is not modified. Skip saving.");
     }
 
-    warning.innerText = "";
+    warning.replaceChildren();
   };
 }
 
 setupSectionNav();
 
 //////////////////// monitored host list ///////////////////////
-let blacklistHostDiv = document.getElementById("blacklist-host");
+let blacklistHostDiv = $id("blacklist-host");
 let blacklistHostListEle = blacklistHostDiv.getElementsByClassName(
   "host-list"
 )[0];
@@ -188,7 +186,7 @@ options.monitoredList.doOnUpdated(function (list) {
 });
 
 ///////////////////// Whitelist ////////////////////////
-let whitelistHostDiv = document.getElementById("whitelist-host");
+let whitelistHostDiv = $id("whitelist-host");
 let whitelistHostListEle = whitelistHostDiv.getElementsByClassName(
   "host-list"
 )[0];
@@ -211,8 +209,8 @@ options.notificationOn.doOnUpdated(function (notiOn) {});
 
 /////////////////////// Selection Page ///////////////////////
 
-let defaultDurInput = document.getElementById("default-time");
-let defaultDurSave = document.getElementById("save-default-time-btn");
+let defaultDurInput = $id("default-time");
+let defaultDurSave = $id("save-default-time-btn");
 let lastSaveDefDur = [];
 const MIN_DUR_MIN = 1;
 const MAX_DUR_MIN = 1000;
@@ -222,7 +220,7 @@ function loadDefaultDurations(list) {
   defaultDurInput.value = list.toString();
 }
 
-const defDurChoiceTitle = document.getElementById("def-dur-choice-title");
+const defDurChoiceTitle = $id("def-dur-choice-title");
 
 function saveDefaultDuration(str) {
   // clear unsaved tag
@@ -277,17 +275,17 @@ defaultDurInput.oninput = function () {
 
 ////////////////////// storage & sync ////////////////////////
 
-let localUseSpaceTxt = document.getElementById("local-used-space");
+let localUseSpaceTxt = $id("local-used-space");
 chrome.storage.local.getBytesInUse(function (val) {
   localUseSpaceTxt.innerText = formatBytes(val);
 });
 
-let cloudUseSpaceTxt = document.getElementById("cloud-used-space");
+let cloudUseSpaceTxt = $id("cloud-used-space");
 chrome.storage.sync.getBytesInUse(function (val) {
   cloudUseSpaceTxt.innerText = formatBytes(val);
 });
 
-let cloudMaxSpaceTxt = document.getElementById("cloud-max-space");
+let cloudMaxSpaceTxt = $id("cloud-max-space");
 cloudMaxSpaceTxt.innerText = formatBytes(chrome.storage.sync.QUOTA_BYTES);
 
 // TODO - add syncing support
