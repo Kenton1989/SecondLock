@@ -53,7 +53,7 @@ function selectTime(tab, hostname) {
 monitor.onBrowse.addListener(selectTime);
 
 unlockTiming.onTimesUp.addListener(function (hostname) {
-  tabBlocker.blockAllTabsOf(hostname, kTimesUpPageURL);
+  tabBlocker.blockAllTabsUnder(hostname, kTimesUpPageURL);
 });
 
 backgroundAux.queryPageState = function (url) {
@@ -84,16 +84,12 @@ backgroundAux.queryPageState = function (url) {
     }
   }
   return state;
-}
+};
 
 backgroundAux.stopTimingAndClose = function (hostname) {
-  queryTabsUnder(hostname, function(tabs) {
-    let toClose = [];
-    for (const tab of tabs) {
-      if (monitor.isMonitoring(tab.url)) toClose.push(tab.id);
-    }
-    chrome.tabs.remove(toClose, function(){
-      unlockTiming.stopTiming(hostname);
-    });
+  tabBlocker.blockAllByClosing(hostname, function () {
+    // stop timing after closing
+    // avoid frequent tabs switching, which is likely to trigger browsing-monitor
+    unlockTiming.stopTiming(hostname);
   });
-}
+};

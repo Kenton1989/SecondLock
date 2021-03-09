@@ -31,7 +31,7 @@ class BrowsingPageMonitor extends RemoteCallable {
     this.#eventTarget
   );
   #monitoring = true;
-  #protocol =  new Set(["http:", "https:"]);
+  #protocol = new Set(["http:", "https:"]);
 
   constructor(name) {
     super(name);
@@ -100,7 +100,7 @@ class BrowsingPageMonitor extends RemoteCallable {
   }
 
   /**
-   * Check if a web page is monitored.
+   * find the actual monitored suffix.
    * @param {string} url the URL of web page to be checked.
    * @returns {(string|undefined)} the actual monitored host suffix if the web page is monitored.
    *    If the web page is not monitored, return undefined
@@ -113,6 +113,11 @@ class BrowsingPageMonitor extends RemoteCallable {
     return this.blacklist.findSuffix(urlObj.hostname);
   }
 
+  /**
+   * Check if a web page is monitored.
+   * @param {string} url the URL of web page to be checked.
+   * @returns {boolean} true if the tab is monitored
+   */
   isMonitoring(url) {
     if (!this.active) return undefined;
     let urlObj = new URL(url);

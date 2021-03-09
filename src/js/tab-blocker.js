@@ -60,11 +60,10 @@ class TabBlocker extends RemoteCallable {
    * Block all tabs under the given hostname, unless the hostname is in the whitelist of monitor
    *
    * @param {string} hostname the hostname to be blocked
-   * @param {(string|undefined)} blockingPageUrl the URL of new page used to block the tab.
-   *  If it is undefined, all host under the given host name will be close. Otherwise, all active
+   * @param {string} blockingPageUrl the URL of new page used to block the tab. All active
    *  tabs will be overwrite with blockingPageUrl through method this.blockPageByOverwriting
    */
-  blockAllTabsOf(hostname, blockingPageUrl = kTimesUpPageURL) {
+  blockAllTabsUnder(hostname, blockingPageUrl) {
     let pattern = hostname;
 
     if (validHostname(hostname)) {
@@ -75,34 +74,39 @@ class TabBlocker extends RemoteCallable {
     let monitor = this.#monitor;
     let blocker = this;
 
-    // block active page if blockingPageUrl is set
-    if (blockingPageUrl != undefined) {
-      queryTabsUnder(
-        hostname,
-        function (tabs) {
-          for (const tab of tabs) {
-            if (monitor.isMonitoring(tab.url))
-              blocker.blockPageByOverwriting(tab, hostname, kTimesUpPageURL);
-          }
-        },
-        { active: true }
-      );
-    }
-
-    let param2 = {};
-    if (blockingPageUrl != undefined) param2.active = false;
-    // close the other pages
     queryTabsUnder(
       hostname,
       function (tabs) {
-        let toClose = [];
         for (const tab of tabs) {
-          if (monitor.isMonitoring(tab.url)) toClose.push(tab.id);
+          if (monitor.isMonitoring(tab.url))
+            blocker.blockPageByOverwriting(tab, hostname, blockingPageUrl);
         }
-        chrome.tabs.remove(toClose);
       },
-      param2
+      { active: true }
     );
+
+    queryTabsUnder(
+      hostname,
+      function (tabs) {
+        let toClose = tabs.filter((tab) => monitor.isMonitoring(tab.url));
+        closeTabs(toClose, callback);
+      },
+      { active: false }
+    );
+  }
+
+  /**
+   * Block all the page opening the given hostname by closing all page.
+   * Whitelist of monitor will be go through before closing
+   * @param {string} hostname the hostname to be blocked
+   * @param {function()} callback the callback after all tabs are closed
+   */
+  blockAllByClosing(hostname, callback) {
+    let monitor = this.#monitor;
+    queryTabsUnder(hostname, function (tabs) {
+      let toClose = tabs.filter((tab) => monitor.isMonitoring(tab.url));
+      closeTabs(toClose, callback);
+    });
   }
 
   /**

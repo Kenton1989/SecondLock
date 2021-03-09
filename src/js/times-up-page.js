@@ -2,7 +2,7 @@
  * This is the js for blocking.html
  */
 import { DynamicPage } from "./dynamic-page.js";
-import { autoUnblock, notifyUnblock } from "./tab-blocker.js";
+import { TabBlocker } from "./tab-blocker.js";
 import { closeCurrentTab, setTextForClass, $id } from "./utility.js";
 
 let blockedHost = undefined;
@@ -14,10 +14,10 @@ DynamicPage.dynamicInit(function (args) {
 
   setTextForClass("blocked-link", blockedHost);
 
-  autoUnblock(blockedHost);
+  TabBlocker.autoUnblock(blockedHost);
 
   closeAllBtn.onclick = function () {
-    notifyUnblock(blockedHost);
+    TabBlocker.notifyUnblock(blockedHost);
     // Delay for a while before closing to avoid potential frequent tab switching
     window.setTimeout(closeCurrentTab, 200);
   };

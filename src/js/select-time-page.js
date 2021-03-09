@@ -5,7 +5,7 @@ import {} from "./common-page.js";
 import { DynamicPage } from "./dynamic-page.js";
 import { OptionCollection } from "./options-manager.js";
 import { RemoteCallable } from "./remote-callable.js";
-import { autoUnblock, notifyUnblock } from "./tab-blocker.js";
+import { TabBlocker } from "./tab-blocker.js";
 import {
   closeCurrentTab,
   setTextForClass,
@@ -58,7 +58,7 @@ function setUnlock(minutes) {
     "setTimerFor",
     [blockedHost, unlockDuration],
     function () {
-      notifyUnblock(blockedHost);
+      TabBlocker.notifyUnblock(blockedHost);
       // Delay for a while before closing to avoid potential frequent tab switching
       window.setTimeout(closeCurrentTab, 200);
     }
@@ -69,7 +69,7 @@ function setUnlock(minutes) {
 DynamicPage.dynamicInit(function (args) {
   blockedHost = args.blockedHost;
   setTextForClass("blocked-link", blockedHost);
-  autoUnblock(blockedHost);
+  TabBlocker.autoUnblock(blockedHost);
 
   let closeAllBtn = $id("close-all");
   let pattern = blockedHost;
@@ -82,7 +82,7 @@ DynamicPage.dynamicInit(function (args) {
       let tabIds = tabs.map((t) => t.id);
       chrome.tabs.remove(tabIds, function () {
         // Close time-selection and blocking page about the hostname
-        notifyUnblock(blockedHost);
+        TabBlocker.notifyUnblock(blockedHost);
         // Delay for a while before closing to avoid potential frequent tab switching
         window.setTimeout(closeCurrentTab, 200);
       });
