@@ -62,8 +62,9 @@ class OneOption {
    * manage the option updating event
    * @param {String} name name of the option
    * @param {EventTarget} eventTarget the given event target
+   * @param {boolean} autoInit whether the option should query the storage and initialize the cached value automatically.
    */
-  constructor(name, eventTarget = document) {
+  constructor(name, eventTarget = document, autoInit = true) {
     if (!ALL_OPTION_NAME_SET.has(name)) {
       throw new ReferenceError(`Create invalid option: ${thisOption}.`);
     }
@@ -79,9 +80,12 @@ class OneOption {
     // make private member accessible in the callback.
     let storageKey = this.#storageKey;
     let thisOption = this;
-    localStorage.get([storageKey], function (result) {
-      thisOption.setCached(result[storageKey]);
-    });
+
+    if (autoInit) {
+      localStorage.get([storageKey], function (result) {
+        thisOption.setCached(result[storageKey]);
+      });
+    }
 
     localStorage.onChanged.addListener(function (changes) {
       if (changes[storageKey]) {
@@ -160,22 +164,30 @@ class OptionCollection {
 
   /**
    * Create a option collection with the given options
-   * @param  {...any} optionNames the option name to be included
+   * @param  {...string} optionNames the option name to be included
    * @throws when optionNames contains option that is not in the allOptionNameList
    */
   constructor(...optionNames) {
     // remove duplication
     let optionSet = new Set(optionNames);
+    optionNames = [...optionSet];
 
-    for (const option of optionSet) {
+    for (const option of optionNames) {
       if (!ALL_OPTION_NAME_SET.has(option)) {
         throw new ReferenceError(`Referring invalid option: ${option}.`);
       }
       Object.defineProperty(this, option, {
-        value: new OneOption(option, this.#eventTarget),
+        value: new OneOption(option, this.#eventTarget, false),
         writable: false,
       });
     }
+
+    let thisOptions = this;
+    chrome.storage.local.get(optionNames, function (res) {
+      for (const key of optionNames) {
+        thisOptions.getOption(key).setCached(res[key]);
+      }
+    });
   }
 
   /**
@@ -184,6 +196,9 @@ class OptionCollection {
    * @return {OneOption} the option object
    */
   getOption(name) {
+    if (!ALL_OPTION_NAME_SET.has(name)) {
+      throw new ReferenceError(`Referring invalid option: ${name}.`);
+    }
     return this[name];
   }
 }
