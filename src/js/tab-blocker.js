@@ -89,7 +89,7 @@ class TabBlocker extends RemoteCallable {
       hostname,
       function (tabs) {
         let toClose = tabs.filter((tab) => monitor.isMonitoring(tab.url));
-        closeTabs(toClose, callback);
+        closeTabs(toClose);
       },
       { active: false }
     );
@@ -137,7 +137,4 @@ class TabBlocker extends RemoteCallable {
   }
 }
 
-let notifyUnblock = TabBlocker.notifyUnblock;
-let autoUnblock = TabBlocker.autoUnblock;
-
-export { notifyUnblock, autoUnblock, TabBlocker };
+export { TabBlocker };
