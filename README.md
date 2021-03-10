@@ -49,6 +49,11 @@ Capability on Chromium and Microsoft Edge (Chromium Kernel) haven't been tested.
 
 # Update
 
+- v0.2.1
+
+  - change extension name.
+  - bug fix: whitelist does not work when manually stop timing.
+
 - v0.2.0
 
   - Support simplified Chinese (zh-CN)
