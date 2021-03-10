@@ -8,7 +8,7 @@ import {
 } from "./options-manager.js";
 import { RemoteCallable } from "./remote-callable.js";
 import { TabBlocker } from "./tab-blocker.js";
-import { queryTabsUnder } from "./utility.js";
+import { api } from "./api.js";
 
 let options = new OptionCollection(...ALL_OPTION_NAME);
 
