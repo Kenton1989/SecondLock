@@ -34,13 +34,18 @@ function setupRemainTimeDisplay() {
   if (offset < 50) offset += 1000;
 
   window.setTimeout(function () {
-    window.setInterval(function () {
-      updateRemainTimeDisplay(unlockEndTime - Date.now());
+    let handle = window.setInterval(function () {
+      if (Date.now() > unlockEndTime) {
+        window.clearInterval(handle);
+        updateRemainTimeDisplay(0);
+      } else {
+        updateRemainTimeDisplay(unlockEndTime - Date.now());
+      }
     }, 1000);
   }, offset);
 
   // Close the popup on time's up
-  window.setTimeout(window.close, mSec + 1000);
+  window.setTimeout(window.close, mSec + 100);
 }
 
 // open the option page with special method.
