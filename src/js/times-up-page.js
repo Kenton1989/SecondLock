@@ -4,6 +4,7 @@
 import { DynamicPage } from "./dynamic-page.js";
 import { TabBlocker } from "./tab-blocker.js";
 import { closeCurrentTab, setTextForClass, $id } from "./utility.js";
+import "./common-page.js";
 
 let blockedHost = undefined;
 
