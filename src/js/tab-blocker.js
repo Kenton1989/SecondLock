@@ -97,7 +97,7 @@ class TabBlocker extends RemoteCallable {
 
   /**
    * Block all the page opening the given hostname by closing all page.
-   * Whitelist of monitor will be go through before closing
+   * Whitelist of monitor will be checked before closing
    * @param {string} hostname the hostname to be blocked
    * @param {function()} callback the callback after all tabs are closed
    */
@@ -105,7 +105,16 @@ class TabBlocker extends RemoteCallable {
     let monitor = this.#monitor;
     queryTabsUnder(hostname, function (tabs) {
       let toClose = tabs.filter((tab) => monitor.isMonitoring(tab.url));
-      closeTabs(toClose, callback);
+      // temporary disable the monitor
+      // since frequent tabs switching may happen when multiple tabs are close
+      // which may trigger monitor unexpectedly
+      let oldActive = monitor.active;
+      monitor.active = false;
+
+      closeTabs(toClose, function(){
+        monitor.active = oldActive;
+        callback();
+      });
     });
   }
 
