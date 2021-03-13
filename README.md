@@ -86,6 +86,8 @@ Capability on Chromium and Microsoft Edge (Chromium Kernel) haven't been tested.
 - [ ] option syncing
 - [ ] options: close website on time's up without showing time's up page
 - [ ] options: customize blocking page on time's up
+- [ ] options: leave one newtab when all tabs in current window are closed
+- [ ] support FireFox
 - [ ] rewrite frontend with a framework
 - [x] selection page：set unlock time by ending point
 - [x] internationalization (at least zh-CN + en)
