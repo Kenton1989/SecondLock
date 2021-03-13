@@ -2,11 +2,11 @@ import { api } from "./api.js";
 
 class DynamicPage {
   // Buffered arguments
-  static #args = undefined;
+  static _args = undefined;
   // Setup flag
-  static #setup = false;
+  static _setup = false;
   // event key
-  static #ARGS_BUFFERED_EVENT_KEY = "dynamic-page-arguments-buffered";
+  static _ARGS_BUFFERED_EVENT_KEY = "dynamic-page-arguments-buffered";
 
   /**
    * Initialize the current page with the given callback function.
@@ -18,15 +18,15 @@ class DynamicPage {
   static dynamicInit(callback) {
     // execute the callback directly if the arguments is buffered.
     // otherwise, register for the buffering events.
-    if (DynamicPage.#args != undefined) {
+    if (DynamicPage._args != undefined) {
       console.debug("using buffered arg.");
-      callback(DynamicPage.#args);
+      callback(DynamicPage._args);
     } else {
       document.addEventListener(
-        DynamicPage.#ARGS_BUFFERED_EVENT_KEY,
+        DynamicPage._ARGS_BUFFERED_EVENT_KEY,
         function (e) {
           console.debug("arg received.");
-          callback(DynamicPage.#args);
+          callback(DynamicPage._args);
         }
       );
     }
@@ -34,8 +34,8 @@ class DynamicPage {
 
   static setup() {
     // avoid multiple setup
-    if (DynamicPage.#setup) return;
-    DynamicPage.#setup = true;
+    if (DynamicPage._setup) return;
+    DynamicPage._setup = true;
 
     api.tabs.getCurrent().then(function (tab) {
       if (!tab) return;
@@ -46,7 +46,7 @@ class DynamicPage {
     api.runtime.onMessage.addListener(function (message) {
       if (message.dynamicPageInitArgs) {
         console.debug("arg received (passive): ", message.dynamicPageInitArgs);
-        DynamicPage.#setArgs(message.dynamicPageInitArgs);
+        DynamicPage._setArgs(message.dynamicPageInitArgs);
       }
     });
 
@@ -66,19 +66,19 @@ class DynamicPage {
         }
 
         console.debug("arg received (active): ", response.dynamicPageInitArgs);
-        DynamicPage.#setArgs(response.dynamicPageInitArgs);
+        DynamicPage._setArgs(response.dynamicPageInitArgs);
       });
   }
 
-  static #setArgs(args) {
+  static _setArgs(args) {
     // Already buffered
-    if (DynamicPage.#args != undefined) {
+    if (DynamicPage._args != undefined) {
       return;
     }
     // Buffering the argument
-    DynamicPage.#args = args;
+    DynamicPage._args = args;
     // Trigger the argument reception event
-    let argsArriveEvent = new Event(DynamicPage.#ARGS_BUFFERED_EVENT_KEY);
+    let argsArriveEvent = new Event(DynamicPage._ARGS_BUFFERED_EVENT_KEY);
     document.dispatchEvent(argsArriveEvent);
   }
 }

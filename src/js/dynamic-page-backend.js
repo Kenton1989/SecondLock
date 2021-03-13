@@ -5,13 +5,13 @@ const RECEIVER_DOES_NOT_EXIST_MSG =
   "Could not establish connection. Receiving end does not exist.";
 
 class DynamicPageBackend extends RemoteCallable {
-  #tabArgs = new Map();
+  _tabArgs = new Map();
 
   constructor(name) {
     super(name);
 
     // make private member visible in callback
-    let tabArgs = this.#tabArgs;
+    let tabArgs = this._tabArgs;
 
     // send arguments back on request.
     api.runtime.onMessage.addListener(function (message, sender, sendResponse) {
@@ -40,7 +40,7 @@ class DynamicPageBackend extends RemoteCallable {
    * @returns {Promise} promise resolved with updated api.tabs.Tab object after the url is opened
    */
   openOnExistingTab(url, pageArgs, tabId) {
-    this.#tabArgs.set(tabId, pageArgs);
+    this._tabArgs.set(tabId, pageArgs);
     let promise = api.tabs.update(tabId, { url: url });
     console.debug(`Overwriting tab #${tabId} with URL:${url}.`);
     return promise;
@@ -61,7 +61,7 @@ class DynamicPageBackend extends RemoteCallable {
     else tabProperties.url = url;
 
     // make private member visible in callback
-    let tabArgs = this.#tabArgs;
+    let tabArgs = this._tabArgs;
     let promise = api.tabs.create(tabProperties).then(function (tab) {
       tabArgs.set(tab.id, pageArgs);
       console.debug(`Created tab #${tab.id} opened with URL:${url}.`);

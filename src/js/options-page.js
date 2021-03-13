@@ -282,14 +282,8 @@ defaultDurInput.oninput = function () {
 // TODO - allow customizing motto displayed on blocking page
 
 ////////////////////// storage & sync ////////////////////////
-
-let localUseSpaceTxt = $id("local-used-space");
-api.storage.local.getBytesInUse().then(function (val) {
-  localUseSpaceTxt.innerText = formatBytes(val);
-});
-
 let cloudUseSpaceTxt = $id("cloud-used-space");
-api.storage.sync.getBytesInUse().then(function (val) {
+api.storage.sync.getBytesInUse(undefined).then(function (val) {
   cloudUseSpaceTxt.innerText = formatBytes(val);
 });
 

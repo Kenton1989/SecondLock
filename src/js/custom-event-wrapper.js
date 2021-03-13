@@ -1,14 +1,14 @@
 class CustomEventWrapper {
-  #eventKey;
-  #eventTarget;
+  _eventKey;
+  _eventTarget;
   /**
    * Construct a event manager backing with given key and target object
    * @param {String} eventType type of event
    * @param {EventTarget} eventTarget backing event target object
    */
   constructor(eventType, eventTarget) {
-    this.#eventKey = eventType;
-    this.#eventTarget = eventTarget;
+    this._eventKey = eventType;
+    this._eventTarget = eventTarget;
   }
 
   /**
@@ -17,7 +17,7 @@ class CustomEventWrapper {
    * @param {function(...)} callback callback function
    */
   addListener(callback) {
-    this.#eventTarget.addEventListener(this.#eventKey, function (e) {
+    this._eventTarget.addEventListener(this._eventKey, function (e) {
       callback(...e.detail);
     });
   }
@@ -28,8 +28,8 @@ class CustomEventWrapper {
    * @param  {...any} args arguments passed to the callback functions
    */
   trigger(...args) {
-    let event = new CustomEvent(this.#eventKey, { detail: args });
-    this.#eventTarget.dispatchEvent(event);
+    let event = new CustomEvent(this._eventKey, { detail: args });
+    this._eventTarget.dispatchEvent(event);
   }
 }
 

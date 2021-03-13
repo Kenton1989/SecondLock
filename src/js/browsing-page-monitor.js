@@ -24,21 +24,21 @@ const WINDOW_SWITCH_DELAY = 300;
  * callback functions will be activated.
  */
 class BrowsingPageMonitor extends RemoteCallable {
-  #monitoredHost = new HostnameSet();
-  #whitelistHost = new HostnameSet();
-  #eventTarget = new EventTarget();
-  #browseEvent = new CustomEventWrapper(
+  _monitoredHost = new HostnameSet();
+  _whitelistHost = new HostnameSet();
+  _eventTarget = new EventTarget();
+  _browseEvent = new CustomEventWrapper(
     BROWSING_MONITORED_PAGE,
-    this.#eventTarget
+    this._eventTarget
   );
-  #monitoring = true;
-  #protocol = new Set(["http:", "https:"]);
+  _monitoring = true;
+  _protocol = new Set(["http:", "https:"]);
 
   constructor(name) {
     super(name);
 
     // make private member public
-    let browseEvent = this.#browseEvent;
+    let browseEvent = this._browseEvent;
     // avoid ambiguity of "this"
     let monitor = this;
 
@@ -87,19 +87,19 @@ class BrowsingPageMonitor extends RemoteCallable {
    * @return {Set<String>} the protocol that are monitored
    */
   get monitoredProtocol() {
-    return this.#protocol;
+    return this._protocol;
   }
 
   /**
    * @returns {boolean} If the monitor is active
    */
   get active() {
-    return this.#monitoring;
+    return this._monitoring;
   }
 
   set active(val) {
     val = Boolean(val);
-    this.#monitoring = val;
+    this._monitoring = val;
   }
 
   /**
@@ -133,14 +133,14 @@ class BrowsingPageMonitor extends RemoteCallable {
    * Get a set of host name that are monitored.
    */
   get blacklist() {
-    return this.#monitoredHost;
+    return this._monitoredHost;
   }
 
   /**
    * Get a set of host name that are in the whitelist.
    */
   get whitelist() {
-    return this.#whitelistHost;
+    return this._whitelistHost;
   }
 
   /**
@@ -153,7 +153,7 @@ class BrowsingPageMonitor extends RemoteCallable {
    *  - hostname: the monitored hostname
    */
   get onBrowse() {
-    return this.#browseEvent;
+    return this._browseEvent;
   }
 }
 

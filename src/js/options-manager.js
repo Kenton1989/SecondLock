@@ -43,10 +43,6 @@ const DEFAULT_OPTIONS = {
 };
 const SYNCED_OPTION_NAME = [];
 
-// short name for storage lib
-const localStorage = api.storage.local;
-const syncStorage = api.storage.sync;
-
 // Dirty bit
 let dirtyLocal = false;
 
@@ -55,10 +51,10 @@ let dirtyLocal = false;
  * Notify all listener when the value of option updated.
  */
 class OneOption {
-  #eventTarget;
-  #onUpdatedEvent;
-  #storageKey;
-  #value = undefined;
+  _eventTarget;
+  _onUpdatedEvent;
+  _storageKey;
+  _value = undefined;
 
   /**
    * construct a option with the given EventTarget object to
@@ -72,25 +68,26 @@ class OneOption {
       throw new ReferenceError(`Create invalid option: ${thisOption}.`);
     }
 
-    this.#eventTarget = eventTarget;
+    this._eventTarget = eventTarget;
 
-    this.#onUpdatedEvent = new CustomEventWrapper(
+    this._onUpdatedEvent = new CustomEventWrapper(
       `${name}-option-updated`,
-      this.#eventTarget
+      this._eventTarget
     );
 
-    this.#storageKey = name;
+    this._storageKey = name;
     // make private member accessible in the callback.
-    let storageKey = this.#storageKey;
+    let storageKey = this._storageKey;
     let thisOption = this;
 
     if (autoInit) {
-      localStorage.get([storageKey]).then(function (result) {
+      api.storage.local.get([storageKey]).then(function (result) {
         thisOption.setCached(result[storageKey]);
       });
     }
 
-    localStorage.onChanged.addListener(function (changes) {
+    api.storage.onChanged.addListener(function (changes, area) {
+      if (area != "local") return;
       if (changes[storageKey]) {
         thisOption.setCached(changes[storageKey].newValue);
       }
@@ -101,7 +98,7 @@ class OneOption {
    * Get the cached value
    */
   getCached() {
-    return this.#value;
+    return this._value;
   }
 
   /**
@@ -110,11 +107,11 @@ class OneOption {
    * @param {*} value new value
    */
   setCached(value) {
-    if (Object.is(value, this.#value)) return;
+    if (Object.is(value, this._value)) return;
 
-    let oldValue = this.#value;
-    this.#value = value;
-    this.#onUpdatedEvent.trigger(value, oldValue);
+    let oldValue = this._value;
+    this._value = value;
+    this._onUpdatedEvent.trigger(value, oldValue);
   }
 
   /**
@@ -128,12 +125,12 @@ class OneOption {
    *  NOTE: to check if the value is changed, use function doOnUpdated()
    */
   set(value) {
-    if (Object.is(value, this.#value)) {
+    if (Object.is(value, this._value)) {
       return Promise.resolve(undefined);
     }
     let val = {};
-    val[this.#storageKey] = value;
-    return localStorage.set(val).then(function () { dirtyLocal = true; })
+    val[this._storageKey] = value;
+    return api.storage.local.set(val).then(function () { dirtyLocal = true; })
   }
 
   /**
@@ -152,8 +149,8 @@ class OneOption {
    *    immediately.
    */
   doOnUpdated(callback, asGetter = true) {
-    if (this.#value != undefined && asGetter) callback(this.#value, undefined);
-    this.#onUpdatedEvent.addListener(callback);
+    if (this._value != undefined && asGetter) callback(this._value, undefined);
+    this._onUpdatedEvent.addListener(callback);
   }
 }
 
@@ -162,7 +159,7 @@ class OneOption {
  * The options can be accessed as properties
  */
 class OptionCollection {
-  #eventTarget = new EventTarget();
+  _eventTarget = new EventTarget();
 
   /**
    * Create a option collection with the given options
@@ -179,13 +176,13 @@ class OptionCollection {
         throw new ReferenceError(`Referring invalid option: ${option}.`);
       }
       Object.defineProperty(this, option, {
-        value: new OneOption(option, this.#eventTarget, false),
+        value: new OneOption(option, this._eventTarget, false),
         writable: false,
       });
     }
 
     let thisOptions = this;
-    localStorage.get(optionNames).then(function (res) {
+    api.storage.local.get(optionNames).then(function (res) {
       for (const key of optionNames) {
         thisOptions.getOption(key).setCached(res[key]);
       }

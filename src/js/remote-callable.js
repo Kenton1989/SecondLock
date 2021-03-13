@@ -9,7 +9,7 @@ import { api } from "./api.js";
 class RemoteCallable {
   static doNothing(arg) {}
 
-  #name = undefined;
+  _name = undefined;
 
   /**
    * Create a remote callable of given name.
@@ -20,7 +20,7 @@ class RemoteCallable {
   constructor(name) {
     // Avoid redundancy if the name is not set.
     if (!name) return;
-    this.#name = name;
+    this._name = name;
 
     // avoid ambiguity of "this"
     let obj = this;
@@ -51,7 +51,7 @@ class RemoteCallable {
    * The name of the remote callable object.
    */
   get name() {
-    return this.#name;
+    return this._name;
   }
 
   /**

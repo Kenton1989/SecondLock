@@ -14,8 +14,8 @@ const kTimesUpPageURL = api.runtime.getURL("times-up.html");
 const NO_RESPONSE_MSG =
   "The message port closed before a response was received.";
 class TabBlocker extends RemoteCallable {
-  #monitor;
-  #backend;
+  _monitor;
+  _backend;
   /**
    * Create a tab blocker backing with the given dynamic page backend and monitor
    *
@@ -25,8 +25,8 @@ class TabBlocker extends RemoteCallable {
    */
   constructor(name, backend, monitor) {
     super(name);
-    this.#backend = backend;
-    this.#monitor = monitor;
+    this._backend = backend;
+    this._monitor = monitor;
   }
 
   /**
@@ -39,7 +39,7 @@ class TabBlocker extends RemoteCallable {
    *  after the given tab is blocked
    */
   blockPageWithNewTab(tab, hostname, blockingPageUrl) {
-    return this.#backend.openOnNewTab(
+    return this._backend.openOnNewTab(
       blockingPageUrl,
       { blockedHost: hostname },
       { windowId: tab.windowId }
@@ -59,7 +59,7 @@ class TabBlocker extends RemoteCallable {
    */
   blockPageByOverwriting(tab, hostname, newPageUrl, param = {}) {
     param.blockedHost = hostname;
-    return this.#backend.openOnExistingTab(newPageUrl, param, tab.id);
+    return this._backend.openOnExistingTab(newPageUrl, param, tab.id);
   }
 
   /**
@@ -77,7 +77,7 @@ class TabBlocker extends RemoteCallable {
     }
 
     // make private member visible
-    let monitor = this.#monitor;
+    let monitor = this._monitor;
     let blocker = this;
 
     queryTabsUnder(hostname, { active: true }).then(function (tabs) {
@@ -100,7 +100,7 @@ class TabBlocker extends RemoteCallable {
    * @returns {Promise} the promise resolved with undefined after all tabs are closed
    */
   blockAllByClosing(hostname) {
-    let monitor = this.#monitor;
+    let monitor = this._monitor;
     return queryTabsUnder(hostname).then(function (tabs) {
       let toClose = tabs.filter((tab) => monitor.isMonitoring(tab.url));
       // temporary disable the monitor

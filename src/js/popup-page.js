@@ -85,7 +85,7 @@ function setupCountdownDiv(state) {
       // close all monitored tabs and end the timer
       RemoteCallable.call("background-aux", "stopTimingAndClose", [
         monitoredHost,
-      ]);
+      ]).then(window.close);
     };
   } else {
     // TODO - add quick adding blacklist support
