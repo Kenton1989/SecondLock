@@ -1,6 +1,9 @@
 import { api } from "./api.js";
 import { RemoteCallable } from "./remote-callable.js";
 
+const RECEIVER_DOES_NOT_EXIST_MSG =
+  "Could not establish connection. Receiving end does not exist.";
+
 class DynamicPageBackend extends RemoteCallable {
   #tabArgs = new Map();
 
@@ -63,7 +66,15 @@ class DynamicPageBackend extends RemoteCallable {
       tabArgs.set(tab.id, pageArgs);
       console.debug(`Created tab #${tab.id} opened with URL:${url}.`);
       // Actively send arguments
-      api.tabs.sendMessage(tab.id, { dynamicPageInitArgs: pageArgs });
+      api.tabs
+        .sendMessage(tab.id, { dynamicPageInitArgs: pageArgs })
+        .catch((reason) => {
+          if (reason.message == RECEIVER_DOES_NOT_EXIST_MSG) {
+            console.debug(`Argument sent too early. Tab #${tab.id} haven't setup.`);
+          } else {
+            throw reason;
+          }
+        });
       console.debug("Sent argument: ", pageArgs);
       return tab;
     });

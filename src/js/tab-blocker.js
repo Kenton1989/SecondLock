@@ -11,7 +11,8 @@ import {
 
 const kSelectTimeURL = api.runtime.getURL("select-time.html");
 const kTimesUpPageURL = api.runtime.getURL("times-up.html");
-
+const NO_RESPONSE_MSG =
+  "The message port closed before a response was received.";
 class TabBlocker extends RemoteCallable {
   #monitor;
   #backend;
@@ -100,7 +101,7 @@ class TabBlocker extends RemoteCallable {
    */
   blockAllByClosing(hostname) {
     let monitor = this.#monitor;
-    queryTabsUnder(hostname).then(function (tabs) {
+    return queryTabsUnder(hostname).then(function (tabs) {
       let toClose = tabs.filter((tab) => monitor.isMonitoring(tab.url));
       // temporary disable the monitor
       // since frequent tabs switching may happen when multiple tabs are close
@@ -115,9 +116,9 @@ class TabBlocker extends RemoteCallable {
   }
 
   /**
-   * Notify all tabs that are blocking the given hostname to unblock, 
+   * Notify all tabs that are blocking the given hostname to unblock,
    * **except the current page**.
-   * 
+   *
    * To let a tab automatically close itself after this function is called,
    * autoBlock(hostname: string) should be called in the content-script of
    * that page.
@@ -127,6 +128,11 @@ class TabBlocker extends RemoteCallable {
   static notifyUnblock(hostname) {
     api.runtime.sendMessage({
       doNotBlockHost: hostname,
+    }).catch(function (reason) {
+      // this method does not expect any response
+      if (reason.message != NO_RESPONSE_MSG) {
+        throw reason;
+      }
     });
   }
 

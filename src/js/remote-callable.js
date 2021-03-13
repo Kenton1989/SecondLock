@@ -35,7 +35,9 @@ class RemoteCallable {
         let res = obj[funcName](...args);
 
         if (res instanceof Promise) {
-          res.then((result) => sendResponse({ ret: result }));
+          res.then(function (result) {
+            sendResponse({ ret: result });
+          });
           // return true to keep message channel open until response is set
           return true;
         } else {

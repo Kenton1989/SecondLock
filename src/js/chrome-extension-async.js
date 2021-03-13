@@ -3,9 +3,10 @@
  * @author Keith Henry <keith.henry@evolutionjobs.co.uk>
  * @license MIT */
 
-function remapChromeApi() {
-  "use strict";
+// The code is modified by Kenton
+// the original code: https://github.com/KeithHenry/chromeExtensionAsync
 
+function remapChromeApi() {
   /** Wrap a function with a callback with a Promise.
    * @param {function} f The function to wrap, should be pattern: withCallback(arg1, arg2, ... argN, callback).
    * @param {function} parseCB Optional function to parse multiple callback parameters into a single object.
