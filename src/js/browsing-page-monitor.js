@@ -64,7 +64,7 @@ class BrowsingPageMonitor extends RemoteCallable {
 
     api.tabs.onActivated.addListener(function (tabInfo) {
       if (!monitor.active) return;
-      api.tabs.get(tabInfo.tabId, onBrowsingPageChanged);
+      api.tabs.get(tabInfo.tabId).then(onBrowsingPageChanged);
     });
 
     api.windows.onFocusChanged.addListener(function (winId) {
