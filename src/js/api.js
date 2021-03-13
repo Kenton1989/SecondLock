@@ -8,7 +8,8 @@ if (api == undefined) {
 
 // map chrome api to Promise based
 if (chrome) {
-  // remapChromeApi();
+  console.debug("chrome API detected.")
+  remapChromeApi();
 }
 
 export { api };

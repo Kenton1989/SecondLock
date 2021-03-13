@@ -1,3 +1,4 @@
+import { api } from "./api.js";
 import { CustomEventWrapper } from "./custom-event-wrapper.js";
 import { HostnameSet } from "./hostname-set.js";
 import { RemoteCallable } from "./remote-callable.js";
@@ -56,24 +57,26 @@ class BrowsingPageMonitor extends RemoteCallable {
       }, TAB_SWITCH_DELAY);
     };
 
-    chrome.tabs.onUpdated.addListener(function (id, changes, tab) {
+    api.tabs.onUpdated.addListener(function (id, changes, tab) {
       if (!monitor.active || !tab.active || !changes.url) return;
       onBrowsingPageChanged(tab);
     });
 
-    chrome.tabs.onActivated.addListener(function (tabInfo) {
+    api.tabs.onActivated.addListener(function (tabInfo) {
       if (!monitor.active) return;
-      chrome.tabs.get(tabInfo.tabId, onBrowsingPageChanged);
+      api.tabs.get(tabInfo.tabId, onBrowsingPageChanged);
     });
 
-    chrome.windows.onFocusChanged.addListener(function (winId) {
-      if (!monitor.active || winId == chrome.windows.WINDOW_ID_NONE) return;
+    api.windows.onFocusChanged.addListener(function (winId) {
+      if (!monitor.active || winId == api.windows.WINDOW_ID_NONE) return;
       window.setTimeout(function () {
-        chrome.tabs.query({ active: true, windowId: winId }, function (tabs) {
-          // If the all tabs are closed before query.
-          if (tabs.length < 1) return;
-          onBrowsingPageChanged(tabs[0]);
-        });
+        api.tabs
+          .query({ active: true, windowId: winId })
+          .then(function (tabs) {
+            // If the all tabs are closed before query.
+            if (tabs.length < 1) return;
+            onBrowsingPageChanged(tabs[0]);
+          });
       }, WINDOW_SWITCH_DELAY);
     });
 
@@ -145,7 +148,7 @@ class BrowsingPageMonitor extends RemoteCallable {
    *
    * The callback function format for this event is:
    *
-   *     function (tab: chrome.tabs.Tab, hostname: String)
+   *     function (tab: api.tabs.Tab, hostname: String)
    *  - tab: the tab that opened a monitored host
    *  - hostname: the monitored hostname
    */

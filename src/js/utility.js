@@ -1,3 +1,5 @@
+import { api } from "./api.js";
+
 // Short name for selectors
 function $(selector, element = document) {
   return element.querySelector(selector);
@@ -21,7 +23,7 @@ function $tag(tag, element = document) {
 
 // Translate
 function $t(msgKey, ...param) {
-  return chrome.i18n.getMessage(msgKey, ...param);
+  return api.i18n.getMessage(msgKey, ...param);
 }
 
 /**
@@ -128,9 +130,9 @@ function setTextForClass(className, text) {
  * Close current tab.
  */
 function closeCurrentTab() {
-  chrome.tabs.getCurrent(function (tab) {
+  api.tabs.getCurrent().then(function (tab) {
     if (!tab) return;
-    chrome.tabs.remove(tab.id);
+    api.tabs.remove(tab.id);
   });
 }
 
@@ -217,22 +219,22 @@ function formatBytes(bytes) {
 
 /**
  * close a list of tabs
- * @param {chrome.tabs.Tab[]} tabs the tabs to be closed
- * @param {function()} callback the callback on tabs are closed.
+ * @param {api.tabs.Tab[]} tabs the tabs to be closed
+ * @returns {Promise} promise after all tabs are closed
  */
-function closeTabs(tabs, callback = undefined) {
+function closeTabs(tabs) {
   let tabIds = tabs.map((tab) => tab.id);
-  chrome.tabs.remove(tabIds, callback);
+  return api.tabs.remove(tabIds);
 }
 
 /**
  * query tabs under the given hostname.
  *
  * @param {string} hostname the hostname to be query
- * @param {function(chrome.tabs.Tab[])} callback the result
- * @param {*} args other arguments to be passed to chrome.tabs.query
+ * @param {*} args other arguments to be passed to api.tabs.query
+ * @returns {Promise} the promise resolved with query result
  */
-function queryTabsUnder(hostname, callback, args = {}) {
+function queryTabsUnder(hostname, args = {}) {
   let pattern = hostname;
 
   if (validHostname(hostname)) {
@@ -241,7 +243,7 @@ function queryTabsUnder(hostname, callback, args = {}) {
 
   args.url = `*://${pattern}/*`;
 
-  chrome.tabs.query(args, callback);
+  return api.tabs.query(args);
 }
 
 export {

@@ -1,3 +1,4 @@
+import { api } from "./api.js";
 import { CustomEventWrapper } from "./custom-event-wrapper.js";
 
 /**
@@ -43,8 +44,8 @@ const DEFAULT_OPTIONS = {
 const SYNCED_OPTION_NAME = [];
 
 // short name for storage lib
-const localStorage = chrome.storage.local;
-const syncStorage = chrome.storage.sync;
+const localStorage = api.storage.local;
+const syncStorage = api.storage.sync;
 
 // Dirty bit
 let dirtyLocal = false;
@@ -84,7 +85,7 @@ class OneOption {
     let thisOption = this;
 
     if (autoInit) {
-      localStorage.get([storageKey], function (result) {
+      localStorage.get([storageKey]).then(function (result) {
         thisOption.setCached(result[storageKey]);
       });
     }
@@ -121,23 +122,18 @@ class OneOption {
    * be updated after setting.
    *
    * @param {*} value the new value
-   * @param {function()} callback the callback after the setting is done,
+   *  NOTE: to check if the value is changed, use function doOnUpdated()
+   * @returns {Promise} promise resolve with undefined after the setting is done,
    *  regardless if the value is changed.
    *  NOTE: to check if the value is changed, use function doOnUpdated()
    */
-  set(value, callback = undefined) {
+  set(value) {
     if (Object.is(value, this.#value)) {
-      callback && callback();
-      return;
+      return Promise.resolve(undefined);
     }
     let val = {};
     val[this.#storageKey] = value;
-    if (callback) {
-      localStorage.set(val, function (...params) {
-        callback(params);
-        dirtyLocal = true;
-      });
-    } else localStorage.set(val, () => (dirtyLocal = true));
+    return localStorage.set(val).then(function () { dirtyLocal = true; })
   }
 
   /**
@@ -152,7 +148,7 @@ class OneOption {
    * @param {function(any, any)} callback the callback function on update
    *     - arg 0: the new value of the option
    *     - arg 1: the old value of the option
-   * @param {boolean} asGetter whether or not call the callback with (current value, undefined)
+   * @param {boolean} asGetter whether or not call the callback with (current cached value, undefined)
    *    immediately.
    */
   doOnUpdated(callback, asGetter = true) {
@@ -189,7 +185,7 @@ class OptionCollection {
     }
 
     let thisOptions = this;
-    chrome.storage.local.get(optionNames, function (res) {
+    localStorage.get(optionNames).then(function (res) {
       for (const key of optionNames) {
         thisOptions.getOption(key).setCached(res[key]);
       }
@@ -209,7 +205,7 @@ class OptionCollection {
   }
 }
 
-// sync options every 5 seconds
+// TODO - sync options every 5 seconds
 window.setInterval(function () {}, 5000);
 
 export {

@@ -1,3 +1,5 @@
+import { api } from "./api.js";
+
 class DynamicPage {
   // Buffered arguments
   static #args = undefined;
@@ -35,13 +37,13 @@ class DynamicPage {
     if (DynamicPage.#setup) return;
     DynamicPage.#setup = true;
 
-    chrome.tabs.getCurrent(function (tab) {
+    api.tabs.getCurrent().then(function (tab) {
       if (!tab) return;
       console.debug("current tab id: ", tab.id);
     });
 
     // Passive receive argument
-    chrome.runtime.onMessage.addListener(function (message) {
+    api.runtime.onMessage.addListener(function (message) {
       if (message.dynamicPageInitArgs) {
         console.debug("arg received (passive): ", message.dynamicPageInitArgs);
         DynamicPage.#setArgs(message.dynamicPageInitArgs);
@@ -49,9 +51,9 @@ class DynamicPage {
     });
 
     // Active Request arguments
-    chrome.runtime.sendMessage(
-      { dynamicPageInitRequest: true },
-      function (response) {
+    api.runtime
+      .sendMessage({ dynamicPageInitRequest: true })
+      .then(function (response) {
         // No argument received
         if (!response) {
           throw new Error("Failed to get page arguments.");
@@ -65,8 +67,7 @@ class DynamicPage {
 
         console.debug("arg received (active): ", response.dynamicPageInitArgs);
         DynamicPage.#setArgs(response.dynamicPageInitArgs);
-      }
-    );
+      });
   }
 
   static #setArgs(args) {

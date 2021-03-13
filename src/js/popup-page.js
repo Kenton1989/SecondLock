@@ -1,6 +1,7 @@
 /**
  * This is the js for popup.html
  */
+import { api } from "./api.js";
 import {} from "./common-page.js";
 import { RemoteCallable } from "./remote-callable.js";
 import { generalTranslate } from "./translation.js";
@@ -13,10 +14,6 @@ let currentPageUrl = "";
 let monitoredHost = undefined;
 let unlockEndTime = undefined;
 let remainTimeDiv = undefined;
-
-const SECOND = 1000;
-const MINUTE = 60000;
-const HOUR = 3600000;
 
 remainTimeDiv = $id("remain-time");
 
@@ -52,7 +49,7 @@ function setupRemainTimeDisplay() {
 // Using hyperlink directly will open the page in the popup window
 let goOptions = $id("go-options");
 goOptions.onclick = function (e) {
-  chrome.runtime.openOptionsPage();
+  api.runtime.openOptionsPage();
 };
 
 // TODO - add quick adding blacklist support
@@ -103,17 +100,14 @@ function setupCountdownDiv(state) {
 
 // get current browsing host and display
 let currentHostTxt = $id("current-host");
-chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+api.tabs.query({ active: true, currentWindow: true }).then(function (tabs) {
   currentTab = tabs[0];
   currentPageUrl = currentTab.url;
   let urlObj = getUrlOfTab(currentTab);
 
   currentHostTxt.innerText = urlObj.hostname;
 
-  RemoteCallable.call(
-    "background-aux",
-    "queryPageState",
-    [currentPageUrl],
-    setupCountdownDiv
-  );
+  RemoteCallable.call("background-aux", "queryPageState", [
+    currentPageUrl,
+  ]).then(setupCountdownDiv);
 });

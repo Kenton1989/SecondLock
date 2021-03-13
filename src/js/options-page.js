@@ -1,6 +1,7 @@
 /**
  * This is the js for options.html
  */
+import { api } from "./api.js";
 import {} from "./common-page.js";
 import { HostnameSet } from "./hostname-set.js";
 import { setupSectionNav } from "./nav-setup.js";
@@ -283,16 +284,16 @@ defaultDurInput.oninput = function () {
 ////////////////////// storage & sync ////////////////////////
 
 let localUseSpaceTxt = $id("local-used-space");
-chrome.storage.local.getBytesInUse(function (val) {
+api.storage.local.getBytesInUse().then(function (val) {
   localUseSpaceTxt.innerText = formatBytes(val);
 });
 
 let cloudUseSpaceTxt = $id("cloud-used-space");
-chrome.storage.sync.getBytesInUse(function (val) {
+api.storage.sync.getBytesInUse().then(function (val) {
   cloudUseSpaceTxt.innerText = formatBytes(val);
 });
 
 let cloudMaxSpaceTxt = $id("cloud-max-space");
-cloudMaxSpaceTxt.innerText = formatBytes(chrome.storage.sync.QUOTA_BYTES);
+cloudMaxSpaceTxt.innerText = formatBytes(api.storage.sync.QUOTA_BYTES);
 
 // TODO - add syncing support
