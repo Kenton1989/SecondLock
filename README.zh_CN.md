@@ -43,9 +43,9 @@ SecondLock正是为这类人所设计，有意识但不够坚定的人。在打�
 
 # 软件要求与依赖
 
-总之用最新版 Chrome 就肯定没问题。
+总之用最新版 Chrome 和 Firefox 就肯定没问题。
 
-懒得测旧版本 Chrome 的兼容性了。
+懒得测旧版本的兼容性了。
 
 暂未在 Chromium 和 Microsoft Edge (Chromium 核心版) 上测试兼容性。
 

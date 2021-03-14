@@ -43,7 +43,7 @@ The extension haven't been published in Firefox Browser Add-ons.
 
 # Requirement
 
-Use the latest Chrome is always fine.
+Using the latest Chrome or Firefox is always fine.
 
 I'm just too lazy to test capability on old version Chrome (XD).
 
