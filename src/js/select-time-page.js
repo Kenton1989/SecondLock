@@ -71,10 +71,6 @@ dynamicInit(function (args) {
   TabBlocker.autoUnblock(blockedHost);
 
   let closeAllBtn = $id("close-all");
-  let pattern = blockedHost;
-  if (validHostname(blockedHost)) {
-    pattern = `*.${blockedHost}`;
-  }
   closeAllBtn.onclick = function () {
     // close all page about the hostname
     RemoteCallable.call("tab-blocker", "blockAllByClosing", [blockedHost]).then(
