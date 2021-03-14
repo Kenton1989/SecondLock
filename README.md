@@ -45,9 +45,9 @@ The extension haven't been published in Firefox Browser Add-ons.
 
 Use the latest Chrome & Firefox is definitely fine.
 
-The extension is developed since Chrome 89.0 & Firefox 86.0
+The extension is tested on Chrome 89.0 & Firefox 86.0
 
-I'm just too lazy to test capability on old version Chrome XD.
+I'm just too lazy to test capability on old version browser (XD.
 
 Capability on Chromium and Microsoft Edge (Chromium Kernel) haven't been tested.
 

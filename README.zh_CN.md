@@ -47,7 +47,7 @@ SecondLock正是为这类人所设计，有意识但不够坚定的人。在打�
 
 测试时的浏览器版本为 Chrome 89.0 和 Firefox 86.0
 
-懒得测旧版本的兼容性了。
+懒得测旧版本的兼容性了（
 
 暂未在 Chromium 和 Microsoft Edge (Chromium 版) 上测试兼容性。
 
