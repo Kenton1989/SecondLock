@@ -9,8 +9,6 @@ import {
   closeTabs,
 } from "./utility.js";
 
-const kSelectTimeURL = api.runtime.getURL("select-time.html");
-const kTimesUpPageURL = api.runtime.getURL("times-up.html");
 const NO_RESPONSE_MSG =
   "The message port closed before a response was received.";
 class TabBlocker extends RemoteCallable {
@@ -25,6 +23,18 @@ class TabBlocker extends RemoteCallable {
     super(name);
     this._backend = backend;
     this._monitor = monitor;
+    this._leaveOneWhenCloseAll = true;
+  }
+
+  /**
+   * @returns {boolean} whether a newtab is open when all tabs in active window are closed
+   */
+  get keepOneTab() {
+    return this._leaveOneWhenCloseAll;
+  }
+
+  set keepOneTab(val) {
+    this._leaveOneWhenCloseAll = Boolean(val);
   }
 
   /**
@@ -95,11 +105,31 @@ class TabBlocker extends RemoteCallable {
    * Block all the page opening the given hostname by closing all page.
    * Whitelist of monitor will be checked before closing
    * @param {string} hostname the hostname to be blocked
+   * @param {boolean} leaveOneTab whether a new tab should be opened on the top window 
+   *  if all tabs on the top window are closed. The default value follows this.keepOneTab
    * @returns {Promise} the promise resolved with undefined after all tabs are closed
    */
-  blockAllByClosing(hostname) {
+  blockAllByClosing(hostname, leaveOneTab = this.keepOneTab) {
     let monitor = this._monitor;
-    return queryTabsUnder(hostname).then(function (tabs) {
+
+    let getTabProm = queryTabsUnder(hostname);
+
+    if (leaveOneTab) {
+      let getWindowProm = api.windows.getLastFocused({ populate: true });
+      getTabProm = Promise.all([getTabProm, getWindowProm]).then((results) => {
+        let [toClose, topWindow] = results;
+        let toCloseOnCur = toClose.filter(
+          (tab) => tab.windowId == topWindow.id
+        );
+        // create a new tab if all tabs on the top window will be closed.
+        if (toCloseOnCur.length == topWindow.tabs.length) {
+          api.tabs.create({ windowId: topWindow.id });
+        }
+        return toClose;
+      });
+    }
+
+    return getTabProm.then(function (tabs) {
       let toClose = tabs.filter((tab) => monitor.isMonitoring(tab.url));
       // temporary disable the monitor
       // since frequent tabs switching may happen when multiple tabs are close
@@ -124,14 +154,16 @@ class TabBlocker extends RemoteCallable {
    * @param {String} hostname the hostname to be unblocked.
    */
   static notifyUnblock(hostname) {
-    api.runtime.sendMessage({
-      doNotBlockHost: hostname,
-    }).catch(function (reason) {
-      // this method does not expect any response
-      if (reason.message != NO_RESPONSE_MSG) {
-        throw reason;
-      }
-    });
+    api.runtime
+      .sendMessage({
+        doNotBlockHost: hostname,
+      })
+      .catch(function (reason) {
+        // this method does not expect any response
+        if (reason.message != NO_RESPONSE_MSG) {
+          throw reason;
+        }
+      });
   }
 
   /**

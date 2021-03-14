@@ -62,6 +62,7 @@
 }
 
 .unsaved::after {
+  color: red;
   content: "__MSG_unsavedHint__";
 }
 
@@ -69,6 +70,7 @@
   text-decoration: line-through;
 }
 .deleted::after {
+  color: red;
   content: "__MSG_unsavedHint__";
 }
 
