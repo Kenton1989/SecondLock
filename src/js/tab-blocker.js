@@ -14,8 +14,6 @@ const kTimesUpPageURL = api.runtime.getURL("times-up.html");
 const NO_RESPONSE_MSG =
   "The message port closed before a response was received.";
 class TabBlocker extends RemoteCallable {
-  _monitor;
-  _backend;
   /**
    * Create a tab blocker backing with the given dynamic page backend and monitor
    *

@@ -5,12 +5,13 @@ const RECEIVER_DOES_NOT_EXIST_MSG =
   "Could not establish connection. Receiving end does not exist.";
 
 class DynamicPageBackend extends RemoteCallable {
-  _tabArgs = new Map();
 
   constructor(name) {
     super(name);
 
-    // make private member visible in callback
+    this._tabArgs = new Map();
+
+    // shorter name
     let tabArgs = this._tabArgs;
 
     // send arguments back on request.

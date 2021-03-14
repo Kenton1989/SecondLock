@@ -14,7 +14,7 @@ try {
 if (api == undefined) {
   try {
     api = chrome;
-    console.debug("chrome API detected.");
+    console.debug("Chrome API detected.");
     apiName = "chrome";
     remapChromeApi();
   } catch {

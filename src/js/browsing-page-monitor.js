@@ -24,20 +24,20 @@ const WINDOW_SWITCH_DELAY = 300;
  * callback functions will be activated.
  */
 class BrowsingPageMonitor extends RemoteCallable {
-  _monitoredHost = new HostnameSet();
-  _whitelistHost = new HostnameSet();
-  _eventTarget = new EventTarget();
-  _browseEvent = new CustomEventWrapper(
-    BROWSING_MONITORED_PAGE,
-    this._eventTarget
-  );
-  _monitoring = true;
-  _protocol = new Set(["http:", "https:"]);
-
   constructor(name) {
     super(name);
 
-    // make private member public
+    this._monitoredHost = new HostnameSet();
+    this._whitelistHost = new HostnameSet();
+    this._eventTarget = new EventTarget();
+    this._browseEvent = new CustomEventWrapper(
+      BROWSING_MONITORED_PAGE,
+      this._eventTarget
+    );
+    this._monitoring = true;
+    this._protocol = new Set(["http:", "https:"]);
+
+    // shorter name
     let browseEvent = this._browseEvent;
     // avoid ambiguity of "this"
     let monitor = this;
@@ -70,13 +70,11 @@ class BrowsingPageMonitor extends RemoteCallable {
     api.windows.onFocusChanged.addListener(function (winId) {
       if (!monitor.active || winId == api.windows.WINDOW_ID_NONE) return;
       window.setTimeout(function () {
-        api.tabs
-          .query({ active: true, windowId: winId })
-          .then(function (tabs) {
-            // If the all tabs are closed before query.
-            if (tabs.length < 1) return;
-            onBrowsingPageChanged(tabs[0]);
-          });
+        api.tabs.query({ active: true, windowId: winId }).then(function (tabs) {
+          // If the all tabs are closed before query.
+          if (tabs.length < 1) return;
+          onBrowsingPageChanged(tabs[0]);
+        });
       }, WINDOW_SWITCH_DELAY);
     });
 

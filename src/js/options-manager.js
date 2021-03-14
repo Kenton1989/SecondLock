@@ -51,11 +51,6 @@ let dirtyLocal = false;
  * Notify all listener when the value of option updated.
  */
 class OneOption {
-  _eventTarget;
-  _onUpdatedEvent;
-  _storageKey;
-  _value = undefined;
-
   /**
    * construct a option with the given EventTarget object to
    * manage the option updating event
@@ -67,15 +62,15 @@ class OneOption {
     if (!ALL_OPTION_NAME_SET.has(name)) {
       throw new ReferenceError(`Create invalid option: ${thisOption}.`);
     }
-
+    
+    this._value = undefined;
     this._eventTarget = eventTarget;
-
     this._onUpdatedEvent = new CustomEventWrapper(
       `${name}-option-updated`,
       this._eventTarget
     );
-
     this._storageKey = name;
+
     // make private member accessible in the callback.
     let storageKey = this._storageKey;
     let thisOption = this;
@@ -130,7 +125,9 @@ class OneOption {
     }
     let val = {};
     val[this._storageKey] = value;
-    return api.storage.local.set(val).then(function () { dirtyLocal = true; })
+    return api.storage.local.set(val).then(function () {
+      dirtyLocal = true;
+    });
   }
 
   /**
@@ -159,7 +156,6 @@ class OneOption {
  * The options can be accessed as properties
  */
 class OptionCollection {
-  _eventTarget = new EventTarget();
 
   /**
    * Create a option collection with the given options
@@ -167,6 +163,8 @@ class OptionCollection {
    * @throws when optionNames contains option that is not in the allOptionNameList
    */
   constructor(...optionNames) {
+    this._eventTarget = new EventTarget();
+    
     // remove duplication
     let optionSet = new Set(optionNames);
     optionNames = [...optionSet];

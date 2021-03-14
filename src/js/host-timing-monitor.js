@@ -4,8 +4,6 @@ import { RemoteCallable } from "./remote-callable.js";
 const TIMES_UP_EVENT_KEY = "timing-monitor-times-up";
 
 class TimingInfo {
-  timeOutHandle = -1;
-  endTimePt = 0;
   constructor(timePt = 0, handle = -1) {
     this.timeOutHandle = handle;
     this.endTimePt = timePt;
@@ -20,10 +18,6 @@ class HostTimingMonitor extends RemoteCallable {
     return 1000;
   }
 
-  _timingInfoMap = new Map();
-  _eventTarget = new EventTarget();
-  _timesUpEvent = new CustomEventWrapper(TIMES_UP_EVENT_KEY, this._eventTarget);
-
   /**
    * Create a timing monitor with given name.
    *
@@ -31,6 +25,13 @@ class HostTimingMonitor extends RemoteCallable {
    */
   constructor(name) {
     super(name);
+
+    this._timingInfoMap = new Map();
+    this._eventTarget = new EventTarget();
+    this._timesUpEvent = new CustomEventWrapper(
+      TIMES_UP_EVENT_KEY,
+      this._eventTarget
+    );
   }
 
   /**

@@ -23,9 +23,6 @@ const HOST_TYPE = Object.freeze({
  * after reformation, exact matching will be performed.
  */
 class HostnameSet {
-  _hostMap = new Map();
-  _matchingRegex = /$^/;
-
   /**
    * Create a host name set with the given list of host.
    *
@@ -33,6 +30,8 @@ class HostnameSet {
    *  If it is not given, an empty set will be created.
    */
   constructor(hosts = []) {
+    this._hostMap = new Map();
+    this._matchingRegex = /$^/;
     this.addList(hosts);
   }
 
@@ -65,7 +64,7 @@ class HostnameSet {
   }
 
   /**
-   * 
+   *
    * @param {string} hostname the host name to be check
    * @return {boolean} true if the hostname is in the set
    */
@@ -141,7 +140,7 @@ class HostnameSet {
    */
   reset(newHostList = []) {
     this.clear();
-    
+
     // Sort according to length in increasing order
     // This guarantee that subdomain is processed after its parent domain
     newHostList.sort((a, b) => a.length - b.length);
@@ -169,8 +168,7 @@ class HostnameSet {
       console.warn(`Invalid hostname: ${hostname}`);
       return false;
     }
-    if (this.has(formattedHost))
-      return false;
+    if (this.has(formattedHost)) return false;
 
     if (validHostname(formattedHost)) {
       this._hostMap.set(formattedHost, HOST_TYPE.NORMAL);

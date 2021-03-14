@@ -1,6 +1,4 @@
 class CustomEventWrapper {
-  _eventKey;
-  _eventTarget;
   /**
    * Construct a event manager backing with given key and target object
    * @param {String} eventType type of event

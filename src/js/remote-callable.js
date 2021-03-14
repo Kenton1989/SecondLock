@@ -8,9 +8,6 @@ import { api } from "./api.js";
  */
 class RemoteCallable {
   static doNothing(arg) {}
-
-  _name = undefined;
-
   /**
    * Create a remote callable of given name.
    *
