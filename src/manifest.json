@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "SecondLock",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Lock Every Second for Mindful Usage.",
 
   "default_locale": "en",
@@ -14,7 +14,10 @@
     "persistent": false
   },
 
-  "options_page": "options.html",
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
 
   "browser_action": {
     "default_popup": "popup.html",

@@ -4,8 +4,6 @@ import { RemoteCallable } from "./remote-callable.js";
 const TIMES_UP_EVENT_KEY = "timing-monitor-times-up";
 
 class TimingInfo {
-  timeOutHandle = -1;
-  endTimePt = 0;
   constructor(timePt = 0, handle = -1) {
     this.timeOutHandle = handle;
     this.endTimePt = timePt;
@@ -20,10 +18,6 @@ class HostTimingMonitor extends RemoteCallable {
     return 1000;
   }
 
-  #timingInfoMap = new Map();
-  #eventTarget = new EventTarget();
-  #timesUpEvent = new CustomEventWrapper(TIMES_UP_EVENT_KEY, this.#eventTarget);
-
   /**
    * Create a timing monitor with given name.
    *
@@ -31,6 +25,13 @@ class HostTimingMonitor extends RemoteCallable {
    */
   constructor(name) {
     super(name);
+
+    this._timingInfoMap = new Map();
+    this._eventTarget = new EventTarget();
+    this._timesUpEvent = new CustomEventWrapper(
+      TIMES_UP_EVENT_KEY,
+      this._eventTarget
+    );
   }
 
   /**
@@ -43,7 +44,7 @@ class HostTimingMonitor extends RemoteCallable {
    *  - timePoint: the ending time point of unlock period (in milliseconds from epoch).
    */
   get onTimesUp() {
-    return this.#timesUpEvent;
+    return this._timesUpEvent;
   }
 
   /**
@@ -53,7 +54,7 @@ class HostTimingMonitor extends RemoteCallable {
    * @return {boolean} whether the monitor is timing for the host
    */
   isTiming(hostname) {
-    return this.#timingInfoMap.has(hostname);
+    return this._timingInfoMap.has(hostname);
   }
 
   /**
@@ -64,11 +65,11 @@ class HostTimingMonitor extends RemoteCallable {
    * @return {boolean} whether a timer is removed.
    */
   stopTiming(hostname, triggerEvent = true) {
-    let info = this.#timingInfoMap.get(hostname);
+    let info = this._timingInfoMap.get(hostname);
     if (!info) return false;
 
     window.clearTimeout(info.timeOutHandle);
-    this.#timingInfoMap.delete(hostname);
+    this._timingInfoMap.delete(hostname);
 
     if (triggerEvent) {
       this.onTimesUp.trigger(hostname, info.endTimePt);
@@ -95,7 +96,7 @@ class HostTimingMonitor extends RemoteCallable {
    *   or undefined if the hostname is not in the list.
    */
   endTimePoint(hostname) {
-    let info = this.#timingInfoMap.get(hostname);
+    let info = this._timingInfoMap.get(hostname);
     if (info == undefined) return undefined;
     return info.endTimePt;
   }
@@ -116,15 +117,15 @@ class HostTimingMonitor extends RemoteCallable {
     let duration = timePoint - Date.now();
     if (duration <= HostTimingMonitor.MINIMAL_TIMER_LEN) return;
 
-    let restTimeMap = this.#timingInfoMap;
-    let timesUpEvent = this.#timesUpEvent;
+    let restTimeMap = this._timingInfoMap;
+    let timesUpEvent = this._timesUpEvent;
 
     let handle = window.setTimeout(function () {
       timesUpEvent.trigger(hostname, duration);
       restTimeMap.delete(hostname);
     }, timePoint - Date.now());
 
-    this.#timingInfoMap.set(hostname, new TimingInfo(timePoint, handle));
+    this._timingInfoMap.set(hostname, new TimingInfo(timePoint, handle));
 
     console.log(`Unlocked ${hostname} until ${new Date(timePoint)}.`);
     return true;

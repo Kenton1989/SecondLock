@@ -1,3 +1,4 @@
+import { api } from "./api.js";
 import { BrowsingPageMonitor } from "./browsing-page-monitor.js";
 import { DynamicPageBackend } from "./dynamic-page-backend.js";
 import { RemoteCallable } from "./remote-callable.js";
@@ -8,12 +9,11 @@ import {
   closeTabs,
 } from "./utility.js";
 
-const kSelectTimeURL = chrome.runtime.getURL("select-time.html");
-const kTimesUpPageURL = chrome.runtime.getURL("times-up.html");
-
+const kSelectTimeURL = api.runtime.getURL("select-time.html");
+const kTimesUpPageURL = api.runtime.getURL("times-up.html");
+const NO_RESPONSE_MSG =
+  "The message port closed before a response was received.";
 class TabBlocker extends RemoteCallable {
-  #monitor;
-  #backend;
   /**
    * Create a tab blocker backing with the given dynamic page backend and monitor
    *
@@ -23,19 +23,21 @@ class TabBlocker extends RemoteCallable {
    */
   constructor(name, backend, monitor) {
     super(name);
-    this.#backend = backend;
-    this.#monitor = monitor;
+    this._backend = backend;
+    this._monitor = monitor;
   }
 
   /**
    * Block a tab by opening a new tab in the same window.
    *
-   * @param {chrome.tabs.Tab} tab the tab to be blocked.
+   * @param {api.tabs.Tab} tab the tab to be blocked.
    * @param {string} hostname the hostname to be blocked.
    * @param {string} blockingPageUrl the URL of the new page used for blocking
+   * @returns {Promise}  The promise resolved with newly created tab
+   *  after the given tab is blocked
    */
-  blockPageWithNewTab(tab, hostname, blockingPageUrl = kSelectTimeURL) {
-    this.#backend.openOnNewTab(
+  blockPageWithNewTab(tab, hostname, blockingPageUrl) {
+    return this._backend.openOnNewTab(
       blockingPageUrl,
       { blockedHost: hostname },
       { windowId: tab.windowId }
@@ -45,15 +47,17 @@ class TabBlocker extends RemoteCallable {
   /**
    * Block the content of a tab completely with given page and parameters.
    *
-   * @param {chrome.tabs.Tab} tab the tab on which the host is accessed.
+   * @param {api.tabs.Tab} tab the tab on which the host is accessed.
    * @param {String} hostname the hostname to be blocked.
    * @param {String} newPageUrl the url of page used to override existing page.
    *  Assuming the page is dynamic page.
    * @param {*} param the param passed to dynamic page
+   * @returns {Promise} promise resolved with updated api.tabs.Tab object
+   * after the tab is blocked
    */
   blockPageByOverwriting(tab, hostname, newPageUrl, param = {}) {
     param.blockedHost = hostname;
-    this.#backend.openOnExistingTab(newPageUrl, param, tab.id);
+    return this._backend.openOnExistingTab(newPageUrl, param, tab.id);
   }
 
   /**
@@ -71,61 +75,62 @@ class TabBlocker extends RemoteCallable {
     }
 
     // make private member visible
-    let monitor = this.#monitor;
+    let monitor = this._monitor;
     let blocker = this;
 
-    queryTabsUnder(
-      hostname,
-      function (tabs) {
-        for (const tab of tabs) {
-          if (monitor.isMonitoring(tab.url))
-            blocker.blockPageByOverwriting(tab, hostname, blockingPageUrl);
-        }
-      },
-      { active: true }
-    );
+    queryTabsUnder(hostname, { active: true }).then(function (tabs) {
+      for (const tab of tabs) {
+        if (monitor.isMonitoring(tab.url))
+          blocker.blockPageByOverwriting(tab, hostname, blockingPageUrl);
+      }
+    });
 
-    queryTabsUnder(
-      hostname,
-      function (tabs) {
-        let toClose = tabs.filter((tab) => monitor.isMonitoring(tab.url));
-        closeTabs(toClose);
-      },
-      { active: false }
-    );
+    queryTabsUnder(hostname, { active: false }).then(function (tabs) {
+      let toClose = tabs.filter((tab) => monitor.isMonitoring(tab.url));
+      closeTabs(toClose);
+    });
   }
 
   /**
    * Block all the page opening the given hostname by closing all page.
    * Whitelist of monitor will be checked before closing
    * @param {string} hostname the hostname to be blocked
-   * @param {function()} callback the callback after all tabs are closed
+   * @returns {Promise} the promise resolved with undefined after all tabs are closed
    */
-  blockAllByClosing(hostname, callback) {
-    let monitor = this.#monitor;
-    queryTabsUnder(hostname, function (tabs) {
+  blockAllByClosing(hostname) {
+    let monitor = this._monitor;
+    return queryTabsUnder(hostname).then(function (tabs) {
       let toClose = tabs.filter((tab) => monitor.isMonitoring(tab.url));
       // temporary disable the monitor
       // since frequent tabs switching may happen when multiple tabs are close
-      // which may trigger monitor unexpectedly
+      // which is likely to the trigger monitor unexpectedly
       let oldActive = monitor.active;
       monitor.active = false;
 
-      closeTabs(toClose, function(){
+      return closeTabs(toClose).then(function () {
         monitor.active = oldActive;
-        callback();
       });
     });
   }
 
   /**
-   * Notify all tabs that are blocking the given hostname to unblock.
+   * Notify all tabs that are blocking the given hostname to unblock,
+   * **except the current page**.
+   *
+   * To let a tab automatically close itself after this function is called,
+   * autoBlock(hostname: string) should be called in the content-script of
+   * that page.
    *
    * @param {String} hostname the hostname to be unblocked.
    */
   static notifyUnblock(hostname) {
-    chrome.runtime.sendMessage({
+    api.runtime.sendMessage({
       doNotBlockHost: hostname,
+    }).catch(function (reason) {
+      // this method does not expect any response
+      if (reason.message != NO_RESPONSE_MSG) {
+        throw reason;
+      }
     });
   }
 
@@ -137,7 +142,7 @@ class TabBlocker extends RemoteCallable {
    */
   static autoUnblock(hostname) {
     if (!hostname) return;
-    chrome.runtime.onMessage.addListener(function (message) {
+    api.runtime.onMessage.addListener(function (message) {
       if (message.doNotBlockHost) {
         let unlockedHost = message.doNotBlockHost;
         if (unlockedHost == hostname) closeCurrentTab();

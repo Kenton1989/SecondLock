@@ -1,8 +1,9 @@
 /**
  * This is the js for select-time.html
  */
+import { api } from "./api.js";
 import {} from "./common-page.js";
-import { DynamicPage } from "./dynamic-page.js";
+import { dynamicInit } from "./dynamic-page.js";
 import { OptionCollection } from "./options-manager.js";
 import { RemoteCallable } from "./remote-callable.js";
 import { TabBlocker } from "./tab-blocker.js";
@@ -15,8 +16,8 @@ import {
   $cls,
 } from "./utility.js";
 
-let minUnit = chrome.i18n.getMessage("min");
-let minUnits = chrome.i18n.getMessage("mins");
+let minUnit = api.i18n.getMessage("min");
+let minUnits = api.i18n.getMessage("mins");
 
 let blockedHost = undefined;
 let warningTxt = undefined;
@@ -53,20 +54,18 @@ function setUnlock(minutes) {
   }
 
   let unlockDuration = Math.round(minutes * MINUTE);
-  RemoteCallable.call(
-    "lock-time-monitor",
-    "setTimerFor",
-    [blockedHost, unlockDuration],
-    function () {
-      TabBlocker.notifyUnblock(blockedHost);
-      // Delay for a while before closing to avoid potential frequent tab switching
-      window.setTimeout(closeCurrentTab, 200);
-    }
-  );
+  RemoteCallable.call("lock-time-monitor", "setTimerFor", [
+    blockedHost,
+    unlockDuration,
+  ]).then(function () {
+    TabBlocker.notifyUnblock(blockedHost);
+    // Delay for a while before closing to avoid potential frequent tab switching
+    window.setTimeout(closeCurrentTab, 200);
+  });
 }
 
 // Initialize the blocked hostname
-DynamicPage.dynamicInit(function (args) {
+dynamicInit(function (args) {
   blockedHost = args.blockedHost;
   setTextForClass("blocked-link", blockedHost);
   TabBlocker.autoUnblock(blockedHost);
@@ -78,15 +77,14 @@ DynamicPage.dynamicInit(function (args) {
   }
   closeAllBtn.onclick = function () {
     // close all page about the hostname
-    chrome.tabs.query({ url: `*://${pattern}/*` }, function (tabs) {
-      let tabIds = tabs.map((t) => t.id);
-      chrome.tabs.remove(tabIds, function () {
+    RemoteCallable.call("tab-blocker", "blockAllByClosing", [blockedHost]).then(
+      function () {
         // Close time-selection and blocking page about the hostname
         TabBlocker.notifyUnblock(blockedHost);
         // Delay for a while before closing to avoid potential frequent tab switching
         window.setTimeout(closeCurrentTab, 200);
-      });
-    });
+      }
+    );
   };
 });
 

@@ -1,7 +1,7 @@
 /**
  * This is the js for blocking.html
  */
-import { DynamicPage } from "./dynamic-page.js";
+import { dynamicInit } from "./dynamic-page.js";
 import { TabBlocker } from "./tab-blocker.js";
 import { closeCurrentTab, setTextForClass, $id } from "./utility.js";
 import "./common-page.js";
@@ -10,7 +10,7 @@ let blockedHost = undefined;
 
 let closeAllBtn = $id("close-all-about");
 
-DynamicPage.dynamicInit(function (args) {
+dynamicInit(function (args) {
   blockedHost = args.blockedHost;
 
   setTextForClass("blocked-link", blockedHost);

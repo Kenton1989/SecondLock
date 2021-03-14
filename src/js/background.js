@@ -12,14 +12,14 @@ import { api } from "./api.js";
 
 let options = new OptionCollection(...ALL_OPTION_NAME);
 
-const kSelectTimeURL = chrome.runtime.getURL("select-time.html");
-const kTimesUpPageURL = chrome.runtime.getURL("times-up.html");
+const kSelectTimeURL = api.runtime.getURL("select-time.html");
+const kTimesUpPageURL = api.runtime.getURL("times-up.html");
 
 // Set default options
-chrome.runtime.onInstalled.addListener(function () {
-  chrome.storage.local.get(DEFAULT_OPTIONS, function (result) {
-    chrome.storage.local.set(result, function () {
-      console.debug("Set config: ", result);
+api.runtime.onInstalled.addListener(function () {
+  api.storage.local.get(DEFAULT_OPTIONS).then(function (result) {
+    api.storage.local.set(result).then(function () {
+      console.debug("Setting: ", result)
     });
   });
 });
@@ -87,7 +87,7 @@ backgroundAux.queryPageState = function (url) {
 };
 
 backgroundAux.stopTimingAndClose = function (hostname) {
-  tabBlocker.blockAllByClosing(hostname, function () {
+  tabBlocker.blockAllByClosing(hostname).then(function () {
     // stop timing after closing
     // avoid frequent tabs switching, which is likely to trigger browsing-monitor
     unlockTiming.stopTiming(hostname);

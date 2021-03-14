@@ -1,3 +1,5 @@
+import { api } from "./api.js";
+
 /**
  * A class of object that can be call remotely.
  *
@@ -6,9 +8,6 @@
  */
 class RemoteCallable {
   static doNothing(arg) {}
-
-  #name = undefined;
-
   /**
    * Create a remote callable of given name.
    *
@@ -18,23 +17,29 @@ class RemoteCallable {
   constructor(name) {
     // Avoid redundancy if the name is not set.
     if (!name) return;
-    this.#name = name;
+    this._name = name;
 
     // avoid ambiguity of "this"
     let obj = this;
 
-    chrome.runtime.onMessage.addListener(function (
-      message,
-      sender,
-      sendResponse
-    ) {
+    api.runtime.onMessage.addListener(function (message, sender, sendResponse) {
       if (message.remoteCallInfo) {
         let callInfo = message.remoteCallInfo;
         if (callInfo.targetName != obj.name) return;
+
         let funcName = callInfo.funcName;
         let args = callInfo.args;
-        let ret = obj[funcName](...args);
-        sendResponse({ ret: ret });
+        let res = obj[funcName](...args);
+
+        if (res instanceof Promise) {
+          res.then(function (result) {
+            sendResponse({ ret: result });
+          });
+          // return true to keep message channel open until response is set
+          return true;
+        } else {
+          sendResponse({ ret: res });
+        }
       }
     });
   }
@@ -43,7 +48,7 @@ class RemoteCallable {
    * The name of the remote callable object.
    */
   get name() {
-    return this.#name;
+    return this._name;
   }
 
   /**
@@ -52,10 +57,9 @@ class RemoteCallable {
    * @param {String} name name of the remote object
    * @param {String} funcName name of the function to be called
    * @param {any[]} args parameter list
-   * @param {function(any)} callOnReturn callback on function return.
-   *    The parameter will be the value returned by the called function
+   * @returns {Promise} the promise resolved with the value return by remote method
    */
-  static call(name, funcName, args = [], callOnReturn = undefined) {
+  static call(name, funcName, args = []) {
     let remoteCallQuery = {
       remoteCallInfo: {
         targetName: name,
@@ -63,33 +67,15 @@ class RemoteCallable {
         args: args,
       },
     };
-  
-    if (callOnReturn != undefined) {
-      chrome.runtime.sendMessage(remoteCallQuery, function (val) {
-        callOnReturn(val.ret);
-      });
-    } else {
-      chrome.runtime.sendMessage(remoteCallQuery);
-    }
+    return api.runtime.sendMessage(remoteCallQuery).then((reply) => reply.ret);
   }
 }
 
 /**
- * Call a method of the given remote callable object.
- *
- * @param {String} name name of the remote object
- * @param {String} funcName name of the function to be called
- * @param {any[]} args parameter list
- * @param {function(any)} callOnReturn callback on function return.
- *    The parameter will be the value returned by the called function
+ * equivalent function to RemoteCallable.call
  */
-function remoteCall(
-  name,
-  funcName,
-  args = [],
-  callOnReturn = RemoteCallable.doNothing
-) {
-  RemoteCallable.call(name, funcName, args, callOnReturn);
+function remoteCall(name, funcName, args = []) {
+  return RemoteCallable.call(name, funcName, args);
 }
 
 export { RemoteCallable, remoteCall };

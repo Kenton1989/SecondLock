@@ -1,3 +1,4 @@
+import { api } from "./api.js";
 import { CustomEventWrapper } from "./custom-event-wrapper.js";
 import { HostnameSet } from "./hostname-set.js";
 import { RemoteCallable } from "./remote-callable.js";
@@ -23,21 +24,21 @@ const WINDOW_SWITCH_DELAY = 300;
  * callback functions will be activated.
  */
 class BrowsingPageMonitor extends RemoteCallable {
-  #monitoredHost = new HostnameSet();
-  #whitelistHost = new HostnameSet();
-  #eventTarget = new EventTarget();
-  #browseEvent = new CustomEventWrapper(
-    BROWSING_MONITORED_PAGE,
-    this.#eventTarget
-  );
-  #monitoring = true;
-  #protocol = new Set(["http:", "https:"]);
-
   constructor(name) {
     super(name);
 
-    // make private member public
-    let browseEvent = this.#browseEvent;
+    this._monitoredHost = new HostnameSet();
+    this._whitelistHost = new HostnameSet();
+    this._eventTarget = new EventTarget();
+    this._browseEvent = new CustomEventWrapper(
+      BROWSING_MONITORED_PAGE,
+      this._eventTarget
+    );
+    this._monitoring = true;
+    this._protocol = new Set(["http:", "https:"]);
+
+    // shorter name
+    let browseEvent = this._browseEvent;
     // avoid ambiguity of "this"
     let monitor = this;
 
@@ -56,20 +57,20 @@ class BrowsingPageMonitor extends RemoteCallable {
       }, TAB_SWITCH_DELAY);
     };
 
-    chrome.tabs.onUpdated.addListener(function (id, changes, tab) {
+    api.tabs.onUpdated.addListener(function (id, changes, tab) {
       if (!monitor.active || !tab.active || !changes.url) return;
       onBrowsingPageChanged(tab);
     });
 
-    chrome.tabs.onActivated.addListener(function (tabInfo) {
+    api.tabs.onActivated.addListener(function (tabInfo) {
       if (!monitor.active) return;
-      chrome.tabs.get(tabInfo.tabId, onBrowsingPageChanged);
+      api.tabs.get(tabInfo.tabId).then(onBrowsingPageChanged);
     });
 
-    chrome.windows.onFocusChanged.addListener(function (winId) {
-      if (!monitor.active || winId == chrome.windows.WINDOW_ID_NONE) return;
+    api.windows.onFocusChanged.addListener(function (winId) {
+      if (!monitor.active || winId == api.windows.WINDOW_ID_NONE) return;
       window.setTimeout(function () {
-        chrome.tabs.query({ active: true, windowId: winId }, function (tabs) {
+        api.tabs.query({ active: true, windowId: winId }).then(function (tabs) {
           // If the all tabs are closed before query.
           if (tabs.length < 1) return;
           onBrowsingPageChanged(tabs[0]);
@@ -84,19 +85,19 @@ class BrowsingPageMonitor extends RemoteCallable {
    * @return {Set<String>} the protocol that are monitored
    */
   get monitoredProtocol() {
-    return this.#protocol;
+    return this._protocol;
   }
 
   /**
    * @returns {boolean} If the monitor is active
    */
   get active() {
-    return this.#monitoring;
+    return this._monitoring;
   }
 
   set active(val) {
     val = Boolean(val);
-    this.#monitoring = val;
+    this._monitoring = val;
   }
 
   /**
@@ -130,14 +131,14 @@ class BrowsingPageMonitor extends RemoteCallable {
    * Get a set of host name that are monitored.
    */
   get blacklist() {
-    return this.#monitoredHost;
+    return this._monitoredHost;
   }
 
   /**
    * Get a set of host name that are in the whitelist.
    */
   get whitelist() {
-    return this.#whitelistHost;
+    return this._whitelistHost;
   }
 
   /**
@@ -145,12 +146,12 @@ class BrowsingPageMonitor extends RemoteCallable {
    *
    * The callback function format for this event is:
    *
-   *     function (tab: chrome.tabs.Tab, hostname: String)
+   *     function (tab: api.tabs.Tab, hostname: String)
    *  - tab: the tab that opened a monitored host
    *  - hostname: the monitored hostname
    */
   get onBrowse() {
-    return this.#browseEvent;
+    return this._browseEvent;
   }
 }
 

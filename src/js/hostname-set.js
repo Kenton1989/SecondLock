@@ -23,9 +23,6 @@ const HOST_TYPE = Object.freeze({
  * after reformation, exact matching will be performed.
  */
 class HostnameSet {
-  #hostMap = new Map();
-  #matchingRegex = /$^/;
-
   /**
    * Create a host name set with the given list of host.
    *
@@ -33,6 +30,8 @@ class HostnameSet {
    *  If it is not given, an empty set will be created.
    */
   constructor(hosts = []) {
+    this._hostMap = new Map();
+    this._matchingRegex = /$^/;
     this.addList(hosts);
   }
 
@@ -40,7 +39,7 @@ class HostnameSet {
    * The size of hostname set
    */
   get size() {
-    return this.#hostMap.size;
+    return this._hostMap.size;
   }
 
   /**
@@ -53,7 +52,7 @@ class HostnameSet {
     hostname = reformatHostname(hostname);
     if (!hostname) return undefined;
 
-    let result = this.#matchingRegex.exec(hostname);
+    let result = this._matchingRegex.exec(hostname);
     if (!result) return undefined;
 
     let actualHost = result[0];
@@ -65,7 +64,7 @@ class HostnameSet {
   }
 
   /**
-   * 
+   *
    * @param {string} hostname the host name to be check
    * @return {boolean} true if the hostname is in the set
    */
@@ -73,7 +72,7 @@ class HostnameSet {
     hostname = reformatHostname(hostname);
     if (!hostname) return false;
 
-    let result = this.#matchingRegex.exec(hostname);
+    let result = this._matchingRegex.exec(hostname);
 
     return Boolean(result);
   }
@@ -85,9 +84,9 @@ class HostnameSet {
    *          the hostname is already existed, return false.
    */
   add(hostname) {
-    if (!this.#addToMap(hostname)) return false;
+    if (!this._addToMap(hostname)) return false;
 
-    this.#updateRegex();
+    this._updateRegex();
     return true;
   }
 
@@ -108,8 +107,8 @@ class HostnameSet {
    * @return {boolean} true if the hostname exist in the list and being removed.
    */
   remove(hostname) {
-    if (!this.#removeFromMap(hostname)) return false;
-    this.#updateRegex();
+    if (!this._removeFromMap(hostname)) return false;
+    this._updateRegex();
     return true;
   }
 
@@ -120,19 +119,19 @@ class HostnameSet {
   removeList(hostnameList) {
     let dirty = false;
     for (const val of hostnameList) {
-      dirty = this.#removeFromMap(val) || dirty;
+      dirty = this._removeFromMap(val) || dirty;
     }
     if (!dirty) return;
 
-    this.#updateRegex();
+    this._updateRegex();
   }
 
   /**
    * Clear the hostname set.
    */
   clear() {
-    this.#hostMap.clear();
-    this.#matchingRegex = /$^/;
+    this._hostMap.clear();
+    this._matchingRegex = /$^/;
   }
 
   /**
@@ -141,13 +140,13 @@ class HostnameSet {
    */
   reset(newHostList = []) {
     this.clear();
-    
+
     // Sort according to length in increasing order
     // This guarantee that subdomain is processed after its parent domain
     newHostList.sort((a, b) => a.length - b.length);
     for (const val of newHostList) {
-      this.#addToMap(val);
-      this.#updateRegex();
+      this._addToMap(val);
+      this._updateRegex();
     }
   }
 
@@ -155,7 +154,7 @@ class HostnameSet {
    * Make hostname set iterable.
    */
   [Symbol.iterator]() {
-    return this.#hostMap.keys();
+    return this._hostMap.keys();
   }
 
   /**
@@ -163,21 +162,20 @@ class HostnameSet {
    * @param {String} hostname a hostname
    * @returns {boolean} true if a hostname is successfully added.
    */
-  #addToMap(hostname) {
+  _addToMap(hostname) {
     let formattedHost = reformatHostname(hostname);
     if (!formattedHost) {
       console.warn(`Invalid hostname: ${hostname}`);
       return false;
     }
-    if (this.has(formattedHost))
-      return false;
+    if (this.has(formattedHost)) return false;
 
     if (validHostname(formattedHost)) {
-      this.#hostMap.set(formattedHost, HOST_TYPE.NORMAL);
+      this._hostMap.set(formattedHost, HOST_TYPE.NORMAL);
     } else if (validIPv4Address(formattedHost)) {
-      this.#hostMap.set(formattedHost, HOST_TYPE.IPV4);
+      this._hostMap.set(formattedHost, HOST_TYPE.IPV4);
     } else if (validIPv6Hostname(formattedHost)) {
-      this.#hostMap.set(formattedHost, HOST_TYPE.IPV6);
+      this._hostMap.set(formattedHost, HOST_TYPE.IPV6);
     } else {
       console.warn(`Invalid hostname: ${hostname}`);
       return false;
@@ -191,23 +189,23 @@ class HostnameSet {
    * @param {String} hostname a hostname
    * @returns {boolean} true if a hostname is removed from the map
    */
-  #removeFromMap(hostname) {
+  _removeFromMap(hostname) {
     let formattedHost = reformatHostname(hostname);
     if (!formattedHost) {
       console.warn(`Invalid hostname: ${hostname}`);
       return false;
     }
-    return this.#hostMap.delete(hostname);
+    return this._hostMap.delete(hostname);
   }
 
   /**
    * Update the regex matcher for hostname.
    */
-  #updateRegex() {
+  _updateRegex() {
     // initialized with an impossible pattern.
     let pattern = "($^)";
 
-    for (const pair of this.#hostMap) {
+    for (const pair of this._hostMap) {
       if (pair[1] == HOST_TYPE.NORMAL) {
         // Match suffix
         pattern += `|((^|\\.)(${pair[0]})$)`;
@@ -217,7 +215,7 @@ class HostnameSet {
       }
     }
 
-    this.#matchingRegex = new RegExp(pattern, "i");
+    this._matchingRegex = new RegExp(pattern, "i");
   }
 }
 

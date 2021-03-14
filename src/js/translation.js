@@ -1,10 +1,11 @@
 import { $cls } from "./utility.js";
 import { TRANS_KEYS } from "./trans-keys.js";
+import { api } from "./api.js";
 
 const SUPPORTED_LANG = new Set(["zh-CN"]);
 
 function canTranslate() {
-  let langCode = chrome.i18n.getUILanguage();
+  let langCode = api.i18n.getUILanguage();
   console.debug("Lang code: " + langCode);
   return SUPPORTED_LANG.has(langCode);
 }
@@ -15,7 +16,7 @@ function generalTranslate(transKeys = TRANS_KEYS) {
     return;
   }
   for (const key of transKeys) {
-    let txt = chrome.i18n.getMessage(key);
+    let txt = api.i18n.getMessage(key);
 
     let elements = $cls(`trans-${key}`);
     for (const ele of elements) {
