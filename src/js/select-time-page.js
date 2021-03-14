@@ -3,7 +3,7 @@
  */
 import { api } from "./api.js";
 import {} from "./common-page.js";
-import { DynamicPage } from "./dynamic-page.js";
+import { dynamicInit } from "./dynamic-page.js";
 import { OptionCollection } from "./options-manager.js";
 import { RemoteCallable } from "./remote-callable.js";
 import { TabBlocker } from "./tab-blocker.js";
@@ -65,7 +65,7 @@ function setUnlock(minutes) {
 }
 
 // Initialize the blocked hostname
-DynamicPage.dynamicInit(function (args) {
+dynamicInit(function (args) {
   blockedHost = args.blockedHost;
   setTextForClass("blocked-link", blockedHost);
   TabBlocker.autoUnblock(blockedHost);
