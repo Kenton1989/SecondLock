@@ -86,7 +86,7 @@ Capability on Chromium and Microsoft Edge (Chromium Kernel) haven't been tested.
 - [ ] calm down time
 - [ ] customize monitor working days
 - [ ] display motto on blocking page
-- [ ] display mottos
+- [ ] customize mottos
 - [ ] option exporting & importing
 - [ ] option syncing
 - [ ] options: close website on time's up without showing time's up page
