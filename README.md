@@ -39,6 +39,8 @@ Three questions above also applies before browsing any website.
 
 The extension haven't been published in Chrome Web Store.
 
+The extension haven't been published in Firefox Browser Add-ons.
+
 # Requirement
 
 Use the latest Chrome is always fine.
@@ -48,6 +50,9 @@ I'm just too lazy to test capability on old version Chrome (XD).
 Capability on Chromium and Microsoft Edge (Chromium Kernel) haven't been tested.
 
 # Update
+
+- v0.3.0
+  - Add capability: Firefox
 
 - v0.2.1
 
@@ -88,7 +93,7 @@ Capability on Chromium and Microsoft Edge (Chromium Kernel) haven't been tested.
 - [ ] options: customize blocking page on time's up
 - [ ] options: leave one newtab when all tabs in current window are closed
 - [ ] rewrite frontend with a framework
-- [x] support FireFox
+- [x] support Firefox
 - [x] selection page：set unlock time by ending point
 - [x] internationalization (at least zh-CN + en)
 - [x] refine README.md

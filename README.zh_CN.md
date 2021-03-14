@@ -39,6 +39,8 @@ SecondLock正是为这类人所设计，有意识但不够坚定的人。在打�
 
 插件暂未在 Chrome Web Store 发布。
 
+插件暂未在 Firefox Browser Add-ons 发布。
+
 # 软件要求与依赖
 
 总之用最新版 Chrome 就肯定没问题。
@@ -48,6 +50,9 @@ SecondLock正是为这类人所设计，有意识但不够坚定的人。在打�
 暂未在 Chromium 和 Microsoft Edge (Chromium 核心版) 上测试兼容性。
 
 # 更新日志
+
+- v0.3.0
+  - 兼容Firefox
 
 - v0.2.1
 
@@ -88,7 +93,7 @@ SecondLock正是为这类人所设计，有意识但不够坚定的人。在打�
 - [ ] 选项：自定义时间到时的拦截页面
 - [ ] 选项：关闭窗口所有tab时，留一个新标签页
 - [ ] 挑个前端框架重写前端
-- [x] 兼容FireFox
+- [x] 兼容Firefox
 - [x] 时间选择页面：按解锁时间结束时间点设置，而非时间长度
 - [x] 中英双语支持
 - [x] 弄好 Readme（格式和语言）
