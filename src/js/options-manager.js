@@ -57,12 +57,18 @@ class OneOption {
    * @param {String} name name of the option
    * @param {EventTarget} eventTarget the given event target
    * @param {boolean} autoInit whether the option should query the storage and initialize the cached value automatically.
+   * @param {boolean} autoUpdate whether the option should listen the storage change event and update the cached value automatically.
    */
-  constructor(name, eventTarget = document, autoInit = true) {
+  constructor(
+    name,
+    eventTarget = document,
+    autoInit = true,
+    autoUpdate = true
+  ) {
     if (!ALL_OPTION_NAME_SET.has(name)) {
       throw new ReferenceError(`Create invalid option: ${thisOption}.`);
     }
-    
+
     this._value = undefined;
     this._eventTarget = eventTarget;
     this._onUpdatedEvent = new CustomEventWrapper(
@@ -81,12 +87,14 @@ class OneOption {
       });
     }
 
-    api.storage.onChanged.addListener(function (changes, area) {
-      if (area != "local") return;
-      if (changes[storageKey]) {
-        thisOption.setCached(changes[storageKey].newValue);
-      }
-    });
+    if (autoUpdate) {
+      api.storage.onChanged.addListener(function (changes, area) {
+        if (area != "local") return;
+        if (changes[storageKey]) {
+          thisOption.setCached(changes[storageKey].newValue);
+        }
+      });
+    }
   }
 
   /**
@@ -156,7 +164,6 @@ class OneOption {
  * The options can be accessed as properties
  */
 class OptionCollection {
-
   /**
    * Create a option collection with the given options
    * @param  {...string} optionNames the option name to be included
@@ -164,7 +171,7 @@ class OptionCollection {
    */
   constructor(...optionNames) {
     this._eventTarget = new EventTarget();
-    
+
     // remove duplication
     let optionSet = new Set(optionNames);
     optionNames = [...optionSet];
@@ -174,15 +181,29 @@ class OptionCollection {
         throw new ReferenceError(`Referring invalid option: ${option}.`);
       }
       Object.defineProperty(this, option, {
-        value: new OneOption(option, this._eventTarget, false),
+        value: new OneOption(option, this._eventTarget, false, false),
         writable: false,
       });
     }
 
+    // avoid ambiguity of "this"
     let thisOptions = this;
+
+    // query the storage in bulk
     api.storage.local.get(optionNames).then(function (res) {
       for (const key of optionNames) {
-        thisOptions.getOption(key).setCached(res[key]);
+        thisOptions[key].setCached(res[key]);
+      }
+    });
+
+    // listen to storage changes in bulk
+    api.storage.onChanged.addListener(function (changes, area) {
+      if (area != "local") return;
+      for (const changedKey of Object.keys(changes)) {
+        let option = thisOptions[changedKey];
+        if (option) {
+          option.setCached(changes[changedKey].newValue);
+        }
       }
     });
   }
