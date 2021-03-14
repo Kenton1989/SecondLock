@@ -105,17 +105,20 @@ class TabBlocker extends RemoteCallable {
    * Block all the page opening the given hostname by closing all page.
    * Whitelist of monitor will be checked before closing
    * @param {string} hostname the hostname to be blocked
-   * @param {boolean} leaveOneTab whether a new tab should be opened on the top window 
+   * @param {boolean} leaveOneTab whether a new tab should be opened on the top window
    *  if all tabs on the top window are closed. The default value follows this.keepOneTab
    * @returns {Promise} the promise resolved with undefined after all tabs are closed
    */
   blockAllByClosing(hostname, leaveOneTab = this.keepOneTab) {
     let monitor = this._monitor;
 
-    let getTabProm = queryTabsUnder(hostname);
+    let getTabProm = queryTabsUnder(hostname).then((tabs) =>
+      tabs.filter((tab) => monitor.isMonitoring(tab.url))
+    );
 
     if (leaveOneTab) {
       let getWindowProm = api.windows.getLastFocused({ populate: true });
+
       getTabProm = Promise.all([getTabProm, getWindowProm]).then((results) => {
         let [toClose, topWindow] = results;
         let toCloseOnCur = toClose.filter(
@@ -129,8 +132,7 @@ class TabBlocker extends RemoteCallable {
       });
     }
 
-    return getTabProm.then(function (tabs) {
-      let toClose = tabs.filter((tab) => monitor.isMonitoring(tab.url));
+    return getTabProm.then(function (toClose) {
       // temporary disable the monitor
       // since frequent tabs switching may happen when multiple tabs are close
       // which is likely to the trigger monitor unexpectedly
