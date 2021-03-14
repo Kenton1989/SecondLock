@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "SecondLock",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Lock Every Second for Mindful Usage.",
 
   "default_locale": "en",
