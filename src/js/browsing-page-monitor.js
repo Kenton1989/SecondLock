@@ -12,9 +12,35 @@ const HOST_TYPE = {
 };
 Object.freeze(HOST_TYPE);
 
+const BROWSING_PAGE_CHANGED = "browsing-page-changed";
 const BROWSING_MONITORED_PAGE = "browsing-monitored-host";
 const TAB_SWITCH_DELAY = 100;
 const WINDOW_SWITCH_DELAY = 300;
+
+let onBrowsingPageChanged = new CustomEventWrapper(
+  BROWSING_PAGE_CHANGED,
+  window
+);
+// If user open a new website in a tab
+api.tabs.onUpdated.addListener(function (id, changes, tab) {
+  if (!tab.active || !changes.url) return;
+  onBrowsingPageChanged.trigger(tab);
+});
+// If user switch to another tab
+api.tabs.onActivated.addListener(function (tabInfo) {
+  api.tabs.get(tabInfo.tabId).then((tab) => onBrowsingPageChanged.trigger(tab));
+});
+// If user switch to another window
+api.windows.onFocusChanged.addListener(function (winId) {
+  if (winId == api.windows.WINDOW_ID_NONE) return;
+  window.setTimeout(function () {
+    api.tabs.query({ active: true, windowId: winId }).then(function (tabs) {
+      // If the all tabs are closed before query.
+      if (tabs.length < 1) return;
+      onBrowsingPageChanged.trigger(tabs[0]);
+    });
+  }, WINDOW_SWITCH_DELAY);
+});
 
 /**
  * Used for monitoring browser user's browsing page.
@@ -42,8 +68,8 @@ class BrowsingPageMonitor extends RemoteCallable {
     // avoid ambiguity of "this"
     let monitor = this;
 
-    let onBrowsingPageChanged = function (tab) {
-      if (!tab || !tab.url) return;
+    onBrowsingPageChanged.addListener(function (tab) {
+      if (!monitor.active || !tab || !tab.url) return;
 
       console.debug(`User are browsing: ${tab.url}`);
 
@@ -55,27 +81,6 @@ class BrowsingPageMonitor extends RemoteCallable {
       window.setTimeout(function () {
         browseEvent.trigger(tab, monitoredHost);
       }, TAB_SWITCH_DELAY);
-    };
-
-    api.tabs.onUpdated.addListener(function (id, changes, tab) {
-      if (!monitor.active || !tab.active || !changes.url) return;
-      onBrowsingPageChanged(tab);
-    });
-
-    api.tabs.onActivated.addListener(function (tabInfo) {
-      if (!monitor.active) return;
-      api.tabs.get(tabInfo.tabId).then(onBrowsingPageChanged);
-    });
-
-    api.windows.onFocusChanged.addListener(function (winId) {
-      if (!monitor.active || winId == api.windows.WINDOW_ID_NONE) return;
-      window.setTimeout(function () {
-        api.tabs.query({ active: true, windowId: winId }).then(function (tabs) {
-          // If the all tabs are closed before query.
-          if (tabs.length < 1) return;
-          onBrowsingPageChanged(tabs[0]);
-        });
-      }, WINDOW_SWITCH_DELAY);
     });
 
     console.debug("Browsing monitor setup.");
@@ -147,11 +152,25 @@ class BrowsingPageMonitor extends RemoteCallable {
    * The callback function format for this event is:
    *
    *     function (tab: api.tabs.Tab, hostname: String)
+   *
    *  - tab: the tab that opened a monitored host
    *  - hostname: the monitored hostname
    */
   get onBrowse() {
     return this._browseEvent;
+  }
+
+  /**
+   * A event that will be triggered whenever user browsing new page.
+   * 
+   * The callback function format for this event is:
+   *
+   *      function (tab: api.tabs.Tab)
+   *
+   *  - tab: the tab that are current visiting
+   */
+  static get onBrowsingPageChanged() {
+    return onBrowsingPageChanged;
   }
 }
 
