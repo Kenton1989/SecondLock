@@ -81,6 +81,23 @@ class DynamicPageBackend extends RemoteCallable {
     });
     return promise;
   }
+
+  /**
+   * Get the parameters bind to the given tab.
+   * 
+   * @param {number} tabId the id of tab to get parameters
+   * @return {*} the paramter bind to the tab
+   */
+  getParam(tabId) {
+    return this._tabArgs.get(tabId);
+  }
+
+  /**
+   * @returns {Iterable<[number, *]>} iterable containing all id of tabs and their parameters
+   */
+  idsAndParams() {
+    this._tabArgs.entries();
+  }
 }
 
 export { DynamicPageBackend };
