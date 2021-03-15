@@ -27,7 +27,7 @@ class TabBlocker extends RemoteCallable {
   }
 
   /**
-   * @returns {boolean} whether a newtab is open when all tabs in active window are closed
+   * @returns {boolean} whether a New Tab page is open when all tabs in active window are closed
    */
   get keepOneTab() {
     return this._leaveOneWhenCloseAll;

@@ -2,7 +2,7 @@
  * This is the js for select-time.html
  */
 import { api } from "./api.js";
-import {} from "./common-page.js";
+import "./common-page.js";
 import { dynamicInit } from "./dynamic-page.js";
 import { OptionCollection } from "./options-manager.js";
 import { RemoteCallable } from "./remote-callable.js";
@@ -11,7 +11,6 @@ import {
   closeCurrentTab,
   setTextForClass,
   showTxt,
-  validHostname,
   $id,
   $cls,
 } from "./utility.js";

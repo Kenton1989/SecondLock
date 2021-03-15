@@ -2,7 +2,7 @@
  * This is the js for popup.html
  */
 import { api } from "./api.js";
-import {} from "./common-page.js";
+import "./common-page.js";
 import { RemoteCallable } from "./remote-callable.js";
 import { generalTranslate } from "./translation.js";
 import { closeTabs, getUrlOfTab, queryTabsUnder, $id } from "./utility.js";

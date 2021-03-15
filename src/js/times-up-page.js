@@ -3,11 +3,13 @@
  */
 import { dynamicInit } from "./dynamic-page.js";
 import { TabBlocker } from "./tab-blocker.js";
-import { closeCurrentTab, setTextForClass, $id } from "./utility.js";
+import { setTextForClass, $id } from "./utility.js";
 import "./common-page.js";
 import { RemoteCallable } from "./remote-callable.js";
+import { OptionCollection } from "./options-manager.js";
 
 let blockedHost = undefined;
+let options = new OptionCollection("mottos");
 
 let closeAllBtn = $id("close-all-about");
 
@@ -23,3 +25,10 @@ dynamicInit(function (args) {
     RemoteCallable.call("background-aux", "closeRelativePages", [blockedHost]);
   };
 });
+
+{
+  let mottoTxt = $id("motto-txt");
+  options.mottos.doOnUpdated((mottos) => {
+    mottoTxt.innerText = mottos[0];
+  });
+}

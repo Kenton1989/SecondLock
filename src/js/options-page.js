@@ -2,7 +2,7 @@
  * This is the js for options.html
  */
 import { api } from "./api.js";
-import {} from "./common-page.js";
+import "./common-page.js";
 import { HostnameSet } from "./hostname-set.js";
 import { setupSectionNav } from "./nav-setup.js";
 import { ALL_OPTION_NAME, OptionCollection } from "./options-manager.js";
