@@ -26,9 +26,19 @@ api.tabs.onUpdated.addListener(function (id, changes, tab) {
   if (!tab.active || !changes.url) return;
   onBrowsingPageChanged.trigger(tab);
 });
+const NO_TAB_EXIST_MSG_PREFIX = "No tab with id";
 // If user switch to another tab
 api.tabs.onActivated.addListener(function (tabInfo) {
-  api.tabs.get(tabInfo.tabId).then((tab) => onBrowsingPageChanged.trigger(tab));
+  api.tabs
+    .get(tabInfo.tabId)
+    .then((tab) => onBrowsingPageChanged.trigger(tab))
+    .catch((reason) => {
+      if (reason.message.startsWith(NO_TAB_EXIST_MSG_PREFIX)) {
+        // multiple tabs are closed at the same time
+      } else {
+        throw reason;
+      }
+    });
 });
 // If user switch to another window
 api.windows.onFocusChanged.addListener(function (winId) {
@@ -162,7 +172,7 @@ class BrowsingPageMonitor extends RemoteCallable {
 
   /**
    * A event that will be triggered whenever user browsing new page.
-   * 
+   *
    * The callback function format for this event is:
    *
    *      function (tab: api.tabs.Tab)

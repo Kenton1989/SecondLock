@@ -73,14 +73,7 @@ dynamicInit(function (args) {
   let closeAllBtn = $id("close-all");
   closeAllBtn.onclick = function () {
     // close all page about the hostname
-    RemoteCallable.call("tab-blocker", "blockAllByClosing", [blockedHost]).then(
-      function () {
-        // Close time-selection and blocking page about the hostname
-        TabBlocker.notifyUnblock(blockedHost);
-        // Delay for a while before closing to avoid potential frequent tab switching
-        window.setTimeout(closeCurrentTab, 200);
-      }
-    );
+    RemoteCallable.call("background-aux", "closeRelativePages", [blockedHost]);
   };
 });
 
@@ -140,8 +133,8 @@ enterTimeLine.onkeydown = function (e) {
   let curM = time.getMinutes();
 
   // advance to nearest half hour / full hour
-  // but at least 3 minutes unlock time is guaranteed
-  const MIN_UNLOCK_TIME = 2;
+  // but at least 1 minutes unlock time is guaranteed
+  const MIN_UNLOCK_TIME = 1;
   if (curM < 30 - MIN_UNLOCK_TIME) {
     time.setMinutes(30);
   } else if (curM >= 60 - MIN_UNLOCK_TIME) {
@@ -156,7 +149,7 @@ enterTimeLine.onkeydown = function (e) {
   let timeStr = time.toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit",
-    hour12: false,
+    hourCycle: "h23",
   });
 
   endTimePointInput.value = timeStr;

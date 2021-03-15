@@ -217,25 +217,56 @@ function formatBytes(bytes) {
   return `${bytes.toFixed(1)}${BYTE_UNIT[unit]}`;
 }
 
+// Aux function of function closeTabs(toClose, leaveOneTab)
+function closeTabIds(toClose, leaveOneTab = false) {
+  if (leaveOneTab) {
+    let toCloseSet = new Set(toClose);
+    return api.windows
+      .getLastFocused({ populate: true })
+      .then((topWindow) => {
+        for (const tab of topWindow.tabs) {
+          // if some tabs in the top window won't be closed
+          if (!toCloseSet.has(tab.id)) {
+            return;
+          }
+        }
+
+        // all tabs in the top window are to be closed
+        return api.tabs.create({ windowId: topWindow.id });
+      })
+      .then(() => api.tabs.remove(toClose));
+  } else {
+    return api.tabs.remove(toClose);
+  }
+}
+
 /**
  * close a list of tabs
- * @param {api.tabs.Tab[]} toClose the tabs to be closed
- * @param {boolean} leaveOneTab if a new tab will be created on the top window
+ * @param {(api.tabs.Tab[]|number[])} toClose the tab objects, or the id of tabs to be closed.
+ *    Mixture of tab objects and tab id is not allowed.
+ * @param {boolean} leaveOneTab whether a new tab will be created on the top window
  *    if all tabs in the top window are closed
  * @returns {Promise} promise after all tabs are closed
  */
 function closeTabs(toClose, leaveOneTab = false) {
+  if (toClose.length <= 0) return Promise.resolve(undefined);
+
+  if (typeof toClose[0] == "number") {
+    return closeTabIds(toClose, leaveOneTab);
+  }
+
   let tabIds = toClose.map((tab) => tab.id);
+
   if (leaveOneTab) {
-    api.windows
+    return api.windows
       .getLastFocused({ populate: true })
       .then((topWindow) => {
-        let toCloseOnCur = toClose.filter(
-          (tab) => tab.windowId == topWindow.id
-        );
-
+        let closedOnTop = 0;
+        for (const tab of toClose) {
+          closedOnTop += tab.windowId == topWindow.id;
+        }
         // create a new tab if all tabs on the top window will be closed.
-        if (toCloseOnCur.length == topWindow.tabs.length) {
+        if (closedOnTop == topWindow.tabs.length) {
           return api.tabs.create({ windowId: topWindow.id });
         }
       })

@@ -4,20 +4,6 @@ import { CustomEventWrapper } from "./custom-event-wrapper.js";
 /**
  * All valid options
  */
-const ALL_OPTION_NAME = [
-  "monitoredList",
-  "whitelistHost",
-  "activated",
-  "notificationOn",
-  "notificationTimes",
-  "activeDays",
-  "pendingActiveDays",
-  "syncOn",
-  "defDurations",
-  "motto",
-];
-const ALL_OPTION_NAME_SET = new Set(ALL_OPTION_NAME);
-const SYNC_OPTION_NAME = ALL_OPTION_NAME;
 const DEFAULT_OPTIONS = {
   monitoredList: [
     "bilibili.com",
@@ -37,10 +23,14 @@ const DEFAULT_OPTIONS = {
   activeDays: [0, 1, 2, 3, 4, 5, 6],
   pendingActiveDays: undefined,
   activeDayApplyTime: 0,
+  leaveOneTab: true,
   syncOn: false,
   defDurations: [1, 5, 10, 15, 30, 60],
   mottos: ["Time waits for no one. – Folklore"],
 };
+
+const ALL_OPTION_NAME = Object.keys(DEFAULT_OPTIONS);
+const ALL_OPTION_NAME_SET = new Set(ALL_OPTION_NAME);
 const SYNCED_OPTION_NAME = [];
 
 // Dirty bit
@@ -227,7 +217,6 @@ window.setInterval(function () {}, 5000);
 export {
   ALL_OPTION_NAME,
   ALL_OPTION_NAME_SET,
-  SYNC_OPTION_NAME,
   DEFAULT_OPTIONS,
   OptionCollection,
 };

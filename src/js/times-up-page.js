@@ -20,13 +20,6 @@ dynamicInit(function (args) {
 
   closeAllBtn.onclick = function () {
     // close all page about the hostname
-    RemoteCallable.call("tab-blocker", "blockAllByClosing", [blockedHost]).then(
-      function () {
-        // Close time-selection and blocking page about the hostname
-        TabBlocker.notifyUnblock(blockedHost);
-        // Delay for a while before closing to avoid potential frequent tab switching
-        window.setTimeout(closeCurrentTab, 200);
-      }
-    );
+    RemoteCallable.call("background-aux", "closeRelativePages", [blockedHost]);
   };
 });

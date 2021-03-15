@@ -96,7 +96,7 @@ class DynamicPageBackend extends RemoteCallable {
    * @returns {Iterable<[number, *]>} iterable containing all id of tabs and their parameters
    */
   idsAndParams() {
-    this._tabArgs.entries();
+    return this._tabArgs.entries();
   }
 }
 

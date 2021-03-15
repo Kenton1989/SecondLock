@@ -9,11 +9,12 @@ import {
 import { RemoteCallable } from "./remote-callable.js";
 import { TabBlocker } from "./tab-blocker.js";
 import { api } from "./api.js";
+import { closeTabs } from "./utility.js";
 
 let options = new OptionCollection(...ALL_OPTION_NAME);
 
-const kSelectTimeURL = api.runtime.getURL("select-time.html");
-const kTimesUpPageURL = api.runtime.getURL("times-up.html");
+const SELECT_DUR_PAGE_URL = api.runtime.getURL("select-time.html");
+const TIME_UP_PAGE_URL = api.runtime.getURL("times-up.html");
 
 // Set default options
 api.runtime.onInstalled.addListener(function () {
@@ -47,13 +48,13 @@ function selectTime(tab, hostname) {
     console.debug(`${hostname} is unlocked, does not block.`);
     return;
   }
-  tabBlocker.blockPageWithNewTab(tab, hostname, kSelectTimeURL);
+  tabBlocker.blockPageWithNewTab(tab, hostname, SELECT_DUR_PAGE_URL);
 }
 
 monitor.onBrowse.addListener(selectTime);
 
 unlockTiming.onTimesUp.addListener(function (hostname) {
-  tabBlocker.blockAllTabsUnder(hostname, kTimesUpPageURL);
+  tabBlocker.blockAllTabsUnder(hostname, TIME_UP_PAGE_URL);
 });
 
 backgroundAux.queryPageState = function (url) {
@@ -89,7 +90,20 @@ backgroundAux.queryPageState = function (url) {
 backgroundAux.stopTimingAndClose = function (hostname) {
   tabBlocker.blockAllByClosing(hostname).then(function () {
     // stop timing after closing
-    // avoid frequent tabs switching, which is likely to trigger browsing-monitor
+    // avoid frequent tabs switching,
+    // which is likely to trigger browsing monitor unexpectedly
     unlockTiming.stopTiming(hostname);
+  });
+};
+
+backgroundAux.closeRelativePages = function (hostname) {
+  tabBlocker.blockAllByClosing(hostname).then(function () {
+    let toClose = [];
+    for (const [tabId, param] of dynamicPageBack.idsAndParams()) {
+      if (param.blockedHost && param.blockedHost == hostname) {
+        toClose.push(tabId);
+      }
+    }
+    closeTabs(toClose, true);
   });
 };
