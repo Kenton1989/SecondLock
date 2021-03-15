@@ -65,6 +65,7 @@ const TRANS_KEYS = [
   "hostMonitoredWarn",
   "hostMatchRule3",
   "orUntilTimePoint",
+  "blockingPages",
 ];
 
 export { TRANS_KEYS };

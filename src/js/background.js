@@ -20,7 +20,7 @@ const TIME_UP_PAGE_URL = api.runtime.getURL("times-up.html");
 api.runtime.onInstalled.addListener(function () {
   api.storage.local.get(DEFAULT_OPTIONS).then(function (result) {
     api.storage.local.set(result).then(function () {
-      console.debug("Setting: ", result)
+      console.debug("Setting: ", result);
     });
   });
 });
@@ -96,14 +96,17 @@ backgroundAux.stopTimingAndClose = function (hostname) {
   });
 };
 
+const CANDIDATE_RELATIVE_URL = [TIME_UP_PAGE_URL, SELECT_DUR_PAGE_URL];
 backgroundAux.closeRelativePages = function (hostname) {
-  tabBlocker.blockAllByClosing(hostname).then(function () {
-    let toClose = [];
-    for (const [tabId, param] of dynamicPageBack.idsAndParams()) {
-      if (param.blockedHost && param.blockedHost == hostname) {
-        toClose.push(tabId);
-      }
-    }
-    closeTabs(toClose, true);
-  });
+  tabBlocker
+    .blockAllByClosing(hostname)
+    .then(() => {
+      return api.tabs.query({ url: CANDIDATE_RELATIVE_URL });
+    })
+    .then((toClose) => {
+      toClose = toClose.filter(
+        (tab) => dynamicPageBack.getParam(tab.id).blockedHost == hostname
+      );
+      closeTabs(toClose, true);
+    });
 };

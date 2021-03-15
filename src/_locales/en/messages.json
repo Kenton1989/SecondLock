@@ -184,5 +184,8 @@
   },
   "orUntilTimePoint": {
     "message": "or, unlock until"
+  },
+  "blockingPages": {
+    "message": "Blocking Pages"
   }
 }

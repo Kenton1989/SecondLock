@@ -184,5 +184,8 @@
   },
   "orUntilTimePoint": {
     "message": "或者，解锁页面直到"
+  },
+  "blockingPages": {
+    "message": "阻拦页面"
   }
 }
