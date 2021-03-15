@@ -59,8 +59,7 @@ function setUnlock(minutes) {
     unlockDuration,
   ]).then(function () {
     TabBlocker.notifyUnblock(blockedHost);
-    // Delay for a while before closing to avoid potential frequent tab switching
-    window.setTimeout(closeCurrentTab, 200);
+    closeCurrentTab();
   });
 }
 
