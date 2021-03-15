@@ -117,33 +117,35 @@
       </section>
       <section id="blocking-pages">
         <h2 class="section-title trans-blockingPages">Blocking Pages</h2>
-        <h3 class="trans-durSelectPage">Duration Selection Page</h3>
-        <h4 id="def-dur-choice-title" class="trans-defDurChoices">Default Duration Choices (in minutes)</h4>
-        <p class="description trans-setDefDurDescription">
-          Set the list of buttons shown on the unlock duration selection page
-        </p>
-        <details class="description">
-          <summary class="trans-defDurFormatSummary">Details of input format:</summary>
-          <ul>
-            <li class="trans-defDurFormat1">Multiple values should be split with comma.</li>
-            <li class="trans-defDurFormat2">
-              Each value should be an integer, at least 1 and at most 1000.
-            </li>
-            <li class="trans-defDurFormat3">
-              At most 10 different values can be set, if more than 10 values are enter, first 10 valid values will be
-              used.
-            </li>
-          </ul>
-        </details>
-        <input type="text" id="default-time" />
-        <button id="save-default-time-btn" class="trans-save">Save</button>
-      </section>
-      <section id="times-up-page" style="display: block;">
-        <h2 class="section-title trans-timesUpPage">Times Up Page</h2>
-        <h3 class="trans-motto">Motto</h3>
-        <p class="description trans-timesUpMottoDetail">The motto to be displayed on times up page.</p>
-        <textarea id="times-up-mottos"></textarea>
-        <button id="save-block-msg-btn" class="trans-save">Save</button>
+        <div>
+          <h3 class="trans-durSelectPage">Duration Selection Page</h3>
+          <h4 id="def-dur-choice-title" class="trans-defDurChoices">Default Duration Choices (in minutes)</h4>
+          <p class="description trans-setDefDurDescription">
+            Set the list of buttons shown on the unlock duration selection page
+          </p>
+          <details class="description">
+            <summary class="trans-defDurFormatSummary">Details of input format:</summary>
+            <ul>
+              <li class="trans-defDurFormat1">Multiple values should be split with comma.</li>
+              <li class="trans-defDurFormat2">
+                Each value should be an integer, at least 1 and at most 1000.
+              </li>
+              <li class="trans-defDurFormat3">
+                At most 10 different values can be set, if more than 10 values are enter, first 10 valid values will be
+                used.
+              </li>
+            </ul>
+          </details>
+          <input type="text" id="default-time" />
+          <button id="save-default-time-btn" class="trans-save">Save</button>
+        </div>
+        <div>
+          <h3 class="trans-timesUpPage">Times Up Page</h3>
+          <h4 class="trans-motto">Motto</h4>
+          <p class="description trans-timesUpMottoDetail">The motto to be displayed on times up page.</p>
+          <textarea id="times-up-mottos"></textarea>
+          <button id="save-block-msg-btn" class="trans-save">Save</button>
+        </div>
       </section>
       <section id="storage-and-sync" style="display: block;">
         <h2 class="section-title trans-storageAndSync">Storage</h2>

@@ -78,9 +78,9 @@ const kHas2To7Colons = /^([^:]*:){2,7}[^:]*$/;
 const kIPv6AddrNoCompress = new RegExp(`^${kIPv6NoCompress}$`, "i");
 const kIPv6AddrCompressed = new RegExp(`^${kIPv6Compressed}$`, "i");
 /**
- * Check if the given string is a valid IPv6 format hostname.
+ * Check if the given string is a valid IPv6 format address.
  * @param {String} str the string to be checked
- * @returns {boolean} true if it is a valid IPv6 format hostname.
+ * @returns {boolean} true if it is a valid IPv6 format address.
  */
 function validIPv6Address(str) {
   return (
