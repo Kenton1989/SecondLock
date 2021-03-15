@@ -42,16 +42,21 @@ class TabBlocker extends RemoteCallable {
    *
    * @param {api.tabs.Tab} tab the tab to be blocked.
    * @param {string} hostname the hostname to be blocked.
-   * @param {string} blockingPageUrl the URL of the new page used for blocking
+   * @param {(string|undefined)} blockingPageUrl the URL of the new page used for blocking,
+   *     if it is undefined, a New Tab page will be created
    * @returns {Promise}  The promise resolved with newly created tab
-   *  after the given tab is blocked
+   *  after the blocking tab is created
    */
   blockPageWithNewTab(tab, hostname, blockingPageUrl) {
-    return this._backend.openOnNewTab(
-      blockingPageUrl,
-      { blockedHost: hostname },
-      { windowId: tab.windowId }
-    );
+    if (blockingPageUrl) {
+      return this._backend.openOnNewTab(
+        blockingPageUrl,
+        { blockedHost: hostname },
+        { windowId: tab.windowId }
+      );
+    } else {
+      return api.tabs.create({ windowId: tab.windowId });
+    }
   }
 
   /**
@@ -71,11 +76,11 @@ class TabBlocker extends RemoteCallable {
   }
 
   /**
-   * Block all tabs under the given hostname, unless the hostname is in the whitelist of monitor
+   * Block all tabs under the given hostname, unless the hostname is not monitored by monitor
    *
    * @param {string} hostname the hostname to be blocked
    * @param {string} blockingPageUrl the URL of new page used to block the tab. All active
-   *  tabs will be overwrite with blockingPageUrl through method this.blockPageByOverwriting
+   *  tabs will be blocked with blockingPageUrl through method this.blockPageWithNewTab
    */
   blockAllTabsUnder(hostname, blockingPageUrl) {
     let pattern = hostname;
@@ -88,17 +93,20 @@ class TabBlocker extends RemoteCallable {
     let monitor = this._monitor;
     let blocker = this;
 
-    queryTabsUnder(hostname, { active: true }).then(function (tabs) {
-      for (const tab of tabs) {
-        if (monitor.isMonitoring(tab.url))
-          blocker.blockPageByOverwriting(tab, hostname, blockingPageUrl);
-      }
-    });
-
-    queryTabsUnder(hostname, { active: false }).then(function (tabs) {
-      let toClose = tabs.filter((tab) => monitor.isMonitoring(tab.url));
-      closeTabs(toClose);
-    });
+    queryTabsUnder(hostname, { active: true })
+      .then((tabs) => {
+        for (const tab of tabs) {
+          if (monitor.isMonitoring(tab.url))
+            blocker.blockPageWithNewTab(tab, hostname, blockingPageUrl);
+        }
+      })
+      .then(() => {
+        return queryTabsUnder(hostname, { active: false });
+      })
+      .then((tabs) => {
+        let toClose = tabs.filter((tab) => monitor.isMonitoring(tab.url));
+        closeTabs(toClose);
+      });
   }
 
   /**
@@ -114,7 +122,7 @@ class TabBlocker extends RemoteCallable {
 
     return queryTabsUnder(hostname).then((toClose) => {
       toClose = toClose.filter((tab) => monitor.isMonitoring(tab.url));
-      
+
       // temporary disable the monitor
       // since frequent tabs switching may happen when multiple tabs are close
       // which is likely to the trigger monitor unexpectedly
