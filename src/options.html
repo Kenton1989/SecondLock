@@ -2,9 +2,9 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="css/option.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="css/option.css" rel="stylesheet">
   <title class="trans-optionsTitle">Options</title>
 </head>
 
@@ -18,33 +18,39 @@
       <ul id="nav-list"></ul>
     </aside>
     <div id="main-div">
-      <section style="display: block;">
-        <a href="manual.html" class="trans-manualTitle">User Manual</a>
+      <section style="display: block">
+        <a class="trans-manualTitle" href="manual.html">User Manual</a>
       </section>
-      <section id="debug" style="display: block;">
+      <section id="debug" style="display: block">
         <h2 class="section-title">Debug</h2>
-        <a id="go-select" target="_blank" href="select-time.html">To Selection Page</a>
-        <br />
-        <a id="go-block" target="_blank" href="times-up.html">To Times Up Page</a>
+        <a id="go-select" href="select-time.html" target="_blank">To Selection Page</a>
+        <br>
+        <a id="go-block" href="times-up.html" target="_blank">To Times Up Page</a>
       </section>
       <section id="monitored-host">
         <h2 class="section-title trans-monitorHost">Monitored Host</h2>
         <details class="description">
-          <summary class="trans-moniListDetails">Details about how monitored list works:</summary>
+          <summary class="trans-moniListDetails">
+            Details about how monitored list works:
+          </summary>
           <ul>
             <li>
               <span class="trans-hostMatchRules">Hostname matching rules:</span>
               <ul>
                 <li class="trans-hostMatchRule1">
-                  All the subdomain of the hosts in the list will be monitored.<br />e.g. if "youtube.com" is in the
-                  list, then "www.youtube.com", "music.youtube.com", etc. will be monitored at the same time
+                  All the subdomain of the hosts in the list will be
+                  monitored.<br>e.g. if "youtube.com" is in the list, then
+                  "www.youtube.com", "music.youtube.com", etc. will be
+                  monitored at the same time
                 </li>
                 <li class="trans-hostMatchRule2">
-                  Only HTTP and HTTPS pages are monitored. Other protocols like FTP are never monitored.
+                  Only HTTP and HTTPS pages are monitored. Other protocols
+                  like FTP are never monitored.
                 </li>
                 <li class="trans-hostMatchRule3">
-                  Exact matching of full IPv4 and IPv6 address is supported. Matching network area based on IP address +
-                  mask is not supported.
+                  Exact matching of full IPv4 and IPv6 address is supported.
+                  Matching network area based on IP address + mask is not
+                  supported.
                 </li>
               </ul>
             </li>
@@ -52,21 +58,25 @@
               <span class="trans-hostEditRules">Hostname editing rules:</span>
               <ul>
                 <li class="trans-hostEditRule1">
-                  Adding a super domain will eliminate all its subdomains from the list.<br />e.g. Suppose
-                  "www.youtube.com", "music.youtube.com" are in the list. If "youtube.com" is then added, both of them
-                  will be replaced by "youtube.com"
+                  Adding a super domain will eliminate all its subdomains from
+                  the list.<br>e.g. Suppose "www.youtube.com",
+                  "music.youtube.com" are in the list. If "youtube.com" is
+                  then added, both of them will be replaced by "youtube.com"
                 </li>
                 <li class="trans-hostEditRule2">
-                  To add a new subdomain, you need to delete the parent domain first, and you must save the list before
-                  adding the subdomain.<br />e.g. Suppose "youtube.com" is in the list, and you want to add
-                  "www.youtube.com". You must delete "youtube.com" form the list and save it before adding
+                  To add a new subdomain, you need to delete the parent domain
+                  first, and you must save the list before adding the
+                  subdomain.<br>e.g. Suppose "youtube.com" is in the list,
+                  and you want to add "www.youtube.com". You must delete
+                  "youtube.com" form the list and save it before adding
                   "www.youtube.com" into the list.
                 </li>
               </ul>
             </li>
             <li class="trans-whiteOverBlack">
-              Whitelist takes privilege over blacklist. <br />e.g. If "youtube.com" is in the black list, while
-              "music.youtube.com" is in the white list, the "music.youtube.com" will not be monitored
+              Whitelist takes privilege over blacklist. <br>e.g. If
+              "youtube.com" is in the black list, while "music.youtube.com" is
+              in the white list, the "music.youtube.com" will not be monitored
             </li>
           </ul>
         </details>
@@ -75,8 +85,7 @@
           <div class="host-list-div">
             <ul class="host-list"></ul>
             <div class="input-host-div">
-              <input type="url" name="host-input" placeholder="Enter new hostname here"
-                class="host-input transPh-enterNewHost" />
+              <input class="host-input transPh-enterNewHost" name="host-input" type="url" placeholder="Enter new hostname here">
               <button class="add-host-btn">＋</button>
             </div>
           </div>
@@ -84,97 +93,110 @@
           <span class="warning"></span>
         </div>
         <div id="whitelist-host">
-          <h3 class="trans-whitelist">Whitelist</h2>
-            <div class="host-list-div">
-              <ul class="host-list"></ul>
-              <div class="input-host-div">
-                <input type="url" name="host-input" placeholder="Enter new hostname here"
-                  class="host-input transPh-enterNewHost" />
-                <button class="add-host-btn">＋</button>
-              </div>
+          <h3 class="trans-whitelist">Whitelist</h3>
+          <div class="host-list-div">
+            <ul class="host-list"></ul>
+            <div class="input-host-div">
+              <input class="host-input transPh-enterNewHost" name="host-input" type="url" placeholder="Enter new hostname here">
+              <button class="add-host-btn">＋</button>
             </div>
-            <button class="save-host-btn trans-save">Save</button>
-            <span class="warning"></span>
-        </div>
-      </section>
-
-      <section id="notification" style="display: block;">
-        <h2 class="section-title trans-notification">Notification</h2>
-        <input type="checkbox" id="notification-on" name="notification-on" />
-        <label for="notification-on" class="trans-activeCountdownNotify">Activate Countdown Notification</label>
-        <div id="notification-countdowns">
-          <h3 class="trans-notifyTimePoints">Notification Time Points</h3>
-          <p>
-            <input type="number" min="1" max="1000" />
-            <select name="unit">
-              <option value="min" class="trans-mins">mins</option>
-              <option value="sec" class="trans-secs">secs</option>
-            </select>
-            <span class="trans-beforeTimesUp"> before time's up</span>
-          </p>
-          <button id="save-notification-btn" class="trans-save">Save</button>
+          </div>
+          <button class="save-host-btn trans-save">Save</button>
+          <span class="warning"></span>
         </div>
       </section>
       <section id="blocking-pages">
         <h2 class="section-title trans-blockingPages">Blocking Pages</h2>
         <div>
           <h3 class="trans-durSelectPage">Duration Selection Page</h3>
-          <h4 id="def-dur-choice-title" class="trans-defDurChoices">Default Duration Choices (in minutes)</h4>
+          <h4 class="trans-defDurChoices unsaved-hint-default-time" id="def-dur-choice-title">
+            Default Duration Choices (in minutes)
+          </h4>
           <p class="description trans-setDefDurDescription">
-            Set the list of buttons shown on the unlock duration selection page
+            Set the list of buttons shown on the unlock duration selection
+            page
           </p>
           <details class="description">
-            <summary class="trans-defDurFormatSummary">Details of input format:</summary>
+            <summary class="trans-defDurFormatSummary">
+              Details of input format:
+            </summary>
             <ul>
-              <li class="trans-defDurFormat1">Multiple values should be split with comma.</li>
+              <li class="trans-defDurFormat1">
+                Multiple values should be split with comma.
+              </li>
               <li class="trans-defDurFormat2">
                 Each value should be an integer, at least 1 and at most 1000.
               </li>
               <li class="trans-defDurFormat3">
-                At most 10 different values can be set, if more than 10 values are enter, first 10 valid values will be
-                used.
+                At most 10 different values can be set, if more than 10 values
+                are enter, first 10 valid values will be used.
               </li>
             </ul>
           </details>
-          <input type="text" id="default-time" />
-          <button id="save-default-time-btn" class="trans-save">Save</button>
+          <input id="default-time" type="text">
+          <button class="trans-save" id="save-default-time-btn">Save</button>
         </div>
         <div>
           <h3 class="trans-timesUpPage">Times Up Page</h3>
           <h4 class="trans-motto">Motto</h4>
-          <p class="description trans-timesUpMottoDetail">The motto to be displayed on times up page.</p>
+          <details class="description">
+            <summary class="trans-timesUpMottoDetail">
+              The motto to be displayed on times up page.
+            </summary>
+            <ul>
+              <li class="trans-mottosDetail1">
+                Not necessarily a motto, can be any message you want, even rude words.
+              </li>
+              <li class="trans-mottosDetail2">The maximum text length is 300 characters.</li>
+            </ul>
+          </details>
           <textarea id="times-up-mottos"></textarea>
-          <button id="save-block-msg-btn" class="trans-save">Save</button>
+          <button class="trans-save" id="save-block-msg-btn">Save</button>
         </div>
       </section>
-      <section id="storage-and-sync" style="display: block;">
+      <section id="storage-and-sync" style="display: block">
         <h2 class="section-title trans-storageAndSync">Storage</h2>
         <div>
-          <input type="checkbox" id="auto-sync" name="auto-sync" disabled />
+          <input id="auto-sync" name="auto-sync" type="checkbox" disabled>
           <label for="auto-sync trans-autoSync">Auto Sync</label>
         </div>
-        <p><span class="trans-localStorageUsed">Local Storage Used: </span><span id="local-used-space">1kb</span></p>
+        <!-- <p><span class="trans-localStorageUsed">Local Storage Used: </span><span id="local-used-space">1kb</span></p> -->
         <p>
-          <span class="trans-cloudStorageUsed">Cloud Storage Used: </span><span id="cloud-used-space">1kb</span>/<span
-            id="cloud-max-space">5kb</span>
+          <span class="trans-cloudStorageUsed">Cloud Storage Used: </span><span id="cloud-used-space">1kb</span>/<span id="cloud-max-space">5kb</span>
         </p>
-        </details>
+      </section>
+      <section id="notification" style="display: block">
+        <h2 class="section-title trans-notification">Notification</h2>
+        <input id="notification-on" name="notification-on" type="checkbox">
+        <label class="trans-activeCountdownNotify" for="notification-on">Activate Countdown Notification</label>
+        <div id="notification-countdowns">
+          <h3 class="trans-notifyTimePoints">Notification Time Points</h3>
+          <p>
+            <input type="number" min="1" max="1000">
+            <select name="unit">
+              <option class="trans-mins" value="min">mins</option>
+              <option class="trans-secs" value="sec">secs</option>
+            </select>
+            <span class="trans-beforeTimesUp"> before time's up</span>
+          </p>
+          <button class="trans-save" id="save-notification-btn">Save</button>
+        </div>
       </section>
       <section id="acknowledgement">
         <h2 class="section-title trans-acknowledgement">Acknowledgement</h2>
         <p class="trans-thanksMrHe">
-          Great thanks to Mr. He. The idea of this extension is based on his video and app.
+          Great thanks to Mr. He. The idea of this extension is based on his
+          video and app.
         </p>
         <ul>
           <li>
-            <a href="https://space.bilibili.com/163637592" target="_blank" class="trans-hisChannel">His channel</a>
+            <a class="trans-hisChannel" href="https://space.bilibili.com/163637592" target="_blank">His channel</a>
           </li>
           <li>
-            <a href="https://www.bilibili.com/video/BV1ev411x7en" target="_blank" class="trans-hisVideo">His video</a>
+            <a class="trans-hisVideo" href="https://www.bilibili.com/video/BV1ev411x7en" target="_blank">His video</a>
           </li>
           <li>
-            <a href="http://download.yitangyx.cn/test/student-he/new.html?202001" target="_blank"
-              class="trans-hisApp">His app</a>
+            <a class="trans-hisApp" href="http://download.yitangyx.cn/test/student-he/new.html?202001" target="_blank">His app</a>
           </li>
         </ul>
       </section>
@@ -182,16 +204,15 @@
         <h2 class="section-title trans-externalLinks">External Links</h2>
         <ul>
           <li>
-            <a href="https://github.com/Kenton1989/SecondLock" target="_blank" class="trans-sourceCode">Source
-              code</a>
+            <a class="trans-sourceCode" href="https://github.com/Kenton1989/SecondLock" target="_blank">Source code</a>
           </li>
         </ul>
       </section>
     </div>
   </main>
   <footer>
-    &copy;2021-<span id="copy-end-year">2021</span> Kenton. <span class="trans-allRightsReserved">All rights
-      reserved</span>
+    &copy;2021-<span id="copy-end-year">2021</span> Kenton.
+    <span class="trans-allRightsReserved">All rights reserved</span>
   </footer>
 
   <div id="templates">
@@ -200,21 +221,22 @@
     </li>
 
     <li class="host-list-item">
-      <span class="host">hostname</span><button class="undo-btn ">[<span class="trans-undo">undo</span>]</button><button
-        class="delete-btn">[<span class="trans-delete">delete</span>]</button>
+      <span class="host">hostname</span><button class="undo-btn">[<span class="trans-undo">undo</span>]</button><button class="delete-btn">
+        [<span class="trans-delete">delete</span>]
+      </button>
     </li>
 
     <p class="notify-time-point">
-      <input type="number" min="1" max="600" />
+      <input type="number" min="1" max="600">
       <select name="unit">
-        <option value="min" class="trans-mins">mins</option>
-        <option value="sec" class="trans-secs">secs</option>
+        <option class="trans-mins" value="min">mins</option>
+        <option class="trans-secs" value="sec">secs</option>
       </select>
       <span class="trans-beforeTimesUp"> before time's up</span>
     </p>
   </div>
 
-  <script type="module" src="js/options-page.js"></script>
+  <script src="js/options-page.js" type="module"></script>
 </body>
 
 </html>

@@ -187,5 +187,11 @@
   },
   "blockingPages": {
     "message": "阻拦页面设置"
+  },
+  "mottosDetail1": {
+    "message": "不一定是一句格言，可以是任何你想放的消息，脏话都行。"
+  },
+  "mottosDetail2": {
+    "message": "文本长度上限为300字。"
   }
 }

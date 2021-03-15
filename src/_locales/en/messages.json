@@ -187,5 +187,11 @@
   },
   "blockingPages": {
     "message": "Blocking Pages"
+  },
+  "mottosDetail1": {
+    "message": "Not necessarily a motto, can be any message you want, even rude words."
+  },
+  "mottosDetail2": {
+    "message": "The maximum text length is 300 characters."
   }
 }

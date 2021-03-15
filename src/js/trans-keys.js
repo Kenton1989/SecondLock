@@ -66,6 +66,8 @@ const TRANS_KEYS = [
   "hostMatchRule3",
   "orUntilTimePoint",
   "blockingPages",
+  "mottosDetail1",
+  "mottosDetail2",
 ];
 
 export { TRANS_KEYS };
