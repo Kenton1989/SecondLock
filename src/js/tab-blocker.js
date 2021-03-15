@@ -112,36 +112,18 @@ class TabBlocker extends RemoteCallable {
   blockAllByClosing(hostname, leaveOneTab = this.keepOneTab) {
     let monitor = this._monitor;
 
-    let getTabProm = queryTabsUnder(hostname).then((tabs) =>
-      tabs.filter((tab) => monitor.isMonitoring(tab.url))
-    );
-
-    if (leaveOneTab) {
-      let getWindowProm = api.windows.getLastFocused({ populate: true });
-
-      getTabProm = Promise.all([getTabProm, getWindowProm]).then((results) => {
-        let [toClose, topWindow] = results;
-        let toCloseOnCur = toClose.filter(
-          (tab) => tab.windowId == topWindow.id
-        );
-        // create a new tab if all tabs on the top window will be closed.
-        if (toCloseOnCur.length == topWindow.tabs.length) {
-          api.tabs.create({ windowId: topWindow.id });
-        }
-        return toClose;
-      });
-    }
-
-    return getTabProm.then(function (toClose) {
+    return queryTabsUnder(hostname).then((toClose) => {
+      toClose = toClose.filter((tab) => monitor.isMonitoring(tab.url));
+      
       // temporary disable the monitor
       // since frequent tabs switching may happen when multiple tabs are close
       // which is likely to the trigger monitor unexpectedly
       let oldActive = monitor.active;
       monitor.active = false;
 
-      return closeTabs(toClose).then(function () {
-        monitor.active = oldActive;
-      });
+      return closeTabs(toClose, leaveOneTab).then(
+        () => (monitor.active = oldActive)
+      );
     });
   }
 

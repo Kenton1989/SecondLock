@@ -219,12 +219,30 @@ function formatBytes(bytes) {
 
 /**
  * close a list of tabs
- * @param {api.tabs.Tab[]} tabs the tabs to be closed
+ * @param {api.tabs.Tab[]} toClose the tabs to be closed
+ * @param {boolean} leaveOneTab if a new tab will be created on the top window
+ *    if all tabs in the top window are closed
  * @returns {Promise} promise after all tabs are closed
  */
-function closeTabs(tabs) {
-  let tabIds = tabs.map((tab) => tab.id);
-  return api.tabs.remove(tabIds);
+function closeTabs(toClose, leaveOneTab = false) {
+  let tabIds = toClose.map((tab) => tab.id);
+  if (leaveOneTab) {
+    api.windows
+      .getLastFocused({ populate: true })
+      .then((topWindow) => {
+        let toCloseOnCur = toClose.filter(
+          (tab) => tab.windowId == topWindow.id
+        );
+
+        // create a new tab if all tabs on the top window will be closed.
+        if (toCloseOnCur.length == topWindow.tabs.length) {
+          return api.tabs.create({ windowId: topWindow.id });
+        }
+      })
+      .then(() => api.tabs.remove(tabIds));
+  } else {
+    return api.tabs.remove(tabIds);
+  }
 }
 
 /**
