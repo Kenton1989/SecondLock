@@ -215,71 +215,86 @@ options.notificationOn.doOnUpdated(function (notiOn) {});
 //////////////////// Active Days ///////////////////////////
 // TODO - add active days support
 
-/////////////////////// Selection Page ///////////////////////
+/////////////////////// Page Blocking & Closing ///////////////////////
 
-let defaultDurInput = $id("default-time");
-let defaultDurSave = $id("save-default-time-btn");
-let lastSaveDefDur = [];
-const MIN_DUR_MIN = 1;
-const MAX_DUR_MIN = 1000;
-const MAX_DUR_CNT = 10;
+// Duration Selection Page
+{
+  let defaultDurInput = $id("default-time");
+  let defaultDurSave = $id("save-default-time-btn");
+  let lastSaveDefDur = [];
+  const MIN_DUR_MIN = 1;
+  const MAX_DUR_MIN = 1000;
+  const MAX_DUR_CNT = 10;
 
-function loadDefaultDurations(list) {
-  defaultDurInput.value = list.toString();
-}
-
-const defDurChoiceTitle = $id("def-dur-choice-title");
-
-function saveDefaultDuration(str) {
-  // clear unsaved tag
-  defDurChoiceTitle.classList.remove("unsaved");
-
-  if (str == lastSaveDefDur.toString()) {
-    console.log("list is not changed. Skip saving.");
-    return;
+  function loadDefaultDurations(list) {
+    defaultDurInput.value = list.toString();
   }
 
-  let sList = str.split(",");
-  let res = new Set();
-  for (let s of sList) {
-    s = s.trim();
-    let val = 0;
-    val = parseInt(s);
-    if (val >= MIN_DUR_MIN && val <= MAX_DUR_MIN) {
-      res.add(val);
+  const defDurChoiceTitle = $id("def-dur-choice-title");
+
+  function saveDefaultDuration(str) {
+    // clear unsaved tag
+    defDurChoiceTitle.classList.remove("unsaved");
+
+    if (str == lastSaveDefDur.toString()) {
+      console.log("list is not changed. Skip saving.");
+      return;
     }
-    if (res.size >= MAX_DUR_CNT) break;
+
+    let sList = str.split(",");
+    let inputArr = sList.map((s) => parseInt(s));
+    inputArr = inputArr.filter((val) => {
+      return typeof val == "number" && val >= MIN_DUR_MIN && val <= MAX_DUR_MIN;
+    });
+    let res = new Set(inputArr);
+    let list = [...res].slice(0, MAX_DUR_CNT);
+    list = list.sort((a, b) => a - b);
+
+    // set without checking dirtiness to clear potential invalid values
+    loadDefaultDurations(list);
+
+    if (list.toString() == lastSaveDefDur.toString()) {
+      console.log("list is not changed. Skip saving.");
+      return;
+    }
+    lastSaveDefDur = list;
+    options.defDurations.set(list);
   }
 
-  let list = [...res];
-  list = list.sort((a, b) => a - b);
+  options.defDurations.doOnUpdated(function (durList) {
+    lastSaveDefDur = durList;
+    loadDefaultDurations(durList);
+  });
 
-  // set without checking dirtiness to clear potential invalid values
-  loadDefaultDurations(list);
+  defaultDurSave.onclick = function () {
+    saveDefaultDuration(defaultDurInput.value);
+  };
 
-  if (list.toString() == lastSaveDefDur.toString()) {
-    console.log("list is not changed. Skip saving.");
-    return;
-  }
-  lastSaveDefDur = list;
-  options.defDurations.set(list);
+  defaultDurInput.oninput = function () {
+    defDurChoiceTitle.classList.add("unsaved");
+  };
+
+  defaultDurInput.onkeydown = function (keyInfo) {
+    if (keyInfo.key == "Enter") saveDefaultDuration(defaultDurInput.value);
+  };
 }
 
-options.defDurations.doOnUpdated(function (durList) {
-  lastSaveDefDur = durList;
-  loadDefaultDurations(durList);
-});
+// Time's Up Page
+{
+  let pageOnTimesUp = $id("page-on-times-up");
+  let defTimesUpPageDiv = $id("default-times-up-page-settings");
+  let timesUpPagePreview = $id("times-up-page-preview");
 
-defaultDurSave.onclick = function () {
-  saveDefaultDuration(defaultDurInput.value);
-};
+  function updateDivDisplay() {
+    let isDefault = pageOnTimesUp.value == "default";
+    defTimesUpPageDiv.style.display = isDefault ? "block" : "none";
+    timesUpPagePreview.style.display = isDefault ? "inline" : "none";
+  }
 
-defaultDurInput.oninput = function () {
-  defDurChoiceTitle.classList.add("unsaved");
-};
+  pageOnTimesUp.onchange = updateDivDisplay;
 
-////////////////////// Blocking Page ///////////////////////
-// TODO - allow customizing motto displayed on blocking page
+  updateDivDisplay();
+}
 
 ////////////////////// storage & sync ////////////////////////
 let cloudUseSpaceTxt = $id("cloud-used-space");

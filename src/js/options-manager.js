@@ -127,6 +127,25 @@ class OneOption {
   }
 
   /**
+   * Set the value options after a given length of delay
+   * Used to avoid frequent repeating setting.
+   *
+   * @param {*} value the new value
+   * @param {number} delay the delay in milliseconds
+   */
+  delayedSet(value, delay = 500) {
+    if (this._pendingHandle != undefined) {
+      window.clearTimeout(this._pendingHandle);
+    }
+
+    let thisOption = this;
+    this._pendingHandle = window.setTimeout(() => {
+      thisOption.set(value);
+      delete thisOption._pendingHandle;
+    }, delay);
+  }
+
+  /**
    * Set callback when cached value is updated.
    *
    * This function can be used as a getter. In this case, if this.getCached() != undefined,

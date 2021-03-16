@@ -185,13 +185,34 @@
   "orUntilTimePoint": {
     "message": "or, unlock until"
   },
-  "blockingPages": {
-    "message": "Blocking Pages"
+  "blockingOptionsTitle": {
+    "message": "Page Blocking & Closing"
   },
   "mottosDetail1": {
     "message": "Not necessarily a motto, can be any message you want, even rude words."
   },
   "mottosDetail2": {
     "message": "The maximum text length is 300 characters."
+  },
+  "leaveOneTabDescribe": {
+    "message": "Leave one tab on top window if all tabs are closed"
+  },
+  "pageClosingTitle": {
+    "message": "Page Closing"
+  },
+  "preview": {
+    "message": "Preview"
+  },
+  "noPage": {
+    "message": "None"
+  },
+  "default": {
+    "message": "Default"
+  },
+  "newTabPage": {
+    "message": "New Tab Page"
+  },
+  "pageDisplayedOnTimesUp": {
+    "message": "Page Displayed on Times' Up"
   }
 }

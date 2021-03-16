@@ -65,9 +65,16 @@ const TRANS_KEYS = [
   "hostMonitoredWarn",
   "hostMatchRule3",
   "orUntilTimePoint",
-  "blockingPages",
+  "blockingOptionsTitle",
   "mottosDetail1",
   "mottosDetail2",
+  "leaveOneTabDescribe",
+  "pageClosingTitle",
+  "preview",
+  "noPage",
+  "default",
+  "newTabPage",
+  "pageDisplayedOnTimesUp",
 ];
 
 export { TRANS_KEYS };

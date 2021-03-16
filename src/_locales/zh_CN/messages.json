@@ -185,13 +185,34 @@
   "orUntilTimePoint": {
     "message": "或者，解锁页面直到"
   },
-  "blockingPages": {
-    "message": "阻拦页面设置"
+  "blockingOptionsTitle": {
+    "message": "页面拦截与关闭"
   },
   "mottosDetail1": {
     "message": "不一定是一句格言，可以是任何你想放的消息，脏话都行。"
   },
   "mottosDetail2": {
     "message": "文本长度上限为300字。"
+  },
+  "leaveOneTabDescribe": {
+    "message": "当所有标签页被关闭时，在顶层窗口留一个新标签页"
+  },
+  "pageClosingTitle": {
+    "message": "页面关闭选项"
+  },
+  "preview": {
+    "message": "预览"
+  },
+  "default": {
+    "message": "默认"
+  },
+  "newTabPage": {
+    "message": "新标签页"
+  },
+  "noPage": {
+    "message": "无页面"
+  },
+  "pageDisplayedOnTimesUp": {
+    "message": "倒计时结束时显示的页面"
   }
 }
