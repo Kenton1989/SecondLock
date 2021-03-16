@@ -1,5 +1,6 @@
 import { api } from "./api.js";
 import { CustomEventWrapper } from "./custom-event-wrapper.js";
+import { wait, unWait } from "./utility.js";
 
 /**
  * All valid options
@@ -132,17 +133,19 @@ class OneOption {
    *
    * @param {*} value the new value
    * @param {number} delay the delay in milliseconds
+   * @returns {Promise} a promise resolved after setting is done.
    */
   delayedSet(value, delay = 500) {
-    if (this._pendingHandle != undefined) {
-      window.clearTimeout(this._pendingHandle);
+    if (this._pendingWait != undefined) {
+      unWait(this._pendingWait);
     }
-
+    this._pendingWait = wait(delay);
+    
     let thisOption = this;
-    this._pendingHandle = window.setTimeout(() => {
+    return this._pendingWait.then(() => {
       thisOption.set(value);
-      delete thisOption._pendingHandle;
-    }, delay);
+      delete thisOption._pendingWait;
+    });
   }
 
   /**

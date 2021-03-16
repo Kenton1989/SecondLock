@@ -295,6 +295,30 @@ function queryTabsUnder(hostname, args = {}) {
   return api.tabs.query(args);
 }
 
+/**
+ * Create a promise that will be resolved after a given time length
+ * @param {number} ms the milliseconds to wait
+ * @returns {Promise} a promise resolve after a given time length
+ */
+function wait(ms) {
+  let prom = new Promise((resolve) => {
+    prom._timeoutHandle = setTimeout(() => {
+      delete prom._timeoutHandle;
+      resolve();
+    }, ms);
+  });
+  return prom;
+}
+
+/**
+ * Cancel a waiting promise created through function wait(ms)
+ * @param {Promise} prom promise created by wait()
+ */
+function unWait(prom) {
+  if (prom._timeoutHandle == undefined) return;
+  clearTimeout(prom._timeoutHandle);
+}
+
 export {
   getUrlOfTab,
   validHostname,
@@ -309,6 +333,8 @@ export {
   formatBytes,
   queryTabsUnder,
   closeTabs,
+  wait,
+  unWait,
   $,
   $$,
   $id,
