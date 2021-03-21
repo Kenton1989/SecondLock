@@ -44,7 +44,7 @@ class TabBlocker extends RemoteCallable {
    * @param {string} hostname the hostname to be blocked.
    * @param {(string|undefined)} blockingPageUrl the URL of the new page used for blocking,
    *     if it is undefined, a New Tab page will be created
-   * @returns {Promise}  The promise resolved with newly created tab
+   * @returns {Promise<api.tabs.Tab>}  The promise resolved with newly created tab
    *  after the blocking tab is created
    */
   blockPageWithNewTab(tab, hostname, blockingPageUrl) {
@@ -67,7 +67,7 @@ class TabBlocker extends RemoteCallable {
    * @param {String} newPageUrl the url of page used to override existing page.
    *  Assuming the page is dynamic page.
    * @param {*} param the param passed to dynamic page
-   * @returns {Promise} promise resolved with updated api.tabs.Tab object
+   * @returns {Promise<api.tabs.Tab>} promise resolved with updated tab object
    * after the tab is blocked
    */
   blockPageByOverwriting(tab, hostname, newPageUrl, param = {}) {
@@ -115,24 +115,23 @@ class TabBlocker extends RemoteCallable {
    * @param {string} hostname the hostname to be blocked
    * @param {boolean} leaveOneTab whether a new tab should be opened on the top window
    *  if all tabs on the top window are closed. The default value follows this.keepOneTab
-   * @returns {Promise} the promise resolved with undefined after all tabs are closed
+   * @returns {Promise<undefined>} the promise resolved with undefined after all tabs are closed
    */
-  blockAllByClosing(hostname, leaveOneTab = this.keepOneTab) {
+  async blockAllByClosing(hostname, leaveOneTab = this.keepOneTab) {
     let monitor = this._monitor;
+    let toClose = await queryTabsUnder(hostname);
 
-    return queryTabsUnder(hostname).then((toClose) => {
-      toClose = toClose.filter((tab) => monitor.isMonitoring(tab.url));
+    toClose = toClose.filter((tab) => monitor.isMonitoring(tab.url));
 
-      // temporary disable the monitor
-      // since frequent tabs switching may happen when multiple tabs are close
-      // which is likely to the trigger monitor unexpectedly
-      let oldActive = monitor.active;
-      monitor.active = false;
+    // temporary disable the monitor
+    // since frequent tabs switching may happen when multiple tabs are close
+    // which is likely to the trigger monitor unexpectedly
+    let oldActive = monitor.active;
+    monitor.active = false;
 
-      return closeTabs(toClose, leaveOneTab).then(
-        () => (monitor.active = oldActive)
-      );
-    });
+    await closeTabs(toClose, leaveOneTab)
+    
+    monitor.active = oldActive
   }
 
   /**

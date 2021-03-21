@@ -57,9 +57,9 @@ class RemoteCallable {
    * @param {String} name name of the remote object
    * @param {String} funcName name of the function to be called
    * @param {any[]} args parameter list
-   * @returns {Promise} the promise resolved with the value return by remote method
+   * @returns {Promise<*>} the promise resolved with the value return by remote method
    */
-  static call(name, funcName, args = []) {
+  static async call(name, funcName, args = []) {
     let remoteCallQuery = {
       remoteCallInfo: {
         targetName: name,
@@ -67,7 +67,8 @@ class RemoteCallable {
         args: args,
       },
     };
-    return api.runtime.sendMessage(remoteCallQuery).then((reply) => reply.ret);
+    let reply = await api.runtime.sendMessage(remoteCallQuery);
+    return reply.ret;
   }
 }
 

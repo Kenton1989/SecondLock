@@ -5,7 +5,6 @@ const RECEIVER_DOES_NOT_EXIST_MSG =
   "Could not establish connection. Receiving end does not exist.";
 
 class DynamicPageBackend extends RemoteCallable {
-
   constructor(name) {
     super(name);
 
@@ -42,9 +41,8 @@ class DynamicPageBackend extends RemoteCallable {
    */
   openOnExistingTab(url, pageArgs, tabId) {
     this._tabArgs.set(tabId, pageArgs);
-    let promise = api.tabs.update(tabId, { url: url });
-    console.debug(`Overwriting tab #${tabId} with URL:${url}.`);
-    return promise;
+    console.debug(`Overwriting tab #${tabId} wit URL:${url}.`);
+    return api.tabs.update(tabId, { url: url });
   }
 
   /**
@@ -57,34 +55,33 @@ class DynamicPageBackend extends RemoteCallable {
    * api.tabs.create(). The tabProperties.url will be ignored if it is defined.
    * @returns {Promise} The promise resolved with newly created tab after the tab is created
    */
-  openOnNewTab(url, pageArgs, tabProperties = {}) {
+  async openOnNewTab(url, pageArgs, tabProperties = {}) {
     if (url == undefined) delete tabProperties.url;
     else tabProperties.url = url;
 
-    // make private member visible in callback
-    let tabArgs = this._tabArgs;
-    let promise = api.tabs.create(tabProperties).then(function (tab) {
-      tabArgs.set(tab.id, pageArgs);
-      console.debug(`Created tab #${tab.id} opened with URL:${url}.`);
-      // Actively send arguments
-      api.tabs
-        .sendMessage(tab.id, { dynamicPageInitArgs: pageArgs })
-        .catch((reason) => {
-          if (reason.message == RECEIVER_DOES_NOT_EXIST_MSG) {
-            console.debug(`Argument sent too early. Tab #${tab.id} haven't setup.`);
-          } else {
-            throw reason;
-          }
-        });
-      console.debug("Sent argument: ", pageArgs);
-      return tab;
-    });
-    return promise;
+    let tab = await api.tabs.create(tabProperties);
+    this._tabArgs.set(tab.id, pageArgs);
+    console.debug(`Created tab #${tab.id} opened with URL:${url}.`);
+    
+    // Actively send arguments
+    api.tabs
+      .sendMessage(tab.id, { dynamicPageInitArgs: pageArgs })
+      .catch((reason) => {
+        if (reason.message == RECEIVER_DOES_NOT_EXIST_MSG) {
+          console.debug(
+            `Argument sent too early. Tab #${tab.id} haven't setup.`
+          );
+        } else {
+          throw reason;
+        }
+      });
+    console.debug("Sent argument: ", pageArgs);
+    return tab;
   }
 
   /**
    * Get the parameters bind to the given tab.
-   * 
+   *
    * @param {number} tabId the id of tab to get parameters
    * @return {*} the paramter bind to the tab
    */

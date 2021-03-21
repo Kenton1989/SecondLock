@@ -218,26 +218,23 @@ function formatBytes(bytes) {
 }
 
 // Aux function of function closeTabs(toClose, leaveOneTab)
-function closeTabIds(toClose, leaveOneTab = false) {
+async function closeTabIds(toClose, leaveOneTab = false) {
   if (leaveOneTab) {
     let toCloseSet = new Set(toClose);
-    return api.windows
-      .getLastFocused({ populate: true })
-      .then((topWindow) => {
-        for (const tab of topWindow.tabs) {
-          // if some tabs in the top window won't be closed
-          if (!toCloseSet.has(tab.id)) {
-            return;
-          }
-        }
+    let topWindow = await api.windows
+      .getLastFocused({ populate: true });
+    
+    for (const tab of topWindow.tabs) {
+      // if some tabs in the top window won't be closed
+      if (!toCloseSet.has(tab.id)) {
+        return;
+      }
+    }
 
-        // all tabs in the top window are to be closed
-        return api.tabs.create({ windowId: topWindow.id });
-      })
-      .then(() => api.tabs.remove(toClose));
-  } else {
-    return api.tabs.remove(toClose);
+    // all tabs in the top window are to be closed
+    await api.tabs.create({ windowId: topWindow.id });
   }
+  api.tabs.remove(toClose);
 }
 
 /**
@@ -246,10 +243,10 @@ function closeTabIds(toClose, leaveOneTab = false) {
  *    Mixture of tab objects and tab id is not allowed.
  * @param {boolean} leaveOneTab whether a new tab will be created on the top window
  *    if all tabs in the top window are closed
- * @returns {Promise} promise after all tabs are closed
+ * @returns {Promise<undefined>} promise after all tabs are closed
  */
-function closeTabs(toClose, leaveOneTab = false) {
-  if (toClose.length <= 0) return Promise.resolve(undefined);
+async function closeTabs(toClose, leaveOneTab = false) {
+  if (toClose.length <= 0) return;
 
   if (typeof toClose[0] == "number") {
     return closeTabIds(toClose, leaveOneTab);
@@ -258,22 +255,21 @@ function closeTabs(toClose, leaveOneTab = false) {
   let tabIds = toClose.map((tab) => tab.id);
 
   if (leaveOneTab) {
-    return api.windows
-      .getLastFocused({ populate: true })
-      .then((topWindow) => {
-        let closedOnTop = 0;
-        for (const tab of toClose) {
-          closedOnTop += tab.windowId == topWindow.id;
-        }
-        // create a new tab if all tabs on the top window will be closed.
-        if (closedOnTop == topWindow.tabs.length) {
-          return api.tabs.create({ windowId: topWindow.id });
-        }
-      })
-      .then(() => api.tabs.remove(tabIds));
-  } else {
-    return api.tabs.remove(tabIds);
+    let topWindow = await api.windows
+      .getLastFocused({ populate: true });
+
+    let closedOnTop = 0;
+    for (const tab of toClose) {
+      closedOnTop += tab.windowId == topWindow.id;
+    }
+
+    // create a new tab if all tabs on the top window will be closed.
+    if (closedOnTop == topWindow.tabs.length) {
+      await api.tabs.create({ windowId: topWindow.id });
+    }
   }
+
+  return api.tabs.remove(tabIds);
 }
 
 /**
@@ -281,7 +277,7 @@ function closeTabs(toClose, leaveOneTab = false) {
  *
  * @param {string} hostname the hostname to be query
  * @param {*} args other arguments to be passed to api.tabs.query
- * @returns {Promise} the promise resolved with query result
+ * @returns {Promise<api.tabs.Tab[]>} the promise resolved with query result
  */
 function queryTabsUnder(hostname, args = {}) {
   let pattern = hostname;
@@ -298,7 +294,7 @@ function queryTabsUnder(hostname, args = {}) {
 /**
  * Create a promise that will be resolved after a given time length
  * @param {number} ms the milliseconds to wait
- * @returns {Promise} a promise resolve after a given time length
+ * @returns {Promise<undefined>} a promise resolve after a given time length
  */
 function wait(ms) {
   let prom = new Promise((resolve) => {

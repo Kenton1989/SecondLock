@@ -116,15 +116,14 @@ class OneOption {
    *  regardless if the value is changed.
    *  NOTE: to check if the value is changed, use function doOnUpdated()
    */
-  set(value) {
+  async set(value) {
     if (Object.is(value, this._value)) {
-      return Promise.resolve(undefined);
+      return;
     }
     let val = {};
     val[this._storageKey] = value;
-    return api.storage.local.set(val).then(function () {
-      dirtyLocal = true;
-    });
+    await api.storage.local.set(val);
+    dirtyLocal = true;
   }
 
   /**
