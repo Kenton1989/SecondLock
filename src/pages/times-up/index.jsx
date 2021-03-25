@@ -1,11 +1,13 @@
 import React from 'react';
 import { render } from 'react-dom';
+import { $t } from '../../common/utility';
+import MainUI from "../components/main-ui"
 
-import Options from './Options';
 import './index.css';
 
 render(
-  <Options title={'settings'} />,
+  <MainUI title={$t("timesUpTitle")}>
+  </MainUI>,
   window.document.querySelector('#app-container')
 );
 

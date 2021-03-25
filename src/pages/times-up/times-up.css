@@ -1,8 +1,0 @@
-@import "../css/page-layout.css";
-@import "../css/typography.css";
-@import "../css/color.css";
-
-main {
-  text-align: center;
-  padding: 50px;
-}
