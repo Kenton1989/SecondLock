@@ -1,7 +1,11 @@
 {
     "i18n-ally.localesPaths": [
+        "./public/_locales",
         "public/_locales"
     ],
+    "i18n-ally.sourceLanguage": "en",
+    "i18n-ally.displayLanguage": "en",
+
     "files.exclude": {
         "**/.git": true,
         "**/.svn": true,

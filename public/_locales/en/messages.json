@@ -214,5 +214,14 @@
   },
   "pageDisplayedOnTimesUp": {
     "message": "Page Displayed on Times' Up"
+  },
+  "noBlockedDetect": {
+    "message": "No blocked host are detected."
+  },
+  "minimumUnlockTime": {
+    "message": "Minimum unlock time: "
+  },
+  "maximumUnlockTime": {
+    "message": "Maximum unlock time: "
   }
 }

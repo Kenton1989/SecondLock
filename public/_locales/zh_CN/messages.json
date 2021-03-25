@@ -214,5 +214,14 @@
   },
   "pageDisplayedOnTimesUp": {
     "message": "倒计时结束时显示的页面"
+  },
+  "noBlockedDetect": {
+    "message": "未检测到有页面被拦截"
+  },
+  "minimumUnlockTime": {
+    "message": "最短解锁时间："
+  },
+  "maximumUnlockTime": {
+    "message": "最长解锁时间："
   }
 }

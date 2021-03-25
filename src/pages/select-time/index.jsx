@@ -1,14 +1,12 @@
-import React from 'react';
-import { render } from 'react-dom';
-import { $t } from '../../common/utility';
-import MainUI from "../components/main-ui"
+import React, { useState } from "react";
+import { render } from "react-dom";
 
-import './index.css';
+import "./index.css";
+import DurationSelection from "./duration-selection";
 
 render(
-  <MainUI title={$t("durSelectTitle")}>
-  </MainUI>,
-  window.document.querySelector('#app-container')
+  <DurationSelection />,
+  window.document.querySelector("#app-container")
 );
 
 if (module.hot) module.hot.accept();

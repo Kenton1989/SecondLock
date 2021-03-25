@@ -6,38 +6,17 @@ export default class CountdownTimer extends React.Component {
     super(props);
 
     this.state = {
-      remain: undefined
+      remain: undefined,
     };
-    
-    if (props.endTime) {
-      let mSec = props.endTime - Date.now();
-      this.setState({ remain: mSec });
-      
-      if (mSec >= 100) {
-        let offset = (mSec % 1000) - 100;
-        if (offset < 50) offset += 1000;
-        
-        let thisComp = this;
-        window.setTimeout(function () {
-          let handle = window.setInterval(function () {
-            let now = Date.now();
-            if (now >= props.endTime) {
-              window.clearInterval(handle);
-              thisComp.setState({ remain: 0 });
-            } else {
-              thisComp.setState({ remain: props.endTime - now });
-            }
-          }, 1000);
-        }, offset);
-      }
-    }
   }
   render() {
+    console.debug("rendering counter", this.state);
     let display = "--:--:--";
 
-    if (this.state.remain !== undefined && this.state.remain >= 0) {
+    let remain = this.remainTime();
+    if (remain >= 0) {
       // format the rest time to HH:MM:SS format
-      display = new Date(this.state.remain).toISOString().substr(11, 8);
+      display = new Date(remain).toISOString().substr(11, 8);
     }
 
     return (
@@ -46,5 +25,40 @@ export default class CountdownTimer extends React.Component {
         <div className="remain-time">{display}</div>
       </div>
     );
+  }
+
+  remainTime() {
+    // no end time point is set
+    if (!this.props.endTime || this.props.endTime <= Date.now()) {
+      return -1;
+    }
+
+    // already set remain time
+    if (this.state.remain !== undefined) return this.state.remain;
+
+    // set up remain time and update every second
+    let mSec = this.props.endTime - Date.now();
+    
+    if (mSec >= 100) {
+
+      let offset = (mSec % 1000) - 100;
+      if (offset < 50) offset += 1000;
+      
+      console.log("initial offset:", offset);
+      
+      window.setTimeout(() => {
+        let handle = window.setInterval(() => {
+          let now = Date.now();
+          if (now >= this.props.endTime) {
+            window.clearInterval(handle);
+            this.setState({ remain: 0 });
+          } else {
+            this.setState({ remain: this.props.endTime - now });
+          }
+        }, 1000);
+      }, offset);
+    }
+
+    return mSec;
   }
 }

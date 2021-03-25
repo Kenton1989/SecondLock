@@ -8,7 +8,7 @@ main {
   text-align: center;
 }
 
-#buttons button {
+.button-list button {
   margin: 5px 5px;
 }
 
