@@ -10,5 +10,6 @@
         "**/.DS_Store": true,
         "node_modules": true,
         "build": true,
-    }
+    },
+    "editor.tabSize": 2
 }

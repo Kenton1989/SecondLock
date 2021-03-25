@@ -1,25 +1,68 @@
-import React from 'react';
-import { $t } from '../../common/utility';
-import './Popup.css';
+import React, { useState } from "react";
+import { api } from "../../common/api";
+import { RemoteCallable } from "../../common/remote-callable";
+import { $t } from "../../common/utility";
+import CountdownTimer from "../components/countdown-timer";
 
-const Popup = () => {
+let CurHostDisplay = (props) => {
+  let curHost = "example.com";
+  // try to parse the hostname
+  if (props.curUrl)
+    try {
+      curHost = new URL(props.curUrl).hostname;
+    } catch {
+      console.warn("Got invalid URL:", props.curUrl);
+    }
+
   return (
     <div>
-      <section id="page-info">
-        <p>{$t("currentHost")}</p>
-        <p id="current-host"></p>
-      </section>
-      <section>
-        <div id="timer-display">
-          <span>{$t("remainTime")}</span>
-          <div id="remain-time">--:--:--</div>
-        </div>
-        <button id="stop-timer-btn" style={{ display: "none" }}>{$t("stopTimingClose")}</button>
-      </section>
+      <p>{$t("currentHost")}</p>
+      <p id="current-host">{curHost}</p>
+    </div>
+  );
+};
+
+const Popup = () => {
+  let [curUrl, setCurUrl] = useState("");
+  let [pageState, setPageState] = useState({
+    isMonitored: false,
+    monitoredHost: undefined,
+    isUnlocked: undefined,
+    unlockEndTime: undefined,
+    needCalmDown: undefined,
+    calmDownEndTime: undefined,
+  });
+
+  // get URL of current page
+  api.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
+    let url = tabs[0].url;
+    setCurUrl(url);
+    RemoteCallable.call("background-aux", "queryPageState", [url]).then(
+      setPageState
+    );
+  });
+
+  let stopAndClose = () =>
+    pageState.isMonitored &&
+    RemoteCallable.call("background-aux", "stopTimingAndClose", [
+      pageState.monitoredHost,
+    ]).then(window.close);
+
+  return (
+    <div>
+      <CurHostDisplay curUrl={curUrl} />
+      <CountdownTimer endTime={pageState.unlockEndTime} />
+      <button
+        style={{ display: pageState.isMonitored ? "inline-block" : "none" }}
+        onClick={stopAndClose}
+      >
+        {$t("stopTimingClose")}
+      </button>
       <section id="links-div">
-        <a id="go-options" href="./options.html">{$t("optionsTitle")}</a>
+        <a href="./options.html" onClick={() => api.runtime.openOptionsPage()}>
+          {$t("optionsTitle")}
+        </a>
       </section>
-      <script type="module" src="js/popup-page.js"></script>
     </div>
   );
 };

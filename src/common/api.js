@@ -11,7 +11,7 @@ try {
   console.debug("Fail to detect Firefox API");
 }
 
-if (api == undefined) {
+if (api === undefined) {
   try {
     api = chrome;
     console.debug("Chrome API detected.");
@@ -22,7 +22,7 @@ if (api == undefined) {
   }
 }
 
-if (api == undefined) {
+if (api === undefined) {
   throw Error("can not guess the API");
 }
 

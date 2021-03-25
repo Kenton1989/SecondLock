@@ -16,14 +16,14 @@ body {
   margin-bottom: 5px;
 }
 
-#timer-display {
+.countdown-timer {
   border-radius: 5px;
   background-color: black;
   color: white;
   padding: 3px 8px;
 }
 
-#remain-time {
+.remain-time {
   font-size: xx-large;
   font-family:'Courier New', Courier, monospace;
   font-weight: bold;

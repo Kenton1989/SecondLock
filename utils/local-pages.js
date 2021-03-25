@@ -62,7 +62,7 @@ function insertLocalPages(webpackConfig) {
 
   // insert configs
   webpackConfig.entry = Object.assign(webpackConfig.entry, toAdd.entry);
-  webpackConfig.plugins.push(...toAdd.plugins);
+  webpackConfig.plugins = [...toAdd.plugins, ...webpackConfig.plugins];
 }
 
 module.exports = {

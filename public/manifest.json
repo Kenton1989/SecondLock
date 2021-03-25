@@ -10,7 +10,7 @@
   "permissions": ["tabs", "storage", "unlimitedStorage"],
 
   "background": {
-    "script": "background.js"
+    "scripts": ["background.bundle.js"]
   },
 
   "options_ui": {
