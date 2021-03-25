@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
 
-  "name": "SecondLock",
+  "name": "SecondLock - React",
   "version": "0.3.0",
   "description": "Lock Every Second for Mindful Usage.",
 
@@ -10,8 +10,7 @@
   "permissions": ["tabs", "storage", "unlimitedStorage"],
 
   "background": {
-    "page": "background.html",
-    "persistent": false
+    "script": "background.js"
   },
 
   "options_ui": {

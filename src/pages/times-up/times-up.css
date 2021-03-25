@@ -1,6 +1,6 @@
-@import "page-layout.css";
-@import "typography.css";
-@import "color.css";
+@import "../css/page-layout.css";
+@import "../css/typography.css";
+@import "../css/color.css";
 
 main {
   text-align: center;

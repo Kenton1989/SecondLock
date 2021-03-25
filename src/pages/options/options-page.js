@@ -2,10 +2,13 @@
  * This is the js for options.html
  */
 import { api } from "../../common/api.js"
-import "./common-page.js";
-import { HostnameSet } from "./hostname-set.js";
-import { setupSectionNav } from "./nav-setup.js";
-import { ALL_OPTION_NAME, OptionCollection } from "./options-manager.js";
+import "../js/common-page.js";
+import { HostnameSet } from "../../common/hostname-set.js";
+import { setupSectionNav } from "../js/nav-setup.js";
+import {
+  ALL_OPTION_NAME,
+  OptionCollection,
+} from "../../common/options-manager.js";
 import {
   reformatHostname,
   validHostname,

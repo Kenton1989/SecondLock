@@ -5,7 +5,7 @@ import { api } from "../../common/api.js"
 import "../js/common-page.js";
 import { RemoteCallable } from "../../common/remote-callable.js"
 import { generalTranslate } from "./translation.js";
-import { closeTabs, getUrlOfTab, queryTabsUnder, $id } from "../../common/utility.js";
+import { getUrlOfTab, $id } from "../../common/utility.js";
 
 generalTranslate();
 
