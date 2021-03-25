@@ -11,7 +11,8 @@ export default class CountdownTimer extends React.Component {
     
     if (props.endTime) {
       let mSec = props.endTime - Date.now();
-      this.state.remain = mSec;
+      this.setState({ remain: mSec });
+      
       if (mSec >= 100) {
         let offset = (mSec % 1000) - 100;
         if (offset < 50) offset += 1000;
@@ -19,11 +20,12 @@ export default class CountdownTimer extends React.Component {
         let thisComp = this;
         window.setTimeout(function () {
           let handle = window.setInterval(function () {
-            if (Date.now() > props.endTime) {
+            let now = Date.now();
+            if (now >= props.endTime) {
               window.clearInterval(handle);
               thisComp.setState({ remain: 0 });
             } else {
-              thisComp.setState({ remain: props.endTime - Date.now() });
+              thisComp.setState({ remain: props.endTime - now });
             }
           }, 1000);
         }, offset);
