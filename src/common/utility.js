@@ -1,4 +1,4 @@
-import { api } from "./api.js";
+import { api } from "../common/api.js"
 
 // Short name for selectors
 function $(selector, element = document) {

@@ -1,13 +1,13 @@
-import { api } from "./api.js.js.js.js.js";
-import { BrowsingPageMonitor } from "../../../background/browsing-page-monitor.js";
-import { DynamicPageBackend } from "../../../background/dynamic-page-backend.js";
-import { RemoteCallable } from "./remote-callable.js.js.js.js.js";
+import { api } from "../common/api.js"
+import { BrowsingPageMonitor } from "./browsing-page-monitor.js";
+import { DynamicPageBackend } from "./dynamic-page-backend.js";
+import { RemoteCallable } from "../common/remote-callable.js"
 import {
   closeCurrentTab,
   queryTabsUnder,
   validHostname,
   closeTabs,
-} from "./utility.js.js.js.js.js";
+} from "../common/utility.js";
 
 const NO_RESPONSE_MSG =
   "The message port closed before a response was received.";

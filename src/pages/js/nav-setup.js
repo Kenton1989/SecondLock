@@ -1,4 +1,4 @@
-import { blinkElement, $id, $tag, $cls } from "./utility.js";
+import { blinkElement, $id, $tag, $cls } from "../../common/utility.js";
 
 /**
  * Setup the navigation list of the "section" elements in the current html page.

@@ -1,7 +1,7 @@
 /**
  * This is the js for options.html
  */
-import { api } from "./api.js";
+import { api } from "../../common/api.js"
 import "./common-page.js";
 import { HostnameSet } from "./hostname-set.js";
 import { setupSectionNav } from "./nav-setup.js";
@@ -17,7 +17,7 @@ import {
   $cls,
   $id,
   $t,
-} from "/js/utility.js";
+} from "../../common/utility.js";
 
 let options = new OptionCollection(...ALL_OPTION_NAME);
 

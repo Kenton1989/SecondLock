@@ -1,7 +1,7 @@
-import { api } from "./api.js.js.js.js";
-import { CustomEventWrapper } from "./custom-event-wrapper.js";
-import { HostnameSet } from "./hostname-set.js";
-import { RemoteCallable } from "./remote-callable.js.js.js.js";
+import { api } from "../common/api.js"
+import { CustomEventWrapper } from "../common/custom-event-wrapper.js";
+import { HostnameSet } from "../common/hostname-set.js";
+import { RemoteCallable } from "../common/remote-callable.js"
 
 // Different hostname type
 const HOST_TYPE = {

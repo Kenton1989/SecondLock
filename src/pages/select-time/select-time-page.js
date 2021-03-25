@@ -1,11 +1,11 @@
 /**
  * This is the js for select-time.html
  */
-import { api } from "./api.js";
+import { api } from "../../common/api.js"
 import "./common-page.js";
 import { dynamicInit } from "./dynamic-page.js";
 import { OptionCollection } from "./options-manager.js";
-import { RemoteCallable } from "./remote-callable.js";
+import { RemoteCallable } from "../../common/remote-callable.js"
 import { TabBlocker } from "./tab-blocker.js";
 import {
   closeCurrentTab,
@@ -13,7 +13,7 @@ import {
   showTxt,
   $id,
   $cls,
-} from "./utility.js";
+} from "../../common/utility.js";
 
 let minUnit = api.i18n.getMessage("min");
 let minUnits = api.i18n.getMessage("mins");

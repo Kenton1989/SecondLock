@@ -1,4 +1,4 @@
-import { api } from "./api.js.js.js";
+import { api } from "../../common/api.js"
 
 // Buffered arguments
 let _args = undefined;

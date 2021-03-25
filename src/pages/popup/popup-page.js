@@ -1,11 +1,11 @@
 /**
  * This is the js for popup.html
  */
-import { api } from "./api.js";
-import "./common-page.js";
-import { RemoteCallable } from "./remote-callable.js";
+import { api } from "../../common/api.js"
+import "../js/common-page.js";
+import { RemoteCallable } from "../../common/remote-callable.js"
 import { generalTranslate } from "./translation.js";
-import { closeTabs, getUrlOfTab, queryTabsUnder, $id } from "./utility.js";
+import { closeTabs, getUrlOfTab, queryTabsUnder, $id } from "../../common/utility.js";
 
 generalTranslate();
 
