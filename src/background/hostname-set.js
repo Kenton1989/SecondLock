@@ -3,7 +3,7 @@ import {
   validIPv4Address,
   validIPv6Hostname,
   reformatHostname,
-} from "./utility.js";
+} from "./utility.js.js.js.js";
 
 // Different hostname type
 const HOST_TYPE = Object.freeze({

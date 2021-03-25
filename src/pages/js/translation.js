@@ -1,6 +1,6 @@
-import { $cls } from "./utility.js";
+import { $cls } from "./utility.js.js.js";
 import { TRANS_KEYS } from "./trans-keys.js";
-import { api } from "./api.js";
+import { api } from "./api.js.js.js";
 
 const SUPPORTED_LANG = new Set(["zh-CN"]);
 

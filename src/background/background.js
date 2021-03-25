@@ -5,11 +5,11 @@ import {
   ALL_OPTION_NAME,
   DEFAULT_OPTIONS,
   OptionCollection,
-} from "./options-manager.js";
-import { RemoteCallable } from "./remote-callable.js";
-import { TabBlocker } from "./tab-blocker.js";
-import { api } from "./api.js";
-import { closeTabs } from "./utility.js";
+} from "../common/options-manager.js";
+import { RemoteCallable } from "../../second-lock-2021-03-25_21-23-41/js/remote-callable.js";
+import { TabBlocker } from "../pages/common/js/tab-blocker.js";
+import { api } from "./api.js.js.js.js";
+import { closeTabs } from "./utility.js.js.js.js";
 
 let options = new OptionCollection(...ALL_OPTION_NAME);
 
