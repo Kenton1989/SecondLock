@@ -47,7 +47,7 @@ function setup() {
 
 function setArgs(args) {
   // Already buffered
-  if (_args != undefined) {
+  if (_args !== undefined) {
     return;
   }
   // Buffering the argument
@@ -67,8 +67,8 @@ function setArgs(args) {
 function dynamicInit(callback) {
   setup();
   // execute the callback directly if the arguments is buffered.
-  // otherwise, register for the buffering events.
-  if (_args != undefined) {
+  // otherwise, register for the buffering events. 
+  if (_args !== undefined) {
     console.debug("using buffered arg.");
     callback(_args);
   } else {
