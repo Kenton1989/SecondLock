@@ -1,0 +1,17 @@
+@import "../css/page-layout.css";
+@import "../css/typography.css";
+@import "../css/color.css";
+
+
+main {
+  padding: 50px;
+  text-align: center;
+}
+
+#buttons button {
+  margin: 5px 5px;
+}
+
+#other-length {
+  margin: 10px 0;
+}
