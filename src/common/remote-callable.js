@@ -25,7 +25,7 @@ class RemoteCallable {
     api.runtime.onMessage.addListener(function (message, sender, sendResponse) {
       if (message.remoteCallInfo) {
         let callInfo = message.remoteCallInfo;
-        if (callInfo.targetName != obj.name) return;
+        if (callInfo.targetName !== obj.name) return;
 
         let funcName = callInfo.funcName;
         let args = callInfo.args;

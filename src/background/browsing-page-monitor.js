@@ -47,7 +47,7 @@ class BrowsingPageMonitor extends RemoteCallable {
       console.debug(`User are browsing: ${tab.url}`);
 
       let monitoredHost = monitor.findMonitoredSuffix(tab.url);
-      if (monitoredHost == undefined) return;
+      if (monitoredHost === undefined) return;
 
       // Wait for a while, to allow the browser to complete tab switching
       // to reduce the effect of a weird bug

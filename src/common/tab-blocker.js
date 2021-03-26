@@ -143,7 +143,7 @@ class TabBlocker extends RemoteCallable {
       })
       .catch(function (reason) {
         // this method does not expect any response
-        if (reason.message != NO_RESPONSE_MSG) {
+        if (reason.message !== NO_RESPONSE_MSG) {
           throw reason;
         }
       });
@@ -160,7 +160,7 @@ class TabBlocker extends RemoteCallable {
     api.runtime.onMessage.addListener(function (message) {
       if (message.doNotBlockHost) {
         let unlockedHost = message.doNotBlockHost;
-        if (unlockedHost == hostname) closeCurrentTab();
+        if (unlockedHost === hostname) closeCurrentTab();
       }
     });
   }

@@ -78,7 +78,7 @@ class OneOption {
 
     if (autoUpdate) {
       api.storage.onChanged.addListener(function (changes, area) {
-        if (area != "local") return;
+        if (area !== "local") return;
         if (changes[storageKey]) {
           thisOption.setCached(changes[storageKey].newValue);
         }
@@ -135,7 +135,7 @@ class OneOption {
    * @returns {Promise} a promise resolved after setting is done.
    */
   delayedSet(value, delay = 500) {
-    if (this._pendingWait != undefined) {
+    if (this._pendingWait !== undefined) {
       unWait(this._pendingWait);
     }
     this._pendingWait = wait(delay);
@@ -150,7 +150,7 @@ class OneOption {
   /**
    * Set callback when cached value is updated.
    *
-   * This function can be used as a getter. In this case, if this.getCached() != undefined,
+   * This function can be used as a getter. In this case, if this.getCached() !== undefined,
    * the callback be called immediately with parameters: (this.getCached(), undefined).
    *
    * NOTE: when value in the storage is updated, cached value will change accordingly.
@@ -163,7 +163,7 @@ class OneOption {
    *    immediately.
    */
   doOnUpdated(callback, asGetter = true) {
-    if (this._value != undefined && asGetter) callback(this._value, undefined);
+    if (this._value !== undefined && asGetter) callback(this._value, undefined);
     this._onUpdatedEvent.addListener(callback);
   }
 }
@@ -207,7 +207,7 @@ class OptionCollection {
 
     // listen to storage changes in bulk
     api.storage.onChanged.addListener(function (changes, area) {
-      if (area != "local") return;
+      if (area !== "local") return;
       for (const changedKey of Object.keys(changes)) {
         let option = thisOptions[changedKey];
         if (option) {

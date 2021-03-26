@@ -56,7 +56,7 @@ class HostnameSet {
     if (!result) return undefined;
 
     let actualHost = result[0];
-    if (actualHost[0] == ".") {
+    if (actualHost[0] === ".") {
       actualHost = actualHost.slice(1);
     }
 
@@ -206,7 +206,7 @@ class HostnameSet {
     let pattern = "($^)";
 
     for (const pair of this._hostMap) {
-      if (pair[1] == HOST_TYPE.NORMAL) {
+      if (pair[1] === HOST_TYPE.NORMAL) {
         // Match suffix
         pattern += `|((^|\\.)(${pair[0]})$)`;
       } else {

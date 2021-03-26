@@ -149,7 +149,7 @@ function setUpHostListDiv(hosts, hostListDiv, onSaveHostList = function () {}) {
   addHostBtn.onclick = enterHost;
   userInput.onkeydown = function (e) {
     // Shortcut for entering
-    if (e.key == "Enter") enterHost();
+    if (e.key === "Enter") enterHost();
   };
 
   // prepare for saving list
@@ -239,7 +239,7 @@ options.notificationOn.doOnUpdated(function (notiOn) {});
     // clear unsaved tag
     defDurChoiceTitle.classList.remove("unsaved");
 
-    if (str == lastSaveDefDur.toString()) {
+    if (str === lastSaveDefDur.toString()) {
       console.log("list is not changed. Skip saving.");
       return;
     }
@@ -247,7 +247,7 @@ options.notificationOn.doOnUpdated(function (notiOn) {});
     let sList = str.split(",");
     let inputArr = sList.map((s) => parseInt(s));
     inputArr = inputArr.filter((val) => {
-      return typeof val == "number" && val >= MIN_DUR_MIN && val <= MAX_DUR_MIN;
+      return typeof val === "number" && val >= MIN_DUR_MIN && val <= MAX_DUR_MIN;
     });
     let res = new Set(inputArr);
     let list = [...res].slice(0, MAX_DUR_CNT);
@@ -256,7 +256,7 @@ options.notificationOn.doOnUpdated(function (notiOn) {});
     // set without checking dirtiness to clear potential invalid values
     loadDefaultDurations(list);
 
-    if (list.toString() == lastSaveDefDur.toString()) {
+    if (list.toString() === lastSaveDefDur.toString()) {
       console.log("list is not changed. Skip saving.");
       return;
     }
@@ -278,7 +278,7 @@ options.notificationOn.doOnUpdated(function (notiOn) {});
   };
 
   defaultDurInput.onkeydown = function (keyInfo) {
-    if (keyInfo.key == "Enter") saveDefaultDuration(defaultDurInput.value);
+    if (keyInfo.key === "Enter") saveDefaultDuration(defaultDurInput.value);
   };
 }
 
@@ -289,7 +289,7 @@ options.notificationOn.doOnUpdated(function (notiOn) {});
   let timesUpPagePreview = $id("times-up-page-preview");
 
   function updateDivDisplay() {
-    let isDefault = pageOnTimesUp.value == "default";
+    let isDefault = pageOnTimesUp.value === "default";
     defTimesUpPageDiv.style.display = isDefault ? "block" : "none";
     timesUpPagePreview.style.display = isDefault ? "inline" : "none";
   }

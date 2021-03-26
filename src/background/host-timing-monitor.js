@@ -85,7 +85,7 @@ class HostTimingMonitor extends RemoteCallable {
    */
   restTime(hostname) {
     let endTimePoint = this.endTimePoint(hostname);
-    if (endTimePoint == undefined) return undefined;
+    if (endTimePoint === undefined) return undefined;
     return endTimePoint - Date.now();
   }
 
@@ -97,7 +97,7 @@ class HostTimingMonitor extends RemoteCallable {
    */
   endTimePoint(hostname) {
     let info = this._timingInfoMap.get(hostname);
-    if (info == undefined) return undefined;
+    if (info === undefined) return undefined;
     return info.endTimePt;
   }
 

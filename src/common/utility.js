@@ -176,7 +176,7 @@ function blinkElement(element, times = 3, period = 200, display = true) {
 
   // Clear existing timeout managing blinking of this element
   let existing = blinkTimeoutMap.get(element);
-  if (existing != undefined) window.clearTimeout(existing);
+  if (existing !== undefined) window.clearTimeout(existing);
 
   let timeoutId = window.setTimeout(function () {
     element.style.opacity = 0;
@@ -248,7 +248,7 @@ async function closeTabIds(toClose, leaveOneTab = false) {
 async function closeTabs(toClose, leaveOneTab = false) {
   if (toClose.length <= 0) return;
 
-  if (typeof toClose[0] == "number") {
+  if (typeof toClose[0] === "number") {
     return closeTabIds(toClose, leaveOneTab);
   }
 
@@ -260,11 +260,11 @@ async function closeTabs(toClose, leaveOneTab = false) {
 
     let closedOnTop = 0;
     for (const tab of toClose) {
-      closedOnTop += tab.windowId == topWindow.id;
+      closedOnTop += tab.windowId === topWindow.id;
     }
 
     // create a new tab if all tabs on the top window will be closed.
-    if (closedOnTop == topWindow.tabs.length) {
+    if (closedOnTop === topWindow.tabs.length) {
       await api.tabs.create({ windowId: topWindow.id });
     }
   }
