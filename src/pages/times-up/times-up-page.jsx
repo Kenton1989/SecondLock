@@ -25,7 +25,6 @@ export default class TimesUpPage extends Component {
 
   componentDidMount() {
     dynamicInit((args) => {
-      this.blockedTabId = args.blockedTabId;
       TabBlocker.autoUnblock(args.blockedHost);
       this.setState({ blockedHost: args.blockedHost });
     });
