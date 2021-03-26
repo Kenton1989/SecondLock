@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import MainUI from "../components/main-ui";
-import { $t, asyncAlert, closeCurrentTab } from "../../common/utility";
+import React from "react";
+import { $t, asyncAlert } from "../../common/utility";
 import { api } from "../../common/api";
 import { dynamicInit } from "../js/dynamic-page";
 import { OptionCollection } from "../../common/options-manager";
@@ -72,14 +71,16 @@ export default class DurationSelection extends React.Component {
       this.setState({ blockedHost: args.blockedHost });
     });
   }
-  
+
   render() {
     let displayedHost = this.state.blockedHost || "example.com";
     return (
-      <MainUI title={$t("durSelectTitle")}>
+      <div >
         <h1>{$t("durSelectHint")}</h1>
         <h2 className="blocked-link">{displayedHost}</h2>
-        <DefaultDurButtonList doOnSelect={this.unlockMs} />
+        <DefaultDurButtonList
+          doOnSelect={(val) => this.unlockMs(val * MINUTE)}
+        />
         <div id="other-length">
           <EnterableInput
             type="number"
@@ -105,7 +106,7 @@ export default class DurationSelection extends React.Component {
           <button onClick={this.enterEndTime}>GO</button>
         </div>
         <button onClick={this.closeRelevant}>{$t("closeAllRelated")}</button>
-      </MainUI>
+      </div>
     );
   }
 

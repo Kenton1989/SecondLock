@@ -60,12 +60,9 @@ class Popup extends React.Component {
       <div>
         <CurHostDisplay curUrl={this.state.curUrl} />
         <CountdownTimer endTime={this.state.pageState.unlockEndTime} />
-        <button
-          style={{ display: this.state.pageState.isMonitored ? "inline-block" : "none" }}
-          onClick={this.stopAndClose}
-        >
-          {$t("stopTimingClose")}
-        </button>
+        {this.state.pageState.isMonitored && (
+          <button onClick={this.stopAndClose}>{$t("stopTimingClose")}</button>
+        )}
         <section id="links-div">
           <a
             href="./options.html"

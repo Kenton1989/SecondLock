@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import { render } from "react-dom";
+import { $t } from "../../common/utility";
 
 import "./index.css";
 import DurationSelection from "./duration-selection";
+import MainUI from "../components/main-ui";
 
 render(
-  <DurationSelection />,
+  <MainUI title={$t("durSelectTitle")}>
+    <DurationSelection />
+  </MainUI>,
   window.document.querySelector("#app-container")
 );
 

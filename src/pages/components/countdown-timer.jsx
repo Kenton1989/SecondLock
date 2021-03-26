@@ -8,7 +8,10 @@ export default class CountdownTimer extends React.Component {
     this.state = {
       remain: undefined,
     };
+
+    this.timerHandle = undefined;
   }
+
   render() {
     console.debug("rendering counter", this.state);
     let display = "--:--:--";
@@ -27,6 +30,12 @@ export default class CountdownTimer extends React.Component {
     );
   }
 
+  componentWillUnmount() {
+    if (this.timerHandle !== undefined) {
+      window.clearInterval(this.timerHandle);
+    }
+  }
+
   remainTime() {
     // no end time point is set
     if (!this.props.endTime || this.props.endTime <= Date.now()) {
@@ -38,25 +47,18 @@ export default class CountdownTimer extends React.Component {
 
     // set up remain time and update every second
     let mSec = this.props.endTime - Date.now();
-    
-    if (mSec >= 100) {
 
-      let offset = (mSec % 1000) - 100;
-      if (offset < 50) offset += 1000;
-      
-      console.log("initial offset:", offset);
-      
-      window.setTimeout(() => {
-        let handle = window.setInterval(() => {
-          let now = Date.now();
-          if (now >= this.props.endTime) {
-            window.clearInterval(handle);
-            this.setState({ remain: 0 });
-          } else {
-            this.setState({ remain: this.props.endTime - now });
-          }
-        }, 1000);
-      }, offset);
+    if (mSec >= 1000) {
+      this.timerHandle = window.setInterval(() => {
+        let now = Date.now();
+        if (now >= this.props.endTime) {
+          window.clearInterval(this.timerHandle);
+          this.timerHandle = undefined;
+          this.setState({ remain: 0 });
+        } else {
+          this.setState({ remain: this.props.endTime - now });
+        }
+      }, 1000);
     }
 
     return mSec;
