@@ -1,14 +1,8 @@
-import React from 'react';
-import { render } from 'react-dom';
-import { $t } from '../../common/utility';
-import MainUI from "../components/main-ui"
+import React from "react";
+import { render } from "react-dom";
+import Options from "./options";
+import "./index.css";
 
-import './index.css';
-
-render(
-  <MainUI title={$t("optionsTitle")}>
-  </MainUI>,
-  window.document.querySelector('#app-container')
-);
+render(<Options />, window.document.querySelector("#app-container"));
 
 if (module.hot) module.hot.accept();

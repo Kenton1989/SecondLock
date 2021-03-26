@@ -12,5 +12,6 @@
     "build": true
   },
   "editor.tabSize": 2,
-  "cmake.configureOnOpen": false
+  "cmake.configureOnOpen": false,
+  "i18n-ally.keystyle": "nested"
 }

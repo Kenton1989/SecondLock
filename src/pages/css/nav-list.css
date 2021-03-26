@@ -16,37 +16,28 @@ aside * {
   margin: 0px;
 }
 
-#nav-list {
+.nav-list {
   position: sticky;
   top: 0;
   right: 0;
   padding: 0px;
 }
 
-#nav-list a {
+.nav-list a {
   color: black;
   text-decoration: none;
 }
 
-#nav-list li {
-  display: block;
-}
-
-.nav-item {
-  padding: 0px;
-}
-
-.nav-item a {
+.nav-list li {
   display: block;
   padding: 10px;
 }
 
-.nav-item a:hover {
+.nav-list li:hover{
   background-color: var(--side-bar-dark);
 }
 
-.nav-item a:active {
+.nav-list li:active,
+.nav-list li.highlight  {
   background-color: var(--side-bar-light);
 }
-
-

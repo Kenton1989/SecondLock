@@ -105,7 +105,7 @@
     "message": "Local Storage Used:"
   },
   "cloudStorageUsed": {
-    "message": "Cloud Storage Used:"
+    "message": "Cloud Storage Used: "
   },
   "acknowledgement": {
     "message": "Acknowledgement"
