@@ -1,5 +1,5 @@
 import { CustomEventWrapper } from "../common/custom-event-wrapper";
-import { RemoteCallable } from "../common/remote-callable"
+import RemoteCallable from "../common/remote-callable"
 
 const TIMES_UP_EVENT_KEY = "timing-monitor-times-up";
 

@@ -3,7 +3,7 @@
  */
 import { api } from "../../common/api"
 import "../js/common-page";
-import { HostnameSet } from "../../common/hostname-set";
+import HostnameSet from "../../common/hostname-set";
 import { setupSectionNav } from "../js/nav-setup";
 import {
   ALL_OPTION_NAME,

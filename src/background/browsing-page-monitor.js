@@ -1,6 +1,6 @@
 import { CustomEventWrapper } from "../common/custom-event-wrapper";
-import { HostnameSet } from "../common/hostname-set";
-import { RemoteCallable } from "../common/remote-callable";
+import HostnameSet from "../common/hostname-set";
+import RemoteCallable from "../common/remote-callable";
 import onBrowsingPageChanged from "../common/browsing-page-change-event";
 
 // Different hostname type

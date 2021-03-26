@@ -3,7 +3,7 @@ import { $t, asyncAlert } from "../../common/utility";
 import { api } from "../../common/api";
 import { dynamicInit } from "../js/dynamic-page";
 import { OptionCollection } from "../../common/options-manager";
-import { RemoteCallable } from "../../common/remote-callable";
+import RemoteCallable from "../../common/remote-callable";
 
 import { TabBlocker } from "../../common/tab-blocker";
 import EnterableInput from "../components/enterable-input";

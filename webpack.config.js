@@ -136,9 +136,7 @@ if (env.NODE_ENV === 'development') {
   options.optimization = {
     minimize: true,
     minimizer: [
-      new TerserPlugin({
-        extractComments: false,
-      }),
+      new TerserPlugin({}),
     ],
   };
 }

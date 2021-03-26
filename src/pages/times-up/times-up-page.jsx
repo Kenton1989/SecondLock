@@ -4,7 +4,7 @@ import MainUI from "../components/main-ui";
 import { OptionCollection } from "../../common/options-manager";
 import { dynamicInit } from "../js/dynamic-page";
 import { TabBlocker } from "../../common/tab-blocker";
-import { RemoteCallable } from "../../common/remote-callable";
+import RemoteCallable from "../../common/remote-callable";
 
 let options = new OptionCollection("mottos");
 

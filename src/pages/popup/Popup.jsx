@@ -1,6 +1,6 @@
 import React from "react";
 import { api, apiName } from "../../common/api";
-import { RemoteCallable } from "../../common/remote-callable";
+import RemoteCallable from "../../common/remote-callable";
 import { $t } from "../../common/utility";
 import CountdownTimer from "../components/countdown-timer";
 

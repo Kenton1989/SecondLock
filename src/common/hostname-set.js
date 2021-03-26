@@ -219,4 +219,4 @@ class HostnameSet {
   }
 }
 
-export { HostnameSet };
+export default HostnameSet;

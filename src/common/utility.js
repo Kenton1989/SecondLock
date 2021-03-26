@@ -42,7 +42,7 @@ function getUrlOfTab(tab) {
 }
 
 // Pattern used to match a hostname.
-const kHostnamePattern = /^([a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?\.)*[a-z][a-z0-9]{1,62}$/i;
+const kHostnamePattern = /^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)*[a-z][a-z0-9]{1,62}$/i;
 /**
  * Check if the given string is a valid hostname
  *
@@ -136,17 +136,32 @@ function closeCurrentTab() {
   });
 }
 
-const HOSTNAME_CHARS = /^[a-z0-9:\-\.\[\]]*$/i;
+const HOSTNAME_CHARS = /^[a-z0-9:\-.[\]]*$/i;
 /**
  * Reformat a hostname into what chrome would like to display.
  * - lowercase hostname
  * - for ip hostname, omit redundancy
+ * 
+ * For strict format checking, no character will be ignore or added
+ * during format checking.
+ * 
+ * For loose (non-strict) format checking:
+ * - heading and tailing space will be ignore
+ * - IPv6 address will be wrap with bracket automatically
  *
  * @param {string} hostname a hostname
+ * @param {boolean} strict if the format checking is strict
  * @returns {(string|undefined)} the formatted hostname, or
  *  undefined if the input host name is invalid
  */
-function reformatHostname(hostname) {
+function reformatHostname(hostname, strict = true) {
+  
+  if (!strict) {
+    hostname = hostname.trim();
+    if (validIPv6Address(hostname))
+      hostname = `[${hostname}]`
+  }
+
   if (!HOSTNAME_CHARS.test(hostname)) return undefined;
   let url = undefined;
   try {

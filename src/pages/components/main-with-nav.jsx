@@ -1,7 +1,6 @@
 import React from "react";
 import MainUI from "./main-ui";
 
-import "../css/nav-list.css";
 import { $t } from "../../common/utility";
 
 class MainWithNav extends React.Component {

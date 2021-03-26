@@ -72,11 +72,4 @@ class RemoteCallable {
   }
 }
 
-/**
- * equivalent function to RemoteCallable.call
- */
-function remoteCall(name, funcName, args = []) {
-  return RemoteCallable.call(name, funcName, args);
-}
-
-export { RemoteCallable, remoteCall };
+export default RemoteCallable;

@@ -1,5 +1,5 @@
 import { api } from "./api";
-import { RemoteCallable } from "./remote-callable";
+import RemoteCallable from "./remote-callable";
 import {
   closeCurrentTab,
   queryTabsUnder,

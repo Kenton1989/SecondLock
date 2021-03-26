@@ -13,5 +13,6 @@
   },
   "editor.tabSize": 2,
   "cmake.configureOnOpen": false,
-  "i18n-ally.keystyle": "nested"
+  "i18n-ally.keystyle": "nested",
+  // "javascript.validate.enable": false,
 }

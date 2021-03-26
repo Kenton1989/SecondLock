@@ -6,7 +6,7 @@ import {
   DEFAULT_OPTIONS,
   OptionCollection,
 } from "../common/options-manager.js";
-import { RemoteCallable } from "../common/remote-callable";
+import RemoteCallable from "../common/remote-callable";
 import { TabBlocker } from "../common/tab-blocker";
 import { api } from "../common/api";
 import { closeTabs } from "../common/utility";

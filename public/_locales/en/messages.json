@@ -177,7 +177,7 @@
     "message": "Unknown host format."
   },
   "hostMonitoredWarn": {
-    "message": "The host is already being monitored."
+    "message": "The host is already in the list."
   },
   "hostMatchRule3": {
     "message": "Matching IPv4 and IPv6 address is supported. Exact matching will be perform for these addresses."

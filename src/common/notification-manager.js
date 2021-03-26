@@ -1,4 +1,4 @@
-import { RemoteCallable } from "../common/remote-callable"
+import RemoteCallable from "../common/remote-callable"
 
 class NotificationManager extends RemoteCallable {
   constructor(name) {
