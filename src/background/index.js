@@ -42,7 +42,7 @@ options.whitelistHost.doOnUpdated(function (list) {
   monitor.whitelist.reset(list);
 });
 
-function selectTime(tab, hostname) {
+function blockToSelectTime(tab, hostname) {
   console.debug(`Blocking the tab of host: ${hostname}`);
   if (unlockTiming.isTiming(hostname)) {
     console.debug(`${hostname} is unlocked, does not block.`);
@@ -51,7 +51,7 @@ function selectTime(tab, hostname) {
   tabBlocker.blockPageWithNewTab(tab, hostname, SELECT_DUR_PAGE_URL);
 }
 
-monitor.onBrowse.addListener(selectTime);
+monitor.onBrowse.addListener(blockToSelectTime);
 
 unlockTiming.onTimesUp.addListener(function (hostname) {
   tabBlocker.blockAllTabsUnder(hostname, TIME_UP_PAGE_URL);

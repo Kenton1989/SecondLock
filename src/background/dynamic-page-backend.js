@@ -56,7 +56,7 @@ class DynamicPageBackend extends RemoteCallable {
    * @returns {Promise} The promise resolved with newly created tab after the tab is created
    */
   async openOnNewTab(url, pageArgs, tabProperties = {}) {
-    if (url == undefined) delete tabProperties.url;
+    if (url === undefined) delete tabProperties.url;
     else tabProperties.url = url;
 
     let tab = await api.tabs.create(tabProperties);
@@ -67,7 +67,7 @@ class DynamicPageBackend extends RemoteCallable {
     api.tabs
       .sendMessage(tab.id, { dynamicPageInitArgs: pageArgs })
       .catch((reason) => {
-        if (reason.message == RECEIVER_DOES_NOT_EXIST_MSG) {
+        if (reason.message === RECEIVER_DOES_NOT_EXIST_MSG) {
           console.debug(
             `Argument sent too early. Tab #${tab.id} haven't setup.`
           );

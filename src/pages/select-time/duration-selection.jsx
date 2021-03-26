@@ -42,7 +42,9 @@ class DefaultDurButtonList extends React.Component {
 
 const MINUTE = 60000;
 const MIN_UNLOCK_MINUTES = 1;
-const MAX_UNLOCK_MINUTES = 1439;
+const MAX_UNLOCK_MINUTES = 1440;
+const MIN_UNLOCK_MS = 60000;
+const ONE_DAY = 86400000; // ms of one day
 
 export default class DurationSelection extends React.Component {
   constructor(props) {
@@ -51,25 +53,27 @@ export default class DurationSelection extends React.Component {
     this.state = {
       blockedHost: undefined,
       unlockDur: "",
-      unlockEndTime: this.calDefaultEndTimePoint(),
+      unlockEndTime: toHHMM(calDefaultEndTimePoint()),
     };
 
+    this.blockedTabId = undefined;
+
     this.unlockMinutes = this.unlockMinutes.bind(this);
+    this.enterMinutes = this.enterMinutes.bind(this);
+    this.enterEndTime = this.enterEndTime.bind(this);
   }
 
   componentDidMount() {
     dynamicInit((args) => {
+      this.blockedTabId = args.blockedTabId;
+      TabBlocker.autoUnblock(args.blockedHost);
       this.setState({ blockedHost: args.blockedHost });
     });
   }
 
   render() {
     let displayedHost = this.state.blockedHost || "example.com";
-    let enterMinutes = () => {
-      this.state.unlockDur
-        ? this.unlockMinutes(parseFloat(this.state.unlockDur))
-        : asyncAlert($t("EmptyInputWarn"));
-    };
+
     return (
       <MainUI title={$t("durSelectTitle")}>
         <h1>{$t("durSelectHint")}</h1>
@@ -78,19 +82,26 @@ export default class DurationSelection extends React.Component {
         <div id="other-length">
           <EnterableInput
             type="number"
-            onEnter={enterMinutes}
+            onEnter={this.enterMinutes}
             onChange={(e) => {
               this.setState({ unlockDur: e.target.value });
             }}
             value={this.state.unlockDur}
           />
           <span> {$t("mins")} </span>
-          <button onClick={enterMinutes}>GO</button>
+          <button onClick={this.enterMinutes}>GO</button>
         </div>
         <div>
           <span>{$t("orUntilTimePoint")}</span>
-          <input type="time" name="end-time-point" id="end-time-point-input" />
-          <button id="enter-time-point-btn">GO</button>
+          <EnterableInput
+            type="time"
+            onEnter={this.enterEndTime}
+            onChange={(e) => {
+              this.setState({ unlockEndTime: e.target.value });
+            }}
+            value={this.state.unlockEndTime}
+          />
+          <button onClick={this.enterEndTime}>GO</button>
         </div>
         <button id="close-all">
           <span>{$t("closeAllRelated")}</span>
@@ -99,7 +110,7 @@ export default class DurationSelection extends React.Component {
     );
   }
 
-  unlockMinutes(minutes) {
+  async unlockMinutes(minutes) {
     if (!this.state.blockedHost) {
       asyncAlert($t("noBlockedDetect"));
       return;
@@ -108,50 +119,81 @@ export default class DurationSelection extends React.Component {
     console.debug(`Unlock ${this.state.blockedHost} for ${minutes} mins.`);
 
     if (minutes < MIN_UNLOCK_MINUTES) {
-      asyncAlert(` ${$t("minimumUnlockTime")}${MIN_UNLOCK_MINUTES} ${$t("min")}`);
+      asyncAlert(
+        ` ${$t("minimumUnlockTime")}${MIN_UNLOCK_MINUTES} ${$t("min")}`
+      );
       return;
     } else if (minutes > MAX_UNLOCK_MINUTES) {
-      asyncAlert(` ${$t("maximumUnlockTime")}${MAX_UNLOCK_MINUTES} ${$t("mins")}`);
+      asyncAlert(
+        ` ${$t("maximumUnlockTime")}${MAX_UNLOCK_MINUTES} ${$t("mins")}`
+      );
       return;
     }
 
     let unlockDuration = Math.round(minutes * MINUTE);
-    RemoteCallable.call("lock-time-monitor", "setTimerFor", [
+    await RemoteCallable.call("lock-time-monitor", "setTimerFor", [
       this.state.blockedHost,
       unlockDuration,
-    ]).then(() => {
-      TabBlocker.notifyUnblock(this.state.blockedHost);
-      closeCurrentTab();
-    });
-  }
-
-  calDefaultEndTimePoint() {
-    let time = new Date(Date.now());
-    let curH = time.getHours();
-    let curM = time.getMinutes();
-
-    // advance to nearest half hour / full hour
-    // but at least 1 minutes unlock time is guaranteed
-    const MIN_UNLOCK_TIME = 1;
-    if (curM < 30 - MIN_UNLOCK_TIME) {
-      time.setMinutes(30);
-    } else if (curM >= 60 - MIN_UNLOCK_TIME) {
-      time.setMinutes(30);
-      time.setHours(curH + 1);
-    } else {
-      time.setMinutes(0);
-      time.setHours(curH + 1);
+    ]);
+    TabBlocker.notifyUnblock(this.state.blockedHost);
+    if (this.blockedTabId !== undefined) {
+      try {
+        let tab = await api.tabs.get(this.blockedTabId);
+        api.tabs.update(tab.id, { active: true });
+      } catch (e) {
+        // tab is not found, do nothing
+      }
     }
-
-    return time;
+    window.close();
   }
 
-  getHHMM(time) {
-    if (typeof time === "number") time = new Date(time);
-    return time.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      hourCycle: "h23",
-    });
+  enterMinutes() {
+    this.state.unlockDur
+      ? this.unlockMinutes(parseFloat(this.state.unlockDur))
+      : asyncAlert($t("EmptyInputWarn"));
   }
+
+  enterEndTime() {
+    let nowMs = Date.now();
+    let time = new Date(nowMs);
+    let hour = parseInt(this.state.unlockEndTime.substr(0, 2));
+    let min = parseInt(this.state.unlockEndTime.substr(3, 2));
+    time.setHours(hour);
+    time.setMinutes(min);
+    let endTime = time.getTime();
+    if (endTime - nowMs < MIN_UNLOCK_MS) {
+      endTime += ONE_DAY;
+    }
+    this.unlockMinutes((endTime - nowMs)/MINUTE);
+  }
+}
+
+function calDefaultEndTimePoint() {
+  let time = new Date(Date.now());
+  let curH = time.getHours();
+  let curM = time.getMinutes();
+
+  // advance to nearest half hour / full hour
+  // but at least 1 minutes unlock time is guaranteed
+  const MIN_UNLOCK_TIME = 1;
+  if (curM < 30 - MIN_UNLOCK_TIME) {
+    time.setMinutes(30);
+  } else if (curM >= 60 - MIN_UNLOCK_TIME) {
+    time.setMinutes(30);
+    time.setHours(curH + 1);
+  } else {
+    time.setMinutes(0);
+    time.setHours(curH + 1);
+  }
+
+  return time;
+}
+
+function toHHMM(time) {
+  if (typeof time === "number") time = new Date(time);
+  return time.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  });
 }

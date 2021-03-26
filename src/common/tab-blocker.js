@@ -1,5 +1,5 @@
-import { api } from "./api"
-import { RemoteCallable } from "./remote-callable"
+import { api } from "./api";
+import { RemoteCallable } from "./remote-callable";
 import {
   closeCurrentTab,
   queryTabsUnder,
@@ -49,7 +49,7 @@ class TabBlocker extends RemoteCallable {
     if (blockingPageUrl) {
       return this._backend.openOnNewTab(
         blockingPageUrl,
-        { blockedHost: hostname },
+        { blockedHost: hostname, blockedTabId: tab.id },
         { windowId: tab.windowId }
       );
     } else {
@@ -81,12 +81,6 @@ class TabBlocker extends RemoteCallable {
    *  tabs will be blocked with blockingPageUrl through method this.blockPageWithNewTab
    */
   blockAllTabsUnder(hostname, blockingPageUrl) {
-    let pattern = hostname;
-
-    if (validHostname(hostname)) {
-      pattern = `*.${hostname}`;
-    }
-
     // make private member visible
     let monitor = this._monitor;
     let blocker = this;
@@ -127,9 +121,9 @@ class TabBlocker extends RemoteCallable {
     let oldActive = monitor.active;
     monitor.active = false;
 
-    await closeTabs(toClose, leaveOneTab)
-    
-    monitor.active = oldActive
+    await closeTabs(toClose, leaveOneTab);
+
+    monitor.active = oldActive;
   }
 
   /**
