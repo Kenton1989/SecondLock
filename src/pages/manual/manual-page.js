@@ -1,4 +1,4 @@
-import "./common-page.js";
-import { setupSectionNav } from "./nav-setup.js";
+import "./common-page";
+import { setupSectionNav } from "./nav-setup";
 
 setupSectionNav();

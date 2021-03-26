@@ -1,4 +1,4 @@
-import { api } from "../common/api.js"
+import { api } from "../common/api"
 
 /**
  * A class of object that can be call remotely.

@@ -1,6 +1,9 @@
 import React from "react";
 
-export default class LineEdit extends React.Component {
+/**
+ * A input element that will detect whether use hit "Enter" key.
+ */
+export default class EnterableInput extends React.Component {
   constructor(props) {
     super(props);
 

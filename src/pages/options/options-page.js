@@ -1,10 +1,10 @@
 /**
  * This is the js for options.html
  */
-import { api } from "../../common/api.js"
-import "../js/common-page.js";
-import { HostnameSet } from "../../common/hostname-set.js";
-import { setupSectionNav } from "../js/nav-setup.js";
+import { api } from "../../common/api"
+import "../js/common-page";
+import { HostnameSet } from "../../common/hostname-set";
+import { setupSectionNav } from "../js/nav-setup";
 import {
   ALL_OPTION_NAME,
   OptionCollection,

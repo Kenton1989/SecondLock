@@ -1,12 +1,12 @@
 /**
  * This is the js for select-time.html
  */
-import { api } from "../../common/api.js"
-import "./common-page.js";
-import { dynamicInit } from "./dynamic-page.js";
-import { OptionCollection } from "./options-manager.js";
-import { RemoteCallable } from "../../common/remote-callable.js"
-import { TabBlocker } from "./tab-blocker.js";
+import { api } from "../../common/api"
+import "./common-page";
+import { dynamicInit } from "./dynamic-page";
+import { OptionCollection } from "./options-manager";
+import { RemoteCallable } from "../../common/remote-callable"
+import { TabBlocker } from "./tab-blocker";
 import {
   closeCurrentTab,
   setTextForClass,

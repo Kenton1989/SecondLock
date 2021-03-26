@@ -1,12 +1,12 @@
 /**
  * This is the js for blocking.html
  */
-import { dynamicInit } from "./dynamic-page.js";
-import { TabBlocker } from "./tab-blocker.js";
-import { setTextForClass, $id } from "../../common/utility.js";
-import "./common-page.js";
-import { RemoteCallable } from "../../common/remote-callable.js"
-import { OptionCollection } from "./options-manager.js";
+import { dynamicInit } from "./dynamic-page";
+import { TabBlocker } from "./tab-blocker";
+import { setTextForClass, $id } from "../../common/utility";
+import "./common-page";
+import { RemoteCallable } from "../../common/remote-callable"
+import { OptionCollection } from "./options-manager";
 
 let blockedHost = undefined;
 let options = new OptionCollection("mottos");

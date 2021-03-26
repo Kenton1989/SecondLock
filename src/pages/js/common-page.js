@@ -1,4 +1,4 @@
-import { generalTranslate } from "/js/translation.js";
+import { generalTranslate } from "/js/translation";
 
 let thisYear = new Date(Date.now()).getFullYear();
 

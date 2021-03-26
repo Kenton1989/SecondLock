@@ -1,15 +1,15 @@
-import { BrowsingPageMonitor } from "./browsing-page-monitor.js";
-import { DynamicPageBackend } from "./dynamic-page-backend.js";
-import { HostTimingMonitor } from "./host-timing-monitor.js";
+import { BrowsingPageMonitor } from "./browsing-page-monitor";
+import { DynamicPageBackend } from "./dynamic-page-backend";
+import { HostTimingMonitor } from "./host-timing-monitor";
 import {
   ALL_OPTION_NAME,
   DEFAULT_OPTIONS,
   OptionCollection,
 } from "../common/options-manager.js";
-import { RemoteCallable } from "../common/remote-callable.js";
-import { TabBlocker } from "../common/tab-blocker.js";
-import { api } from "../common/api.js";
-import { closeTabs } from "../common/utility.js";
+import { RemoteCallable } from "../common/remote-callable";
+import { TabBlocker } from "../common/tab-blocker";
+import { api } from "../common/api";
+import { closeTabs } from "../common/utility";
 
 let options = new OptionCollection(...ALL_OPTION_NAME);
 

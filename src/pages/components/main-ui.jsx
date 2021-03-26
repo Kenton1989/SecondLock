@@ -1,5 +1,5 @@
 import React from "react";
-import { $t } from "../../common/utility.js";
+import { $t } from "../../common/utility";
 
 export default class MainUI extends React.Component {
   render() {

@@ -1,6 +1,6 @@
-import { api } from "../common/api.js"
-import { CustomEventWrapper } from "./custom-event-wrapper.js";
-import { wait, unWait } from "../common/utility.js";
+import { api } from "../common/api"
+import { CustomEventWrapper } from "./custom-event-wrapper";
+import { wait, unWait } from "../common/utility";
 
 /**
  * All valid options

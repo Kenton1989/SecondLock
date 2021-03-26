@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import MainUI from "../components/main-ui";
-import { $t, closeCurrentTab } from "../../common/utility";
-import { api } from "../../common/api.js";
-import { dynamicInit } from "../js/dynamic-page.js";
-import { OptionCollection } from "../../common/options-manager.js";
-import { RemoteCallable } from "../../common/remote-callable.js";
+import { $t, asyncAlert, closeCurrentTab } from "../../common/utility";
+import { api } from "../../common/api";
+import { dynamicInit } from "../js/dynamic-page";
+import { OptionCollection } from "../../common/options-manager";
+import { RemoteCallable } from "../../common/remote-callable";
 
 import { TabBlocker } from "../../common/tab-blocker";
-import LineEdit from "../components/line-edit";
-import { number } from "prop-types";
+import EnterableInput from "../components/enterable-input";
 
 const options = new OptionCollection("defDurations");
 // TabBlocker.autoUnblock();
@@ -66,35 +65,27 @@ export default class DurationSelection extends React.Component {
 
   render() {
     let displayedHost = this.state.blockedHost || "example.com";
-
+    let enterMinutes = () => {
+      this.state.unlockDur
+        ? this.unlockMinutes(parseFloat(this.state.unlockDur))
+        : asyncAlert($t("EmptyInputWarn"));
+    };
     return (
       <MainUI title={$t("durSelectTitle")}>
         <h1>{$t("durSelectHint")}</h1>
         <h2 className="blocked-link">{displayedHost}</h2>
         <DefaultDurButtonList doOnSelect={this.unlockMinutes} />
         <div id="other-length">
-          <LineEdit
+          <EnterableInput
             type="number"
-            onEnter={() => {
-              this.state.unlockDur
-                ? this.unlockMinutes(parseFloat(this.state.unlockDur))
-                : alert($t("EmptyInputWarn"));
-            }}
+            onEnter={enterMinutes}
             onChange={(e) => {
               this.setState({ unlockDur: e.target.value });
             }}
             value={this.state.unlockDur}
           />
           <span> {$t("mins")} </span>
-          <button
-            onClick={() => {
-              this.state.unlockDur
-                ? this.unlockMinutes(parseFloat(this.state.unlockDur))
-                : alert($t("EmptyInputWarn"));
-            }}
-          >
-            GO
-          </button>
+          <button onClick={enterMinutes}>GO</button>
         </div>
         <div>
           <span>{$t("orUntilTimePoint")}</span>
@@ -110,17 +101,17 @@ export default class DurationSelection extends React.Component {
 
   unlockMinutes(minutes) {
     if (!this.state.blockedHost) {
-      alert($t("noBlockedDetect"));
+      asyncAlert($t("noBlockedDetect"));
       return;
     }
 
     console.debug(`Unlock ${this.state.blockedHost} for ${minutes} mins.`);
 
     if (minutes < MIN_UNLOCK_MINUTES) {
-      alert(` ${$t("minimumUnlockTime")}${MIN_UNLOCK_MINUTES} ${$t("min")}`);
+      asyncAlert(` ${$t("minimumUnlockTime")}${MIN_UNLOCK_MINUTES} ${$t("min")}`);
       return;
     } else if (minutes > MAX_UNLOCK_MINUTES) {
-      alert(` ${$t("maximumUnlockTime")}${MAX_UNLOCK_MINUTES} ${$t("mins")}`);
+      asyncAlert(` ${$t("maximumUnlockTime")}${MAX_UNLOCK_MINUTES} ${$t("mins")}`);
       return;
     }
 

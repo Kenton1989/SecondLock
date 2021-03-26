@@ -1,5 +1,5 @@
-import { api } from "../common/api.js"
-import { RemoteCallable } from "../common/remote-callable.js"
+import { api } from "../common/api"
+import { RemoteCallable } from "../common/remote-callable"
 
 const RECEIVER_DOES_NOT_EXIST_MSG =
   "Could not establish connection. Receiving end does not exist.";

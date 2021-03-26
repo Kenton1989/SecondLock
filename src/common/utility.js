@@ -1,4 +1,4 @@
-import { api } from "../common/api.js"
+import { api } from "../common/api"
 
 // Short name for selectors
 function $(selector, element = document) {
@@ -311,8 +311,21 @@ function wait(ms) {
  * @param {Promise} prom promise created by wait()
  */
 function unWait(prom) {
-  if (prom._timeoutHandle == undefined) return;
+  if (prom._timeoutHandle === undefined) return;
   clearTimeout(prom._timeoutHandle);
+}
+
+/**
+ * async version of window.alert
+ * 
+ * @param  {...any} msgs the message to display
+ * @returns {Promise<undefined>} promise resolved after alert is close
+ */
+function asyncAlert(...msgs) {
+  // not using Promise constructor to avoid unexpected blocking
+  return Promise.resolve().then(() => {
+    window.alert(...msgs);
+  });
 }
 
 export {
@@ -337,4 +350,5 @@ export {
   $cls,
   $tag,
   $t,
+  asyncAlert,
 };
