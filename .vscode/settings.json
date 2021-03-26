@@ -1,20 +1,16 @@
 {
-    "i18n-ally.localesPaths": [
-        "./public/_locales",
-        "public/_locales"
-    ],
-    "i18n-ally.sourceLanguage": "en",
-    "i18n-ally.displayLanguage": "en",
+  "i18n-ally.localesPaths": ["public/_locales"],
+  // "i18n-ally.enabledFrameworks": ["chrome-ext"],
 
-    "files.exclude": {
-        "**/.git": true,
-        "**/.svn": true,
-        "**/.hg": true,
-        "**/CVS": true,
-        "**/.DS_Store": true,
-        "node_modules": true,
-        "build": true,
-    },
-    "editor.tabSize": 2,
-    "cmake.configureOnOpen": false
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "node_modules": true,
+    "build": true
+  },
+  "editor.tabSize": 2,
+  "cmake.configureOnOpen": false
 }
