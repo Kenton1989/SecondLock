@@ -1,5 +1,5 @@
 import React from "react";
-import { api } from "../../common/api";
+import { api, apiName } from "../../common/api";
 import { RemoteCallable } from "../../common/remote-callable";
 import { $t } from "../../common/utility";
 import CountdownTimer from "../components/countdown-timer";
@@ -37,8 +37,12 @@ class Popup extends React.Component {
       },
     };
 
+    this.curTab = undefined;
+
     // get URL of current page
     api.tabs.query({ active: true, currentWindow: true }).then(async (tabs) => {
+      if (tabs.length <= 0) return;
+
       let url = tabs[0].url;
       // this.setState({ });
       // query the state
@@ -47,9 +51,27 @@ class Popup extends React.Component {
         "queryPageState",
         [url]
       );
-      console.debug("update page state: ", pageState);
+
+      this.curTab = tabs[0];
       this.setState({ curUrl: url, pageState: pageState });
     });
+
+    if (apiName !== "chrome") {
+      // load module only if firefox-like browser is used
+      const onBrowsingPageChanged = require("../../common/browsing-page-change-event")
+        .default;
+      // handle the auto closing of popup
+      onBrowsingPageChanged.addListener((tab) => {
+        if (!this.curTab) return;
+        if (this.curTab.windowId !== tab.windowId) {
+          return;
+        }
+        if (this.curTab.id === tab.id && this.curTab.url === tab.url) {
+          return;
+        }
+        window.close();
+      });
+    }
 
     this.stopAndClose = this.stopAndClose.bind(this);
   }
@@ -65,7 +87,10 @@ class Popup extends React.Component {
         <section id="links-div">
           <a
             href="./options.html"
-            onClick={() => api.runtime.openOptionsPage()}
+            onClick={() => {
+              api.runtime.openOptionsPage();
+              window.close();
+            }}
           >
             {$t("optionsTitle")}
           </a>

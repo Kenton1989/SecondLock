@@ -1,7 +1,7 @@
-import { api } from "../common/api"
 import { CustomEventWrapper } from "../common/custom-event-wrapper";
 import { HostnameSet } from "../common/hostname-set";
-import { RemoteCallable } from "../common/remote-callable"
+import { RemoteCallable } from "../common/remote-callable";
+import onBrowsingPageChanged from "../common/browsing-page-change-event";
 
 // Different hostname type
 const HOST_TYPE = {
@@ -12,61 +12,8 @@ const HOST_TYPE = {
 };
 Object.freeze(HOST_TYPE);
 
-const BROWSING_PAGE_CHANGED = "browsing-page-changed";
 const BROWSING_MONITORED_PAGE = "browsing-monitored-host";
 const TAB_SWITCH_DELAY = 100;
-const WINDOW_SWITCH_DELAY = 300;
-
-let onBrowsingPageChanged = new CustomEventWrapper(
-  BROWSING_PAGE_CHANGED,
-  window
-);
-
-// record latest browsing tab id to avoid potential race condition
-// caused by api.tabs.onActivated & api.windows.onFocusChanged
-// when user switch tab and window in one click.
-let latestTab = NaN;
-
-// If user open a new website in a tab
-api.tabs.onUpdated.addListener(function (id, changes, tab) {
-  if (!tab.active || !changes.url) return;
-  onBrowsingPageChanged.trigger(tab);
-});
-
-const NO_TAB_EXIST_MSG_PREFIX = "No tab with id";
-// If user switch to another tab
-api.tabs.onActivated.addListener(function (tabInfo) {
-  if (tabInfo.tabId == latestTab) return;
-  latestTab = tabInfo.tabId;
-  
-  api.tabs
-    .get(tabInfo.tabId)
-    .then((tab) => onBrowsingPageChanged.trigger(tab))
-    .catch((reason) => {
-      if (reason.message.startsWith(NO_TAB_EXIST_MSG_PREFIX)) {
-        // multiple tabs are closed at the same time
-      } else {
-        throw reason;
-      }
-    });
-});
-
-// If user switch to another window
-api.windows.onFocusChanged.addListener(function (winId) {
-  // if all window lose focus
-  if (winId == api.windows.WINDOW_ID_NONE) return;
-
-  api.tabs.query({ active: true, windowId: winId }).then((tabs) => {
-    // If the all tabs are closed before query.
-    if (tabs.length < 1) return;
-    let tab = tabs[0];
-
-    if (tab.id == latestTab) return;
-    latestTab = tab.id;
-
-    onBrowsingPageChanged.trigger(tab);
-  });
-});
 
 /**
  * Used for monitoring browser user's browsing page.
