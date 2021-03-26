@@ -2,6 +2,7 @@ import React from "react";
 import MainUI from "./main-ui";
 
 import "../css/nav-list.css";
+import { $t } from "../../common/utility";
 
 class MainWithNav extends React.Component {
   constructor(props) {
@@ -15,6 +16,12 @@ class MainWithNav extends React.Component {
       <MainUI title={this.props.title}>
         <aside>
           <ul className="nav-list">
+            <li
+              key={""}
+              onClick={() => this.setState({ curSection: "" })}
+            >
+              {$t("showAll")}
+            </li>
             {this.props.children.map(
               (ele) => ele.type === NavSection && this.makeItem(ele)
             )}

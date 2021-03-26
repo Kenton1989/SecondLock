@@ -223,5 +223,8 @@
   },
   "maximumUnlockTime": {
     "message": "Maximum unlock time: "
+  },
+  "showAll": {
+    "message": "Show All"
   }
 }

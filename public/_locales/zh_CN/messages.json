@@ -223,5 +223,8 @@
   },
   "maximumUnlockTime": {
     "message": "最长解锁时间："
+  },
+  "showAll": {
+    "message": "显示全部"
   }
 }
