@@ -1,6 +1,6 @@
 {
   "i18n-ally.localesPaths": ["public/_locales"],
-  // "i18n-ally.enabledFrameworks": ["chrome-ext"],
+  "i18n-ally.enabledFrameworks": ["chrome-ext", "custom"],
 
   "files.exclude": {
     "**/.git": true,

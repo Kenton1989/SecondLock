@@ -16,7 +16,7 @@ usageMatchRegex:
   # the `{key}` will be placed by a proper keypath matching regex,
   # you can ignore it and use your own matching rules as well
   # - "[^\\w\\d]t\\(['\"`]({key})['\"`]"
-  - "$t\\(['\"`]({key})['\"`]\\)"
+  - "\\$t\\(['\"`]({key})['\"`]"
 
 
 # An array of strings containing refactor templates.
@@ -28,4 +28,4 @@ refactorTemplates:
 
 
 # If set to true, only enables this custom framework (will disable all built-in frameworks)
-monopoly: true
+monopoly: false

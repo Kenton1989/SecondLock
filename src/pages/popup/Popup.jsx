@@ -7,13 +7,13 @@ import CountdownTimer from "../components/countdown-timer";
 let CurHostDisplay = (props) => {
   let curHost = "example.com";
   // try to parse the hostname
-  if (props.curUrl)
+  if (props.curUrl) {
     try {
       curHost = new URL(props.curUrl).hostname;
     } catch {
       console.warn("Got invalid URL:", props.curUrl);
     }
-
+  }
   return (
     <div>
       <p>{$t("currentHost")}</p>
