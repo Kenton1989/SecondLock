@@ -150,7 +150,7 @@ export default class DurationSelection extends React.Component {
   enterMinutes() {
     this.state.unlockDur
       ? this.unlockMs(parseFloat(this.state.unlockDur) * MINUTE)
-      : asyncAlert($t("EmptyInputWarn"));
+      : asyncAlert($t("emptyInputWarn"));
   }
 
   enterEndTime() {
@@ -171,9 +171,13 @@ export default class DurationSelection extends React.Component {
   }
 
   closeRelevant() {
-    RemoteCallable.call("background-aux", "closeRelativePages", [
-      this.state.blockedHost,
-    ]);
+    if (this.state.blockedHost) {
+      RemoteCallable.call("background-aux", "closeRelativePages", [
+        this.state.blockedHost,
+      ]);
+    } else {
+      asyncAlert($t("noBlockedDetect"));
+    }
   }
 }
 

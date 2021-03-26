@@ -1,14 +1,11 @@
-import React from 'react';
-import { render } from 'react-dom';
-import { $t } from '../../common/utility';
-import MainUI from "../components/main-ui"
-
-import './index.css';
+import React from "react";
+import { render } from "react-dom";
+import "./index.css";
+import TimesUpPage from "./times-up-page";
 
 render(
-  <MainUI title={$t("timesUpTitle")}>
-  </MainUI>,
-  window.document.querySelector('#app-container')
+  <TimesUpPage/>,
+  window.document.querySelector("#app-container")
 );
 
 if (module.hot) module.hot.accept();
