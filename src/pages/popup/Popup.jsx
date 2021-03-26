@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { render } from "react-dom";
+import React from "react";
 import { api } from "../../common/api";
 import { RemoteCallable } from "../../common/remote-callable";
 import { $t } from "../../common/utility";
