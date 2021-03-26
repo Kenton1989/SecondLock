@@ -56,7 +56,7 @@ class Popup extends React.Component {
       this.setState({ curUrl: url, pageState: pageState });
     });
 
-    if (apiName !== "chrome") {
+    if (apiName === "browser") {
       // load module only if firefox-like browser is used
       const onBrowsingPageChanged = require("../../common/browsing-page-change-event")
         .default;

@@ -1,6 +1,9 @@
 import { remapChromeApi } from "./chrome-extension-async";
 console.debug("loading api");
+
+/** @type {browser} */
 let api = undefined;
+
 let apiName = undefined;
 
 try {
