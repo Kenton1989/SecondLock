@@ -41,9 +41,10 @@ class DefaultDurButtonList extends React.Component {
 }
 
 const MINUTE = 60000;
-const MIN_UNLOCK_MINUTES = 1;
+const MIN_UNLOCK_MINUTES = 0.1;
 const MAX_UNLOCK_MINUTES = 1440;
-const MIN_UNLOCK_MS = 60000;
+const MIN_UNLOCK_MS = MIN_UNLOCK_MINUTES * MINUTE;
+const MAX_UNLOCK_MS = MAX_UNLOCK_MINUTES * MINUTE;
 const ONE_DAY = 86400000; // ms of one day
 
 export default class DurationSelection extends React.Component {
@@ -58,9 +59,10 @@ export default class DurationSelection extends React.Component {
 
     this.blockedTabId = undefined;
 
-    this.unlockMinutes = this.unlockMinutes.bind(this);
+    this.unlockMs = this.unlockMs.bind(this);
     this.enterMinutes = this.enterMinutes.bind(this);
     this.enterEndTime = this.enterEndTime.bind(this);
+    this.closeRelevant = this.closeRelevant.bind(this);
   }
 
   componentDidMount() {
@@ -70,15 +72,14 @@ export default class DurationSelection extends React.Component {
       this.setState({ blockedHost: args.blockedHost });
     });
   }
-
+  
   render() {
     let displayedHost = this.state.blockedHost || "example.com";
-
     return (
       <MainUI title={$t("durSelectTitle")}>
         <h1>{$t("durSelectHint")}</h1>
         <h2 className="blocked-link">{displayedHost}</h2>
-        <DefaultDurButtonList doOnSelect={this.unlockMinutes} />
+        <DefaultDurButtonList doOnSelect={this.unlockMs} />
         <div id="other-length">
           <EnterableInput
             type="number"
@@ -103,44 +104,42 @@ export default class DurationSelection extends React.Component {
           />
           <button onClick={this.enterEndTime}>GO</button>
         </div>
-        <button id="close-all">
-          <span>{$t("closeAllRelated")}</span>
-        </button>
+        <button onClick={this.closeRelevant}>{$t("closeAllRelated")}</button>
       </MainUI>
     );
   }
 
-  async unlockMinutes(minutes) {
+  async unlockMs(ms) {
     if (!this.state.blockedHost) {
       asyncAlert($t("noBlockedDetect"));
       return;
     }
 
-    console.debug(`Unlock ${this.state.blockedHost} for ${minutes} mins.`);
-
-    if (minutes < MIN_UNLOCK_MINUTES) {
+    if (ms < MIN_UNLOCK_MS) {
       asyncAlert(
         ` ${$t("minimumUnlockTime")}${MIN_UNLOCK_MINUTES} ${$t("min")}`
       );
       return;
-    } else if (minutes > MAX_UNLOCK_MINUTES) {
+    } else if (ms > MAX_UNLOCK_MS) {
       asyncAlert(
         ` ${$t("maximumUnlockTime")}${MAX_UNLOCK_MINUTES} ${$t("mins")}`
       );
       return;
     }
 
-    let unlockDuration = Math.round(minutes * MINUTE);
+    let unlockDuration = Math.round(ms);
     await RemoteCallable.call("lock-time-monitor", "setTimerFor", [
       this.state.blockedHost,
       unlockDuration,
     ]);
+
+    // close all relevant pages
     TabBlocker.notifyUnblock(this.state.blockedHost);
     if (this.blockedTabId !== undefined) {
       try {
         let tab = await api.tabs.get(this.blockedTabId);
         api.tabs.update(tab.id, { active: true });
-      } catch (e) {
+      } catch {
         // tab is not found, do nothing
       }
     }
@@ -149,7 +148,7 @@ export default class DurationSelection extends React.Component {
 
   enterMinutes() {
     this.state.unlockDur
-      ? this.unlockMinutes(parseFloat(this.state.unlockDur))
+      ? this.unlockMs(parseFloat(this.state.unlockDur) * MINUTE)
       : asyncAlert($t("EmptyInputWarn"));
   }
 
@@ -160,11 +159,20 @@ export default class DurationSelection extends React.Component {
     let min = parseInt(this.state.unlockEndTime.substr(3, 2));
     time.setHours(hour);
     time.setMinutes(min);
+    time.setSeconds(0);
     let endTime = time.getTime();
-    if (endTime - nowMs < MIN_UNLOCK_MS) {
+    if (endTime - nowMs <= 0) {
       endTime += ONE_DAY;
+    } else if (endTime - nowMs < MIN_UNLOCK_MS) {
+      endTime = nowMs + MIN_UNLOCK_MS;
     }
-    this.unlockMinutes((endTime - nowMs)/MINUTE);
+    this.unlockMs(endTime - nowMs);
+  }
+
+  closeRelevant() {
+    RemoteCallable.call("background-aux", "closeRelativePages", [
+      this.state.blockedHost,
+    ]);
   }
 }
 
@@ -175,10 +183,9 @@ function calDefaultEndTimePoint() {
 
   // advance to nearest half hour / full hour
   // but at least 1 minutes unlock time is guaranteed
-  const MIN_UNLOCK_TIME = 1;
-  if (curM < 30 - MIN_UNLOCK_TIME) {
+  if (curM < 30 - MIN_UNLOCK_MINUTES) {
     time.setMinutes(30);
-  } else if (curM >= 60 - MIN_UNLOCK_TIME) {
+  } else if (curM >= 60 - MIN_UNLOCK_MINUTES) {
     time.setMinutes(30);
     time.setHours(curH + 1);
   } else {

@@ -30,6 +30,7 @@ const MAX_UNLOCK_MINUTES = 1439;
  * Unlock the blocked host of this page for the given duration.
  * @param {Number} minutes the duration in minute.
  */
+// Done
 function setUnlock(minutes) {
   console.debug(`Unlock ${blockedHost} for ${minutes} mins.`);
 
@@ -62,6 +63,7 @@ function setUnlock(minutes) {
   });
 }
 
+// done
 // Initialize the blocked hostname
 dynamicInit(function (args) {
   blockedHost = args.blockedHost;
