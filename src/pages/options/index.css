@@ -3,7 +3,7 @@
 @import "../css/color.css";
 @import "../css/nav-list.css";
 
-#main-div {
+.main-div {
   width: 80%;
   padding: 1px;
   display: block;
@@ -11,14 +11,24 @@
   white-space: pre-wrap;
 }
 
-#main-div h1,
-#main-div h2,
-#main-div h3,
-#main-div h4,
-#main-div h5,
-#main-div h6,
-#main-div p {
+
+.main-div h1,
+.main-div h2,
+.main-div h3,
+.main-div h4,
+.main-div h5,
+.main-div h6,
+.main-div p {
   margin: 10px 0px;
+}
+
+.main-div h3 {
+  margin-top: 20px;
+}
+
+.section-2 {
+  border-left: #AAA solid 5px;
+  padding-left: 12px
 }
 
 .host-list-div {

@@ -29,7 +29,7 @@ class MainWithNav extends React.Component {
           </ul>
         </aside>
         
-        <div id="main-div">
+        <div className="main-div">
           {this.props.children.map((ele) => this.shouldDisplay(ele) && ele)}
         </div>
       </MainUI>

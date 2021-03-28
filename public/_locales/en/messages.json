@@ -81,7 +81,7 @@
     "message": "Multiple values should be split with comma."
   },
   "defDurFormat2": {
-    "message": "Each value should be an integer, at least 1 and at most 1000."
+    "message": "Each value should be an integer, at least 1 and at most 1440. (by the way, 1440 mins = 24 hours)"
   },
   "defDurFormat3": {
     "message": "At most 10 different values can be set, if more than 10 values are enter, first 10 valid values will be used."
@@ -195,7 +195,7 @@
     "message": "The maximum text length is 300 characters."
   },
   "leaveOneTabDescribe": {
-    "message": "Leave one tab on top window if all tabs are closed"
+    "message": "Leave one tab on top window if all tabs in top window are closed."
   },
   "pageClosingTitle": {
     "message": "Page Closing"
@@ -229,5 +229,8 @@
   },
   "duplicatedOptionPageWarn": {
     "message": "Other options pages are detected, this page will be closed."
+  },
+  "msgOnTimesUp": {
+    "message": "Message to be display on time's up"
   }
 }

@@ -239,6 +239,14 @@ class OptionCollection {
   }
 }
 
+function assertOptions(options, ...requiredOptions) {
+  console.assert(options instanceof OptionCollection, "Missing OptionCollection object");
+  for (const name of requiredOptions) {
+    console.assert(ALL_OPTION_NAME_SET.has(name), `Requiring unknown options: ${name}`);
+    console.assert(options[name], `Missing required option: ${name}`);
+  }
+}
+
 // TODO - sync options every 5 seconds
 window.setInterval(function () {}, 5000);
 
@@ -248,4 +256,5 @@ export {
   DEFAULT_OPTIONS,
   OptionCollection,
   OneOption,
+  assertOptions,
 };

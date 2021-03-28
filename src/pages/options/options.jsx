@@ -9,6 +9,7 @@ import {
 import { $t } from "../../common/utility";
 import { MainWithNav, NavSection } from "../components/main-with-nav";
 import MonitoredHost from "./monitored-host-setting";
+import PageBlocking from "./page-blocking-setting";
 
 const options = new OptionCollection(...ALL_OPTION_NAME);
 
@@ -24,7 +25,7 @@ export default function Options(props) {
         <MonitoredHost options={options} />
       </NavSection>
       <NavSection id="page-blocking" title={$t("blockingOptionsTitle")}>
-        <p>This is a section</p>
+        <PageBlocking options={options} />
       </NavSection>
       <NavSection id="storage-and-sync" title={$t("storageAndSync")}>
         <p>{$t("cloudStorageUsed")} 0 KB/5 KB</p>
