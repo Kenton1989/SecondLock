@@ -226,5 +226,8 @@
   },
   "showAll": {
     "message": "显示全部"
+  },
+  "duplicatedOptionPageWarn": {
+    "message": "检测到多个设置页面被打开，该页面将会被关闭。"
   }
 }

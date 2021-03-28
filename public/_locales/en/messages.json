@@ -226,5 +226,8 @@
   },
   "showAll": {
     "message": "Show All"
+  },
+  "duplicatedOptionPageWarn": {
+    "message": "Other options pages are detected, this page will be closed."
   }
 }

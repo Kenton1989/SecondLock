@@ -1,10 +1,16 @@
 // import { useState } from "react";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { api } from "../../common/api";
+import {
+  ALL_OPTION_NAME,
+  OptionCollection,
+} from "../../common/options-manager";
 import { $t } from "../../common/utility";
 import { MainWithNav, NavSection } from "../components/main-with-nav";
 import MonitoredHost from "./monitored-host-setting";
+
+const options = new OptionCollection(...ALL_OPTION_NAME);
 
 export default function Options(props) {
   useEffect(() => checkDuplicatedOptionsPage());
@@ -15,7 +21,7 @@ export default function Options(props) {
         <a href="manual.html">{$t("manualTitle")}</a>
       </section>
       <NavSection id="monitored-host" title={$t("monitorHost")}>
-        <MonitoredHost />
+        <MonitoredHost options={options} />
       </NavSection>
       <NavSection id="blocking-pages" title={$t("blockingOptionsTitle")}>
         <p>This is a section</p>
@@ -44,23 +50,20 @@ async function checkDuplicatedOptionsPage() {
 
   let curTab = await api.tabs.getCurrent();
   if (curTab.id !== trueOptionPage.id) {
-    if (curTab.active) {
-      api.windows.update(trueOptionPage.windowId, {
-        focused: true,
-        drawAttention: true,
-      });
-      api.tabs.update(trueOptionPage.id, { active: true });
-    }
-
-    let toClose = tabs
-      .map((t) => t.id)
-      .filter((id) => id !== trueOptionPage.id);
-    
-    try {
-      // if multiple options pages trigger removing
-      // at the same time, this instruction is likely
-      // to cause "tab not found exception".
-      api.tabs.remove(toClose);
-    } catch {}
+    window.alert($t("duplicatedOptionPageWarn"));
   }
+  api.windows.update(trueOptionPage.windowId, {
+    focused: true,
+    drawAttention: true,
+  });
+  api.tabs.update(trueOptionPage.id, { active: true });
+
+  let toClose = tabs.map((t) => t.id).filter((id) => id !== trueOptionPage.id);
+
+  try {
+    // if multiple options pages trigger removing
+    // at the same time, this instruction is likely
+    // to cause "tab not found exception".
+    api.tabs.remove(toClose);
+  } catch {}
 }

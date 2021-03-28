@@ -93,26 +93,24 @@ export default class HostList extends Component {
   }
 
   genItemList() {
-    let { itemState, dirty } = this.state;
+    let { dirty } = this.state;
     let hostList = dirty ? this.state.hostList : this.props.initList;
     hostList = [...hostList].sort((a, b) => a.localeCompare(b));
-    let res = [];
-    for (const host of hostList) {
-      let state = dirty ? itemState.get(host) || 0 : 0;
-      res.push(
-        <HostListItem
-          key={host}
-          host={host}
-          itemState={state}
-          onStateChange={(state) => {
-            this.setDirty();
+
+    return hostList.map((host) => (
+      <HostListItem
+        key={host}
+        host={host}
+        itemState={this.getItemState(host)}
+        onStateChange={(state) => {
+          this.setDirty(() => {
+            let { itemState } = this.state;
             itemState.set(host, state);
-            this.setState({ itemState: itemState });
-          }}
-        />
-      );
-    }
-    return res;
+            this.setState({ itemState });
+          });
+        }}
+      />
+    ));
   }
 
   setDirty(callback = undefined) {
@@ -121,12 +119,8 @@ export default class HostList extends Component {
       return;
     }
     let { hostList, itemState } = this.state;
-    console.assert(
-      itemState === undefined,
-      "item state should be undefined before set dirty bits."
-    );
     itemState = new Map();
-    
+
     if (hostList === undefined) hostList = this.getHostList();
 
     this.setState(
@@ -215,7 +209,6 @@ export default class HostList extends Component {
     this.setState({
       userInput: "",
       hostList: undefined,
-      
       dirty: false,
     });
   }

@@ -1,12 +1,6 @@
 import React, { Component } from "react";
-import {
-  ALL_OPTION_NAME,
-  OptionCollection,
-} from "../../common/options-manager";
 import { $t } from "../../common/utility";
 import HostList from "./host-list";
-
-const options = new OptionCollection(...ALL_OPTION_NAME);
 
 export default class MonitoredHost extends Component {
   constructor(props) {
@@ -15,8 +9,12 @@ export default class MonitoredHost extends Component {
       blacklist: [],
       whitelist: [],
     };
+    console.assert(props.options, "no options passed in");
+    console.assert(props.options.monitoredList, "Missing blacklist option");
+    console.assert(props.options.whitelistHost, "Missing whitelist option");
   }
   componentDidMount() {
+    const { options } = this.props;
     options.monitoredList.doOnUpdated((val) => {
       this.setState({ blacklist: val });
     });
@@ -25,6 +23,7 @@ export default class MonitoredHost extends Component {
     });
   }
   render() {
+    const { options } = this.props;
     return (
       <div>
         <details className="description">

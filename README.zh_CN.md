@@ -1,4 +1,4 @@
-<img src="./src/images/logo.svg" alt="Logo of the project" align="right" width="128px">
+<img src="./src/pages/images/logo.svg" alt="Logo of the project" align="right" width="128px">
 
 # SecondLock (Chrome 插件)
 
