@@ -23,7 +23,7 @@ function $tag(tag, element = document) {
 
 // Translate
 function $t(msgKey, ...param) {
-  return api.i18n ? api.i18n.getMessage(msgKey, ...param): "text";
+  return api.i18n.getMessage(msgKey, ...param);
 }
 
 /**
@@ -333,6 +333,7 @@ function wait(ms) {
 function unWait(prom) {
   if (prom._timeoutHandle === undefined) return;
   clearTimeout(prom._timeoutHandle);
+  delete prom._timeoutHandle;
 }
 
 /**

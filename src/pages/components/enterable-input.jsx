@@ -12,12 +12,11 @@ export default class EnterableInput extends React.Component {
 
   render() {
     let props = Object.assign({}, this.props, {
-      onKeyDown: this.handleKeyDown
+      onKeyDown: this.handleKeyDown,
     });
     delete props.onEnter;
-    return (
-        <input {...props} />
-    );
+    delete props.forwardRef;
+    return <input {...props} ref={this.props.forwardRef} />;
   }
 
   handleKeyDown(e) {

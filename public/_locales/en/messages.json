@@ -232,5 +232,8 @@
   },
   "msgOnTimesUp": {
     "message": "Message to be display on time's up"
+  },
+  "tooManyChar": {
+    "message": "Too many characters."
   }
 }

@@ -229,5 +229,8 @@
   },
   "duplicatedOptionPageWarn": {
     "message": "检测到多个设置页面被打开，该页面将会被关闭。"
+  },
+  "tooManyChar": {
+    "message": "字符数量超出限制。"
   }
 }
