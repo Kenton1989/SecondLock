@@ -23,7 +23,7 @@ export default function Options(props) {
       <NavSection id="monitored-host" title={$t("monitorHost")}>
         <MonitoredHost options={options} />
       </NavSection>
-      <NavSection id="blocking-pages" title={$t("blockingOptionsTitle")}>
+      <NavSection id="page-blocking" title={$t("blockingOptionsTitle")}>
         <p>This is a section</p>
       </NavSection>
       <NavSection id="storage-and-sync" title={$t("storageAndSync")}>

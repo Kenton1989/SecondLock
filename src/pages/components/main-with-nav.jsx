@@ -15,9 +15,12 @@ class MainWithNav extends React.Component {
       <MainUI title={this.props.title}>
         <aside>
           <ul className="nav-list">
+            {/* Navigation tag for each section */}
             {this.props.children.map(
               (ele) => ele.type === NavSection && this.makeItem(ele)
             )}
+
+            {/* Navigation tag that will display all content */}
             {this.state.curSection !== "" && (
               <li key={""} onClick={() => this.setState({ curSection: "" })}>
                 {$t("showAll")}
@@ -25,6 +28,7 @@ class MainWithNav extends React.Component {
             )}
           </ul>
         </aside>
+        
         <div id="main-div">
           {this.props.children.map((ele) => this.shouldDisplay(ele) && ele)}
         </div>
