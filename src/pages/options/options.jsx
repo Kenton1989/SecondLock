@@ -52,18 +52,26 @@ async function checkDuplicatedOptionsPage() {
   if (curTab.id !== trueOptionPage.id) {
     window.alert($t("duplicatedOptionPageWarn"));
   }
-  api.windows.update(trueOptionPage.windowId, {
-    focused: true,
-    drawAttention: true,
-  });
-  api.tabs.update(trueOptionPage.id, { active: true });
 
   let toClose = tabs.map((t) => t.id).filter((id) => id !== trueOptionPage.id);
 
-  try {
-    // if multiple options pages trigger removing
-    // at the same time, this instruction is likely
-    // to cause "tab not found exception".
-    api.tabs.remove(toClose);
-  } catch {}
+  api.tabs
+    .update(trueOptionPage.id, { active: true })
+    .then(() => {
+      api.windows.update(trueOptionPage.windowId, {
+        focused: true,
+        drawAttention: true,
+      });
+    })
+    .catch((res) => {
+      console.warn(res);
+      // it is possible that the window / tab to be reserved is closed before these code.
+    });
+
+  // if multiple options pages trigger removing
+  // at the same time, this instruction is likely
+  // to cause "tab not found exception".
+  api.tabs.remove(toClose).catch((res) => {
+    console.warn(res);
+  });
 }
