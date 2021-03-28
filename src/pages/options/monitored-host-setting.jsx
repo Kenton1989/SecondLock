@@ -5,23 +5,30 @@ import HostList from "./host-list";
 export default class MonitoredHost extends Component {
   constructor(props) {
     super(props);
+    console.assert(props.options, "no options passed in");
+    console.assert(props.options.monitoredList, "Missing blacklist option");
+    console.assert(props.options.whitelistHost, "Missing whitelist option");
+
     this.state = {
       blacklist: [],
       whitelist: [],
     };
-    console.assert(props.options, "no options passed in");
-    console.assert(props.options.monitoredList, "Missing blacklist option");
-    console.assert(props.options.whitelistHost, "Missing whitelist option");
+    this.setBlacklist = this.setBlacklist.bind(this);
+    this.setWhitelist = this.setWhitelist.bind(this);
   }
+
   componentDidMount() {
-    const { options } = this.props;
-    options.monitoredList.doOnUpdated((val) => {
-      this.setState({ blacklist: val });
-    });
-    options.whitelistHost.doOnUpdated((val) => {
-      this.setState({ whitelist: val });
-    });
+    const { monitoredList, whitelistHost } = this.props.options;
+    monitoredList.doOnUpdated(this.setBlacklist);
+    whitelistHost.doOnUpdated(this.setWhitelist);
   }
+
+  componentWillUnmount() {
+    const { monitoredList, whitelistHost } = this.props.options;
+    monitoredList.removeDoOnUpdated(this.setBlacklist);
+    whitelistHost.removeDoOnUpdated(this.setWhitelist);
+  }
+
   render() {
     const { options } = this.props;
     return (
@@ -59,5 +66,13 @@ export default class MonitoredHost extends Component {
         />
       </div>
     );
+  }
+
+  setBlacklist(list) {
+    this.setState({ blacklist: list });
+  }
+
+  setWhitelist(list) {
+    this.setState({ whitelist: list });
   }
 }

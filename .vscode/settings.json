@@ -14,5 +14,8 @@
   "editor.tabSize": 2,
   "cmake.configureOnOpen": false,
   "i18n-ally.keystyle": "nested",
+  "cSpell.words": [
+    "Unmount"
+  ],
   // "javascript.validate.enable": false,
 }

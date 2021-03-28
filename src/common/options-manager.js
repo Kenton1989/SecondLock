@@ -166,6 +166,15 @@ class OneOption {
     if (this._value !== undefined && asGetter) callback(this._value, undefined);
     this._onUpdatedEvent.addListener(callback);
   }
+
+  /**
+   * Remove a callback added through this.doOnUpdated(function)
+   * 
+   * @param {function(any, any)} callback the callback function to be removed
+   */
+  removeDoOnUpdated(callback) {
+    this._onUpdatedEvent.removeListener(callback);
+  }
 }
 
 /**
@@ -238,4 +247,5 @@ export {
   ALL_OPTION_NAME_SET,
   DEFAULT_OPTIONS,
   OptionCollection,
+  OneOption,
 };
