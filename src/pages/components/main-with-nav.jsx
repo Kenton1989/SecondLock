@@ -15,14 +15,13 @@ class MainWithNav extends React.Component {
       <MainUI title={this.props.title}>
         <aside>
           <ul className="nav-list">
-            <li
-              key={""}
-              onClick={() => this.setState({ curSection: "" })}
-            >
-              {$t("showAll")}
-            </li>
             {this.props.children.map(
               (ele) => ele.type === NavSection && this.makeItem(ele)
+            )}
+            {this.state.curSection !== "" && (
+              <li key={""} onClick={() => this.setState({ curSection: "" })}>
+                {$t("showAll")}
+              </li>
             )}
           </ul>
         </aside>

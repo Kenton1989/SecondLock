@@ -32,7 +32,7 @@ class HostnameSet {
   constructor(hosts = []) {
     this._hostMap = new Map();
     this._matchingRegex = /$^/;
-    this.addList(hosts);
+    this.reset(hosts);
   }
 
   /**
@@ -143,7 +143,9 @@ class HostnameSet {
 
     // Sort according to length in increasing order
     // This guarantee that subdomain is processed after its parent domain
+    newHostList = [...newHostList];
     newHostList.sort((a, b) => a.length - b.length);
+    
     for (const val of newHostList) {
       this._addToMap(val);
       this._updateRegex();

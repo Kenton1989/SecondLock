@@ -1,11 +1,7 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { $t, asyncAlert, reformatHostname } from "../../common/utility";
 import EnterableInput from "../components/enterable-input";
 import HostnameSet from "../../common/hostname-set";
-import {
-  ALL_OPTION_NAME,
-  OptionCollection,
-} from "../../common/options-manager";
 
 let hasBits = (origin, mask) => (origin & mask) === mask;
 let setBits = (origin, mask) => origin | mask;
@@ -43,7 +39,6 @@ function HostListItem(props) {
       </button>
     );
   }
-  console.debug("item state", itemState)
   let tag = itemState > 0 && (
     <span className="unsaved-tag">{$t("unsavedHint")}</span>
   );
@@ -64,7 +59,8 @@ export default class HostList extends Component {
     this.state = {
       hostList: new HostnameSet(props.initList || []),
       userInput: "",
-      itemState: new Map()
+      itemState: new Map(),
+      dirty: false,
     };
 
     this.saveList = this.saveList.bind(this);
@@ -97,15 +93,19 @@ export default class HostList extends Component {
   }
 
   genItemList() {
-    let itemState = this.state.itemState;
+    let { itemState, dirty } = this.state;
+    let hostList = dirty ? this.state.hostList : this.props.initList;
+    hostList = [...hostList].sort((a, b) => a.localeCompare(b));
     let res = [];
-    for (const host of this.state.hostList) {
+    for (const host of hostList) {
+      let state = dirty ? itemState.get(host) || 0 : 0;
       res.push(
         <HostListItem
           key={host}
           host={host}
-          itemState={itemState.get(host)}
+          itemState={state}
           onStateChange={(state) => {
+            this.setDirty();
             itemState.set(host, state);
             this.setState({ itemState: itemState });
           }}
@@ -113,6 +113,23 @@ export default class HostList extends Component {
       );
     }
     return res;
+  }
+
+  setDirty(callback = undefined) {
+    if (this.state.dirty) {
+      callback && callback();
+      return;
+    }
+    let hostList = new HostnameSet(this.props.initList);
+    let itemState = new Map();
+    this.setState(
+      {
+        hostList: hostList,
+        itemState: itemState,
+        dirty: true,
+      },
+      callback
+    );
   }
 
   addHost() {
@@ -127,7 +144,6 @@ export default class HostList extends Component {
     }
 
     let { hostList } = this.state;
-    let itemState = this.state.itemState;
 
     let matched = hostList.findSuffix(hostname);
     if (matched) {
@@ -135,18 +151,26 @@ export default class HostList extends Component {
       return;
     }
 
-    hostList.add(hostname);
-    itemState.set(hostname, UNSAVED);
-    this.setState({
-      userInput: "",
-      hostList: hostList,
-      itemState: itemState,
+    this.setDirty(() => {
+      let { hostList, itemState } = this.state;
+      hostList.add(hostname);
+      itemState.set(hostname, UNSAVED);
+      this.setState({
+        userInput: "",
+        hostList: hostList,
+        itemState: itemState,
+      });
     });
   }
 
   async saveList() {
-    let { hostList } = this.state;
-    
+    let { hostList, dirty } = this.state;
+
+    if (!dirty) {
+      console.log("the list is not modified, skip saving.");
+      return;
+    }
+
     let newHostList = [];
     for (const host of hostList) {
       let itemState = this.state.itemState.get(host);
@@ -154,10 +178,15 @@ export default class HostList extends Component {
         newHostList.push(host);
       }
     }
+    newHostList.sort((a, b) => a.localeCompare(b));
 
     this.props.onSave && (await this.props.onSave(newHostList));
 
     this.state.itemState.clear();
-    this.setState({ userInput: "", hostList: new HostnameSet(newHostList) });
+    this.setState({
+      userInput: "",
+      hostList: new HostnameSet(newHostList),
+      dirty: false,
+    });
   }
 }

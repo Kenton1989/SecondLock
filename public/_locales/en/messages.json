@@ -30,7 +30,7 @@
     "message": "Hostname matching rules:"
   },
   "hostMatchRule1": {
-    "message": "All the subdomain of the hosts in the list will be monitored.<br/>e.g. if \"youtube.com\" is in the list, then \"www.youtube.com\", \"music.youtube.com\", etc. will be monitored at the same time"
+    "message": "All the subdomain of the hosts in the list will be monitored.\ne.g. if \"youtube.com\" is in the list, then \"www.youtube.com\", \"music.youtube.com\", etc. will be monitored at the same time"
   },
   "hostMatchRule2": {
     "message": "Only HTTP and HTTPS pages are monitored. Other protocols like FTP are never monitored."
@@ -39,13 +39,13 @@
     "message": "Hostname editing rules:"
   },
   "hostEditRule1": {
-    "message": "Adding a super domain will eliminate all its subdomains from the list.<br />e.g. Suppose \"www.youtube.com\", \"music.youtube.com\" are in the list. If \"youtube.com\" is then added, both of them will be replaced by \"youtube.com"
+    "message": "Adding a super domain will eliminate all its subdomains from the list.\ne.g. Suppose \"www.youtube.com\", \"music.youtube.com\" are in the list. If \"youtube.com\" is then added, both of them will be replaced by \"youtube.com"
   },
   "hostEditRule2": {
-    "message": "To add a new subdomain, you need to delete the parent domain first, and you must save the list before adding the subdomain.<br />e.g. Suppose \"youtube.com\" is in the list, and you want to add \"www.youtube.com\". You must delete \"youtube.com\" form the list and save it before adding \"www.youtube.com\" into the list."
+    "message": "To add a new subdomain, you need to delete the parent domain first, and you must save the list before adding the subdomain.\ne.g. Suppose \"youtube.com\" is in the list, and you want to add \"www.youtube.com\". You must delete \"youtube.com\" form the list and save it before adding \"www.youtube.com\" into the list."
   },
   "whiteOverBlack": {
-    "message": "Whitelist takes privilege over blacklist. <br />e.g. If \"youtube.com\" is in the black list, while \"music.youtube.com\" is in the white list, the \"music.youtube.com\" will not be monitored"
+    "message": "Whitelist takes privilege over blacklist. \ne.g. If \"youtube.com\" is in the black list, while \"music.youtube.com\" is in the white list, the \"music.youtube.com\" will not be monitored"
   },
   "blacklist": {
     "message": "Blacklist"

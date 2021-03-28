@@ -55,7 +55,7 @@ class OneOption {
     autoUpdate = true
   ) {
     if (!ALL_OPTION_NAME_SET.has(name)) {
-      throw new ReferenceError(`Create invalid option: ${thisOption}.`);
+      throw new ReferenceError(`Create invalid option: ${name}.`);
     }
 
     this._value = undefined;
