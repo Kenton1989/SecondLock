@@ -8,6 +8,7 @@
   padding: 1px;
   display: block;
   position: relative;
+  white-space: pre-wrap;
 }
 
 #main-div h1,

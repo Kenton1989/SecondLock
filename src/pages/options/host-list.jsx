@@ -57,9 +57,9 @@ export default class HostList extends Component {
     super(props);
 
     this.state = {
-      hostList: new HostnameSet(props.initList || []),
+      hostList: undefined,
       userInput: "",
-      itemState: new Map(),
+      itemState: undefined,
       dirty: false,
     };
 
@@ -120,8 +120,15 @@ export default class HostList extends Component {
       callback && callback();
       return;
     }
-    let hostList = new HostnameSet(this.props.initList);
-    let itemState = new Map();
+    let { hostList, itemState } = this.state;
+    console.assert(
+      itemState === undefined,
+      "item state should be undefined before set dirty bits."
+    );
+    itemState = new Map();
+    
+    if (hostList === undefined) hostList = this.getHostList();
+
     this.setState(
       {
         hostList: hostList,
@@ -130,6 +137,28 @@ export default class HostList extends Component {
       },
       callback
     );
+  }
+
+  getHostList() {
+    let { dirty, hostList } = this.state;
+    if (hostList === undefined) {
+      console.assert(
+        !dirty,
+        "undefined host list must infer data is not dirty"
+      );
+      hostList = new HostnameSet(this.props.initList || []);
+      this.setState({ hostList });
+    }
+    return hostList;
+  }
+
+  getItemState(key) {
+    let { dirty, itemState } = this.state;
+    if (!dirty) {
+      return 0;
+    } else {
+      return itemState.get(key);
+    }
   }
 
   addHost() {
@@ -143,7 +172,7 @@ export default class HostList extends Component {
       return;
     }
 
-    let { hostList } = this.state;
+    let hostList = this.getHostList();
 
     let matched = hostList.findSuffix(hostname);
     if (matched) {
@@ -185,7 +214,8 @@ export default class HostList extends Component {
     this.state.itemState.clear();
     this.setState({
       userInput: "",
-      hostList: new HostnameSet(newHostList),
+      hostList: undefined,
+      
       dirty: false,
     });
   }
