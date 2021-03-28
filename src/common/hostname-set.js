@@ -170,15 +170,12 @@ class HostnameSet {
     }
     if (this.has(formattedHost)) return false;
 
-    if (validHostname(formattedHost)) {
-      this._hostMap.set(formattedHost, HOST_TYPE.NORMAL);
-    } else if (validIPv4Address(formattedHost)) {
+    if (validIPv4Address(formattedHost)) {
       this._hostMap.set(formattedHost, HOST_TYPE.IPV4);
     } else if (validIPv6Hostname(formattedHost)) {
       this._hostMap.set(formattedHost, HOST_TYPE.IPV6);
     } else {
-      console.warn(`Invalid hostname: ${hostname}`);
-      return false;
+      this._hostMap.set(formattedHost, HOST_TYPE.NORMAL);
     }
 
     return true;

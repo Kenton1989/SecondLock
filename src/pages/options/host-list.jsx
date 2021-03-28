@@ -1,9 +1,61 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { $t, asyncAlert, reformatHostname } from "../../common/utility";
 import EnterableInput from "../components/enterable-input";
 import HostnameSet from "../../common/hostname-set";
+import {
+  ALL_OPTION_NAME,
+  OptionCollection,
+} from "../../common/options-manager";
 
-const EMPTY = new Set();
+let hasBits = (origin, mask) => (origin & mask) === mask;
+let setBits = (origin, mask) => origin | mask;
+let unsetBits = (origin, mask) => origin & ~mask;
+
+const UNSAVED = 0x1;
+const DELETED = 0x2;
+
+function HostListItem(props) {
+  let itemState = props.itemState || 0;
+
+  let onStateChange = props.onStateChange || (() => {});
+
+  let button = <button>Testing</button>;
+  let hostStyle = "";
+  if (hasBits(itemState, DELETED)) {
+    hostStyle = "deleted";
+    button = (
+      <button
+        onClick={() => {
+          onStateChange(unsetBits(itemState, DELETED));
+        }}
+      >
+        [{$t("undo")}]
+      </button>
+    );
+  } else {
+    button = (
+      <button
+        onClick={() => {
+          onStateChange(setBits(itemState, DELETED));
+        }}
+      >
+        [{$t("delete")}]
+      </button>
+    );
+  }
+  console.debug("item state", itemState)
+  let tag = itemState > 0 && (
+    <span className="unsaved-tag">{$t("unsavedHint")}</span>
+  );
+
+  return (
+    <li className="host-list-item">
+      <span className={hostStyle}>{props.host}</span>
+      {tag}
+      {button}
+    </li>
+  );
+}
 
 export default class HostList extends Component {
   constructor(props) {
@@ -11,8 +63,8 @@ export default class HostList extends Component {
 
     this.state = {
       hostList: new HostnameSet(props.initList || []),
-      itemState: new Map(),
       userInput: "",
+      itemState: new Map()
     };
 
     this.saveList = this.saveList.bind(this);
@@ -43,35 +95,22 @@ export default class HostList extends Component {
       </div>
     );
   }
+
   genItemList() {
-    let res = [];
     let itemState = this.state.itemState;
+    let res = [];
     for (const host of this.state.hostList) {
-      let classes = itemState.get(host) || new Set();
-      let button = <button />;
-
-      if (classes.has("deleted")) {
-        button = (
-          <button onClick={this.genStateDel("deleted")}>[{$t("undo")}]</button>
-        );
-      } else {
-        button = (
-          <button onClick={this.genStateAdd("deleted")}>
-            [{$t("delete")}]
-          </button>
-        );
-      }
-
-      let clsStr = `host ${[...classes].join(" ")}`;
-
-      let item = (
-        <li key={host} className="host-list-item">
-          <span className={clsStr}>{host}</span>
-          {button}
-        </li>
+      res.push(
+        <HostListItem
+          key={host}
+          host={host}
+          itemState={itemState.get(host)}
+          onStateChange={(state) => {
+            itemState.set(host, state);
+            this.setState({ itemState: itemState });
+          }}
+        />
       );
-
-      res.push(item);
     }
     return res;
   }
@@ -86,7 +125,10 @@ export default class HostList extends Component {
       asyncAlert($t("unknownHostFormatWarn"));
       return;
     }
-    let { hostList, itemState } = this.state;
+
+    let { hostList } = this.state;
+    let itemState = this.state.itemState;
+
     let matched = hostList.findSuffix(hostname);
     if (matched) {
       asyncAlert(`${$t("hostMonitoredWarn")} (${matched})`);
@@ -94,7 +136,7 @@ export default class HostList extends Component {
     }
 
     hostList.add(hostname);
-    itemState.set(hostname, new Set(["unsaved"]));
+    itemState.set(hostname, UNSAVED);
     this.setState({
       userInput: "",
       hostList: hostList,
@@ -102,30 +144,20 @@ export default class HostList extends Component {
     });
   }
 
-  genStateAdd(host, state) {
-    let itemState = this.state.itemState;
-    return () => {
-      let classes = itemState.get(host) || new Set();
-      if (!itemState.has(host)) {
-        itemState.set(host, classes);
+  async saveList() {
+    let { hostList } = this.state;
+    
+    let newHostList = [];
+    for (const host of hostList) {
+      let itemState = this.state.itemState.get(host);
+      if (!hasBits(itemState, DELETED)) {
+        newHostList.push(host);
       }
-      if (!classes.has(state)) {
-        classes.add(state);
-        this.setState({ itemState: itemState });
-      }
-    };
-  }
+    }
 
-  genStateDel(host, state) {
-    let itemState = this.state.itemState;
-    return () => {
-      let classes = itemState.get(host);
-      if (classes && classes.has(state)) {
-        classes.delete(state);
-        this.setState({ itemState: itemState });
-      }
-    };
-  }
+    this.props.onSave && (await this.props.onSave(newHostList));
 
-  saveList() {}
+    this.state.itemState.clear();
+    this.setState({ userInput: "", hostList: new HostnameSet(newHostList) });
+  }
 }

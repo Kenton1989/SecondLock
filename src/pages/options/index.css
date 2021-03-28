@@ -61,17 +61,12 @@
   right: 0;
 }
 
-.unsaved::after {
+.unsaved-tag {
   color: red;
-  content: "__MSG_unsavedHint__";
 }
 
-.deleted .host {
+.deleted {
   text-decoration: line-through;
-}
-.deleted::after {
-  color: red;
-  content: "__MSG_unsavedHint__";
 }
 
 .host-list-item {
@@ -82,7 +77,7 @@
 }
 
 .host-list-item:nth-child(even) {
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
 }
 
 .host-list-item button {
@@ -141,7 +136,9 @@
   font-weight: bold;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
   font-size: medium;
 }
 

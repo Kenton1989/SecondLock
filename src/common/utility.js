@@ -1,4 +1,4 @@
-import { api } from "../common/api"
+import { api } from "../common/api";
 
 // Short name for selectors
 function $(selector, element = document) {
@@ -23,7 +23,7 @@ function $tag(tag, element = document) {
 
 // Translate
 function $t(msgKey, ...param) {
-  return api.i18n.getMessage(msgKey, ...param);
+  return api.i18n ? api.i18n.getMessage(msgKey, ...param): "text";
 }
 
 /**
@@ -42,7 +42,7 @@ function getUrlOfTab(tab) {
 }
 
 // Pattern used to match a hostname.
-const kHostnamePattern = /^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)*[a-z][a-z0-9]{1,62}$/i;
+const kHostnamePattern = /^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)*[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$/i;
 /**
  * Check if the given string is a valid hostname
  *
@@ -141,10 +141,10 @@ const HOSTNAME_CHARS = /^[a-z0-9:\-.[\]]*$/i;
  * Reformat a hostname into what chrome would like to display.
  * - lowercase hostname
  * - for ip hostname, omit redundancy
- * 
+ *
  * For strict format checking, no character will be ignore or added
  * during format checking.
- * 
+ *
  * For loose (non-strict) format checking:
  * - heading and tailing space will be ignore
  * - IPv6 address will be wrap with bracket automatically
@@ -155,11 +155,9 @@ const HOSTNAME_CHARS = /^[a-z0-9:\-.[\]]*$/i;
  *  undefined if the input host name is invalid
  */
 function reformatHostname(hostname, strict = true) {
-  
   if (!strict) {
     hostname = hostname.trim();
-    if (validIPv6Address(hostname))
-      hostname = `[${hostname}]`
+    if (validIPv6Address(hostname)) hostname = `[${hostname}]`;
   }
 
   if (!HOSTNAME_CHARS.test(hostname)) return undefined;
@@ -170,6 +168,15 @@ function reformatHostname(hostname, strict = true) {
     console.warn(e);
     return undefined;
   }
+
+  if (
+    !validHostname(url.hostname) &&
+    !validIPv4Address(url.hostname) &&
+    !validIPv6Hostname(url.hostname)
+  ) {
+    return undefined;
+  }
+
   return url.hostname;
 }
 
@@ -236,9 +243,8 @@ function formatBytes(bytes) {
 async function closeTabIds(toClose, leaveOneTab = false) {
   if (leaveOneTab) {
     let toCloseSet = new Set(toClose);
-    let topWindow = await api.windows
-      .getLastFocused({ populate: true });
-    
+    let topWindow = await api.windows.getLastFocused({ populate: true });
+
     for (const tab of topWindow.tabs) {
       // if some tabs in the top window won't be closed
       if (!toCloseSet.has(tab.id)) {
@@ -270,8 +276,7 @@ async function closeTabs(toClose, leaveOneTab = false) {
   let tabIds = toClose.map((tab) => tab.id);
 
   if (leaveOneTab) {
-    let topWindow = await api.windows
-      .getLastFocused({ populate: true });
+    let topWindow = await api.windows.getLastFocused({ populate: true });
 
     let closedOnTop = 0;
     for (const tab of toClose) {
@@ -332,7 +337,7 @@ function unWait(prom) {
 
 /**
  * async version of window.alert
- * 
+ *
  * @param  {...any} msgs the message to display
  * @returns {Promise<undefined>} promise resolved after alert is close
  */
