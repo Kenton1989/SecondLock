@@ -77,8 +77,9 @@ class TabBlocker extends RemoteCallable {
    * Block all tabs under the given hostname, unless the hostname is not monitored by monitor
    *
    * @param {string} hostname the hostname to be blocked
-   * @param {string} blockingPageUrl the URL of new page used to block the tab. All active
-   *  tabs will be blocked with blockingPageUrl through method this.blockPageWithNewTab
+   * @param {string} blockingPageUrl the URL of new page used to block the tab. if it is undefined, 
+   * a New Tab page will be createdAll active tabs will be blocked with blockingPageUrl through 
+   * method this.blockPageWithNewTab
    */
   blockAllTabsUnder(hostname, blockingPageUrl) {
     // make private member visible

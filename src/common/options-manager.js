@@ -25,7 +25,7 @@ const DEFAULT_OPTIONS = {
   leaveOneTab: true,
   // syncOn: false,
   defDurations: [1, 5, 10, 15, 30, 60],
-  timesUpTabType: "default",
+  timesUpPageType: "default",
   mottos: ["Time waits for no one. – Folklore"],
 };
 

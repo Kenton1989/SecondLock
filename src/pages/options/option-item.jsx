@@ -25,7 +25,7 @@ function makeOptionNeedSave(
     detectEnter: true,
   }
 ) {
-  methods = Object.assign(DEFAULT_FUNC_NEED_SAVE, methods);
+  methods = Object.assign({}, DEFAULT_FUNC_NEED_SAVE, methods);
   let { unsavedHint, saveBtn, inputEle } = refs;
   let { getInput, setInput, onSave, verify } = methods;
   let { detectEnter } = params;
@@ -101,7 +101,7 @@ function makeOptionAutoSave(
     autoSaveDelay: 1000,
   }
 ) {
-  methods = Object.assign(DEFAULT_FUNC_NEED_SAVE, methods);
+  methods = Object.assign({}, DEFAULT_FUNC_NEED_SAVE, methods);
   let { savedHint, inputEle } = refs;
   let { getInput, setInput, onSave, verify } = methods;
   let { autoSaveDelay } = params;
@@ -151,6 +151,7 @@ function makeOptionAutoSave(
         window.clearTimeout(this.delayHandle);
         delete this.delayHandle;
       }
+      getInput(inputEle);
       this.delayHandle = window.setTimeout(this.save, autoSaveDelay);
     }
   };

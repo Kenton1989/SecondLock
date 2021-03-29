@@ -58,7 +58,20 @@ function blockToSelectTime(tab, hostname) {
 monitor.onBrowse.addListener(blockToSelectTime);
 
 unlockTiming.onTimesUp.addListener(function (hostname) {
-  tabBlocker.blockAllTabsUnder(hostname, TIME_UP_PAGE_URL);
+  let type = options.timesUpPageType.getCached();
+  switch (type) {
+    case "none":
+      tabBlocker.blockAllByClosing(hostname);
+      break;
+    case "default":
+      tabBlocker.blockAllTabsUnder(hostname, TIME_UP_PAGE_URL);
+      break;
+    case "newtab":
+      tabBlocker.blockAllTabsUnder(hostname, undefined);
+      break;
+    default:
+      console.error("Unknown time's up page type:", type);
+  }
 });
 
 backgroundAux.queryPageState = function (url) {
