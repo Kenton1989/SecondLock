@@ -1,4 +1,4 @@
-import { api } from "../common/api"
+import { api } from "../common/api";
 import { CustomEventWrapper } from "./custom-event-wrapper";
 import { wait, unWait } from "../common/utility";
 
@@ -25,6 +25,7 @@ const DEFAULT_OPTIONS = {
   leaveOneTab: true,
   // syncOn: false,
   defDurations: [1, 5, 10, 15, 30, 60],
+  timesUpTabType: "default",
   mottos: ["Time waits for no one. – Folklore"],
 };
 
@@ -139,7 +140,7 @@ class OneOption {
       unWait(this._pendingWait);
     }
     this._pendingWait = wait(delay);
-    
+
     let thisOption = this;
     return this._pendingWait.then(() => {
       thisOption.set(value);
@@ -169,7 +170,7 @@ class OneOption {
 
   /**
    * Remove a callback added through this.doOnUpdated(function)
-   * 
+   *
    * @param {function(any, any)} callback the callback function to be removed
    */
   removeDoOnUpdated(callback) {
@@ -240,9 +241,15 @@ class OptionCollection {
 }
 
 function assertOptions(options, ...requiredOptions) {
-  console.assert(options instanceof OptionCollection, "Missing OptionCollection object");
+  console.assert(
+    options instanceof OptionCollection,
+    "Missing OptionCollection object"
+  );
   for (const name of requiredOptions) {
-    console.assert(ALL_OPTION_NAME_SET.has(name), `Requiring unknown options: ${name}`);
+    console.assert(
+      ALL_OPTION_NAME_SET.has(name),
+      `Requiring unknown options: ${name}`
+    );
     console.assert(options[name], `Missing required option: ${name}`);
   }
 }

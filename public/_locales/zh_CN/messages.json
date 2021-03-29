@@ -232,5 +232,8 @@
   },
   "tooManyChar": {
     "message": "字符数量超出限制。"
+  },
+  "autoSavedHint": {
+    "message": "（已自动保存）"
   }
 }

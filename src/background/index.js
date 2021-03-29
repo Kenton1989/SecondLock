@@ -42,6 +42,10 @@ options.whitelistHost.doOnUpdated(function (list) {
   monitor.whitelist.reset(list);
 });
 
+options.leaveOneTab.doOnUpdated((val) => {
+  tabBlocker.keepOneTab = val;
+});
+
 function blockToSelectTime(tab, hostname) {
   console.debug(`Blocking the tab of host: ${hostname}`);
   if (unlockTiming.isTiming(hostname)) {

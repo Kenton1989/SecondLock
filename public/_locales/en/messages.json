@@ -235,5 +235,8 @@
   },
   "tooManyChar": {
     "message": "Too many characters."
+  },
+  "autoSavedHint": {
+    "message": "(auto saved)"
   }
 }

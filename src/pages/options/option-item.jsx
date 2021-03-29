@@ -1,29 +1,31 @@
 import React, { Component, createRef } from "react";
-import { asyncAlert } from "../../common/utility";
+import { asyncAlert, blinkElement } from "../../common/utility";
 
 function mkRefs(number) {
   return new Array(number).fill(undefined).map(() => createRef());
 }
 
-const DEFAULT_FUNC = {
+const DEFAULT_FUNC_NEED_SAVE = {
   getInput: (ref) => ref.current.value,
   setInput: (ref, val) => (ref.current.value = val),
-  onSave: (val) => val,
+  onSave: (val) => console.log(val),
 
   // verify the data and return a error message
   verify: (val) => "",
 };
 
+// Create a element type that contains a button used to save
+// value from input
 function makeOptionNeedSave(
   template,
   option,
   refs,
-  methods = DEFAULT_FUNC,
+  methods = DEFAULT_FUNC_NEED_SAVE,
   params = {
     detectEnter: true,
   }
 ) {
-  methods = Object.assign(DEFAULT_FUNC, methods);
+  methods = Object.assign(DEFAULT_FUNC_NEED_SAVE, methods);
   let { unsavedHint, saveBtn, inputEle } = refs;
   let { getInput, setInput, onSave, verify } = methods;
   let { detectEnter } = params;
@@ -80,6 +82,78 @@ function makeOptionNeedSave(
     }
   };
 }
-function makeOptionAutoSave(template, refs, methods) {}
+
+const DEFAULT_FUNC_AUTO_SAVE = {
+  getInput: (ref) => ref.current.value,
+  setInput: (ref, val) => (ref.current.value = val),
+  onSave: (val) => console.log(val),
+  // verify the data and return an error message
+  verify: (val) => "",
+};
+
+// Create a option item that will do auto saving
+function makeOptionAutoSave(
+  template,
+  option,
+  refs,
+  methods = DEFAULT_FUNC_AUTO_SAVE,
+  params = {
+    autoSaveDelay: 1000,
+  }
+) {
+  methods = Object.assign(DEFAULT_FUNC_NEED_SAVE, methods);
+  let { savedHint, inputEle } = refs;
+  let { getInput, setInput, onSave, verify } = methods;
+  let { autoSaveDelay } = params;
+
+  return class extends Component {
+    constructor(props) {
+      super(props);
+
+      this.delayHandle = undefined;
+
+      this.setInputValue = (val) => setInput(inputEle, val);
+      this.save = this.save.bind(this);
+      this.delayedSave = this.delayedSave.bind(this);
+    }
+
+    componentDidMount() {
+      option.doOnUpdated(this.setInputValue);
+
+      savedHint.current.style.opacity = 0;
+
+      inputEle.current.oninput = () => {
+        this.delayedSave();
+      };
+    }
+
+    componentWillUnmount() {
+      option.removeDoOnUpdated(this.setInputValue);
+    }
+
+    render() {
+      return <>{template}</>;
+    }
+
+    async save() {
+      let val = getInput(inputEle);
+      let errMsg = verify(val);
+      if (errMsg) {
+        asyncAlert(errMsg);
+        return;
+      }
+      await onSave(val);
+      blinkElement(savedHint.current, 1, 4000, false);
+    }
+
+    delayedSave() {
+      if (this.delayHandle !== undefined) {
+        window.clearTimeout(this.delayHandle);
+        delete this.delayHandle;
+      }
+      this.delayHandle = window.setTimeout(this.save, autoSaveDelay);
+    }
+  };
+}
 
 export { makeOptionNeedSave, makeOptionAutoSave, mkRefs };

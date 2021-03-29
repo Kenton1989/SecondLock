@@ -10,7 +10,6 @@
   position: relative;
 }
 
-
 .main-div h1,
 .main-div h2,
 .main-div h3,
@@ -26,8 +25,8 @@
 }
 
 .section-2 {
-  border-left: #AAA solid 5px;
-  padding-left: 12px
+  border-left: #aaa solid 5px;
+  padding-left: 12px;
 }
 
 .host-list-div {
@@ -71,7 +70,8 @@
   right: 0;
 }
 
-.unsaved-tag {
+.unsaved-tag,
+.auto-save-tag {
   color: red;
 }
 
