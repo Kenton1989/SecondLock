@@ -195,7 +195,7 @@
     "message": "The maximum text length is 300 characters."
   },
   "leaveOneTabDescribe": {
-    "message": "Leave one tab on top window if all tabs in top window are closed."
+    "message": "Leave one new tab when all tabs are to be closed by SecondLock"
   },
   "pageClosingTitle": {
     "message": "Page Closing"

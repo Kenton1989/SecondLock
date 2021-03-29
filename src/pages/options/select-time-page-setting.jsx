@@ -7,7 +7,13 @@ import { makeOptionNeedSave, mkRefs } from "./option-item";
  * parse a string into a list of integer
  * @param {string} str input string
  */
-function parseIntList(str, min = 1, max = 1440, maxCount = 10, separator = ",") {
+function parseIntList(
+  str,
+  min = 1,
+  max = 1440,
+  maxCount = 10,
+  separator = ","
+) {
   let strVals = str.split(separator);
   let valSet = new Set();
   for (let val of strVals) {
@@ -16,7 +22,7 @@ function parseIntList(str, min = 1, max = 1440, maxCount = 10, separator = ",") 
     val = val.trim();
     if (!val.match(/^[0-9]+$/)) continue;
     val = parseInt(val, 10);
-    
+
     if (min <= val && val <= max) {
       valSet.add(val);
     }
@@ -50,9 +56,9 @@ export default class SelectTimeSetting extends Component {
               {$t("unsavedHint")}
             </span>
           </h4>
-          <p className="description">{$t("setDefDurDescription")}</p>
           <details className="description">
-            <summary>{$t("defDurFormatSummary")}</summary>
+            <summary>{$t("setDefDurDescription")}</summary>
+            <p>{$t("defDurFormatSummary")}</p>
             <ul>
               <li>{$t("defDurFormat1")}</li>
               <li>{$t("defDurFormat2")}</li>

@@ -195,7 +195,7 @@
     "message": "文本长度上限为300字。"
   },
   "leaveOneTabDescribe": {
-    "message": "当顶层窗口的所有标签页被关闭时，在顶层窗口打开一个新标签页"
+    "message": "当所有标签页将被SecondLock关闭时，打开一个新标签页"
   },
   "pageClosingTitle": {
     "message": "页面关闭选项"

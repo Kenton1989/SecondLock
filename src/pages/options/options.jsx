@@ -18,18 +18,18 @@ export default function Options(props) {
 
   return (
     <MainWithNav title={$t("optionsTitle")}>
-      <section>
+      {/* <section>
         <a href="manual.html">{$t("manualTitle")}</a>
-      </section>
+      </section> */}
       <NavSection id="monitored-host" title={$t("monitorHost")}>
         <MonitoredHost options={options} />
       </NavSection>
       <NavSection id="page-blocking" title={$t("blockingOptionsTitle")}>
         <PageBlocking options={options} />
       </NavSection>
-      <NavSection id="storage-and-sync" title={$t("storageAndSync")}>
+      {/* <NavSection id="storage-and-sync" title={$t("storageAndSync")}>
         <p>{$t("cloudStorageUsed")} 0 KB/5 KB</p>
-      </NavSection>
+      </NavSection> */}
     </MainWithNav>
   );
 }
