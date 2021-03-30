@@ -15,7 +15,9 @@
   "cmake.configureOnOpen": false,
   "i18n-ally.keystyle": "nested",
   "cSpell.words": [
-    "Unmount"
+    "Unmount",
+    "lxieyang",
+    "newtab"
   ],
   // "javascript.validate.enable": false,
 }

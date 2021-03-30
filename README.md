@@ -8,9 +8,7 @@
 
 A brand new time management tool introduced in [the video by @老师好我叫何同学][mr_he_video]. You need to set time limit every time before entering those fancy websites.
 
-With SecondLock, before entering any fancy website, you must set a time limit for browsing that page. **That is the last second your are mindful, you should think twice before setting.** Then, enjoy your mindless time. SecondLock will block the webpage when time's up and try to remind you.
-
-Common time management extensions either block those fancy website completely, or set gross time limit. The former ones deny the necessity of relaxation. The latter ones only show effect when the time limit is coming to an end. SecondLock avoids both problem, it remind you every time.
+With SecondLock, before entering any fancy website, you must set a time limit for browsing that page. That is the last second your are mindful, you should think twice to set a appropriate unlock duration. Then, enjoy your mindless time. SecondLock will block the webpage when time's up and try to remind you.
 
 > Ask yourself before opening an app:
 >
@@ -94,6 +92,7 @@ Capability on other Chromium-based browser haven't been tested.
 - [ ] option syncing
 - [ ] options: customize blocking page on time's up
 - [ ] options: set the message on time's up when setting unlock duration
+- [ ] Add question mark near each option to display detail explanation of option
 - [x] options: close website on time's up without showing time's up page
 - [x] display customized motto on blocking page
 - [x] options: leave one newtab when all tabs in current window are closed
