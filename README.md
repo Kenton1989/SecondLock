@@ -6,15 +6,11 @@
 
 ---
 
-> Inspired by [the video by @老师好我叫何同学][mr_he_video].
+A brand new time management tool introduced in [the video by @老师好我叫何同学][mr_he_video]. You need to set time limit every time before entering those fancy websites.
 
-Internet is NOT interesting before you have MIND. Wasting time mindlessly is never interesting.
+With SecondLock, before entering any fancy website, you must set a time limit for browsing that page. **That is the last second your are mindful, you should think twice before setting.** Then, enjoy your mindless time. SecondLock will block the webpage when time's up and try to remind you.
 
-**_As a mindful person_**, you should think twice for what are supposed to be done before entering any website. Then, finish the task quickly, or entertain yourself with plan.
-
-**_However, most of you are not mindful enough_**. Your mind and time will easily fly away when you are attracted by all kinds of fancy contents.
-
-SecondLock will help you, who has mind but not mindful enough. Before entering any attractive website, you must think twice for what to do and estimate the time needed, that is the last second your are mindful. Then, set a time limit with SecondLock and enjoy your mindless time. SecondLock will block the webpage when time's up and try to remind you.
+Common time management extensions either block those fancy website completely, or set gross time limit. The former ones deny the necessity of relaxation. The latter ones only show effect when the time limit is coming to an end. SecondLock avoids both problem, it remind you every time.
 
 > Ask yourself before opening an app:
 >
@@ -22,7 +18,7 @@ SecondLock will help you, who has mind but not mindful enough. Before entering a
 > - How long will you spend?
 > - Do you have any alternative to do?
 >
-> -- @老师好我叫何同学
+> -- [@老师好我叫何同学][mr_he_channel]
 
 Three questions above also applies before browsing any website.
 
