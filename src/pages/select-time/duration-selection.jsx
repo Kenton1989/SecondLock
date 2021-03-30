@@ -127,22 +127,23 @@ export default class DurationSelection extends React.Component {
     }
 
     let unlockDuration = Math.round(ms);
-    await RemoteCallable.call("lock-time-monitor", "setTimerFor", [
-      this.state.blockedHost,
-      unlockDuration,
-    ]);
+    await RemoteCallable.call(
+      "lock-time-monitor",
+      "setTimerFor",
+      [this.state.blockedHost, unlockDuration]
+    );
 
     if (this.blockedTabId !== undefined) {
       try {
         let tab = await api.tabs.get(this.blockedTabId);
-        api.tabs.update(tab.id, { active: true });
+        await api.tabs.update(tab.id, { active: true });
       } catch {
         // tab is not found, do nothing
       }
     }
     RemoteCallable.call("background-aux", "closeExtPageAbout", [
       this.state.blockedHost,
-    ]);
+    ], false);
   }
 
   enterMinutes() {
@@ -170,9 +171,12 @@ export default class DurationSelection extends React.Component {
 
   closeRelevant() {
     if (this.state.blockedHost) {
-      RemoteCallable.call("background-aux", "closeRelativePages", [
-        this.state.blockedHost,
-      ]);
+      RemoteCallable.call(
+        "background-aux",
+        "closeRelativePages",
+        [this.state.blockedHost],
+        false
+      );
     } else {
       asyncAlert($t("noBlockedDetect"));
     }

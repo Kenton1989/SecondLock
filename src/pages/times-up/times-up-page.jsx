@@ -48,7 +48,8 @@ export default class TimesUpPage extends Component {
       RemoteCallable.call(
         "background-aux",
         "closeRelativePages",
-        [this.state.blockedHost]
+        [this.state.blockedHost],
+        false
       );
     } else {
       asyncAlert($t("noBlockedDetect"));

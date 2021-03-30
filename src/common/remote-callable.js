@@ -27,14 +27,22 @@ class RemoteCallable {
         let callInfo = message.remoteCallInfo;
         if (callInfo.targetName !== obj.name) return;
 
-        let funcName = callInfo.funcName;
-        let args = callInfo.args;
+        let { funcName, args, waitForReturn } = callInfo;
         let res = obj[funcName](...args);
+        console.debug("Remote call info:", callInfo)
 
+        if (!waitForReturn) {
+          console.debug("No response sent.")
+          return;
+        }
         if (res instanceof Promise) {
-          res.then((result) => {
-            sendResponse({ ret: result });
-          });
+          res
+            .then((result) => {
+              sendResponse({ ret: result });
+            })
+            .catch((err) => {
+              console.error("Error during Remote Call: ", err);
+            });
           // return true to keep message channel open until response is set
           return true;
         } else {
@@ -57,18 +65,26 @@ class RemoteCallable {
    * @param {String} name name of the remote object
    * @param {String} funcName name of the function to be called
    * @param {any[]} args parameter list
+   * @param {boolean} waitForReturn if true, the call will return a Promise that will resolve with
+   *  the return from the remote callee. Otherwise, return a promise fulfilled with undefined.
    * @returns {Promise<*>} the promise resolved with the value return by remote method
    */
-  static async call(name, funcName, args = []) {
+  static async call(name, funcName, args = [], waitForReturn = true) {
     let remoteCallQuery = {
       remoteCallInfo: {
         targetName: name,
         funcName: funcName,
         args: args,
+        waitForReturn: waitForReturn,
       },
     };
-    let reply = await api.runtime.sendMessage(remoteCallQuery);
-    return reply.ret;
+    let prom = api.runtime.sendMessage(remoteCallQuery);
+    if (waitForReturn) {
+      let reply = await prom;
+      return reply.ret;
+    } else {
+      return;
+    }
   }
 }
 

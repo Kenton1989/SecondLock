@@ -1,13 +1,10 @@
 import { api } from "../common/api";
 import RemoteCallable from "../common/remote-callable";
 import {
-  closeCurrentTab,
   queryTabsUnder,
   closeTabs,
 } from "../common/utility.js";
 
-const NO_RESPONSE_MSG =
-  "The message port closed before a response was received.";
 class TabBlocker extends RemoteCallable {
   /**
    * Create a tab blocker backing with the given dynamic page backend and monitor
