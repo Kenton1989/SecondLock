@@ -95,7 +95,7 @@ Capability on Chromium and Microsoft Edge (Chromium Kernel) haven't been tested.
 - [ ] options: customize blocking page on time's up
 - [ ] options: leave one newtab when all tabs in current window are closed
 - [ ] options: set the message on time's up when setting unlock duration
-- [ ] rewrite frontend with a framework
+- [x] rewrite frontend with a framework
 - [x] support Firefox
 - [x] selection page：set unlock time by ending point
 - [x] internationalization (at least zh-CN + en)
