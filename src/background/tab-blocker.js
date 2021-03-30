@@ -1,11 +1,10 @@
-import { api } from "./api";
-import RemoteCallable from "./remote-callable";
+import { api } from "../common/api";
+import RemoteCallable from "../common/remote-callable";
 import {
   closeCurrentTab,
   queryTabsUnder,
-  validHostname,
   closeTabs,
-} from "./utility.js";
+} from "../common/utility.js";
 
 const NO_RESPONSE_MSG =
   "The message port closed before a response was received.";

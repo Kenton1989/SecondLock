@@ -5,7 +5,6 @@ import { dynamicInit } from "../js/dynamic-page";
 import { OptionCollection } from "../../common/options-manager";
 import RemoteCallable from "../../common/remote-callable";
 
-import { TabBlocker } from "../../common/tab-blocker";
 import EnterableInput from "../components/enterable-input";
 
 const options = new OptionCollection("defDurations");
@@ -67,7 +66,6 @@ export default class DurationSelection extends React.Component {
   componentDidMount() {
     dynamicInit((args) => {
       this.blockedTabId = args.blockedTabId;
-      TabBlocker.autoUnblock(args.blockedHost);
       this.setState({ blockedHost: args.blockedHost });
     });
   }
@@ -75,7 +73,7 @@ export default class DurationSelection extends React.Component {
   render() {
     let displayedHost = this.state.blockedHost || "example.com";
     return (
-      <div >
+      <div>
         <h1>{$t("durSelectHint")}</h1>
         <h2 className="blocked-link">{displayedHost}</h2>
         <DefaultDurButtonList
@@ -134,8 +132,6 @@ export default class DurationSelection extends React.Component {
       unlockDuration,
     ]);
 
-    // close all relevant pages
-    TabBlocker.notifyUnblock(this.state.blockedHost);
     if (this.blockedTabId !== undefined) {
       try {
         let tab = await api.tabs.get(this.blockedTabId);
@@ -144,7 +140,9 @@ export default class DurationSelection extends React.Component {
         // tab is not found, do nothing
       }
     }
-    window.close();
+    RemoteCallable.call("background-aux", "closeExtPageAbout", [
+      this.state.blockedHost,
+    ]);
   }
 
   enterMinutes() {

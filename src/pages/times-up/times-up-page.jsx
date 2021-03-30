@@ -3,7 +3,6 @@ import { $t, asyncAlert } from "../../common/utility";
 import MainUI from "../components/main-ui";
 import { OptionCollection } from "../../common/options-manager";
 import { dynamicInit } from "../js/dynamic-page";
-import { TabBlocker } from "../../common/tab-blocker";
 import RemoteCallable from "../../common/remote-callable";
 
 let options = new OptionCollection("mottos");
@@ -25,7 +24,6 @@ export default class TimesUpPage extends Component {
 
   componentDidMount() {
     dynamicInit((args) => {
-      TabBlocker.autoUnblock(args.blockedHost);
       this.setState({ blockedHost: args.blockedHost });
     });
   }
