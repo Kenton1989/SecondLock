@@ -2,9 +2,11 @@
 
 # SecondLock (Chrome Extension)
 
-[中文 README](README.zh_CN.md)
+[简体中文版简介](README.zh_CN.md)
 
-> Inspired by [Mr. He's video][mr_he_video].
+---
+
+> Inspired by [the video by @老师好我叫何同学][mr_he_video].
 
 Internet is NOT interesting before you have MIND. Wasting time mindlessly is never interesting.
 
@@ -20,11 +22,9 @@ SecondLock will help you, who has mind but not mindful enough. Before entering a
 > - How long will you spend?
 > - Do you have any alternative to do?
 >
-> -- Mr. He
+> -- @老师好我叫何同学
 
 Three questions above also applies before browsing any website.
-
----
 
 # Features
 
@@ -33,7 +33,8 @@ Three questions above also applies before browsing any website.
 - Functional popup
   - Countdown display
   - Stop timing earlier
-- Customize default unlock durations choices
+- Customize unlock duration selection page
+- Customize time's up page
 
 # Installation
 
@@ -49,14 +50,14 @@ The extension is tested on Chrome 89.0 & Firefox 86.0
 
 I'm just too lazy to test capability on old version browser (XD.
 
-Capability on Chromium and Microsoft Edge (Chromium Kernel) haven't been tested.
+Capability on other Chromium-based browser haven't been tested.
 
 # Update
 
 - v0.4.0
   - Rewrite frontend with React.js
   - Support customized message on times up page
-  - 
+  - Support leave one tab when all tabs are closed by SecondLock
 
 - v0.3.0
   - Add capability: Firefox
@@ -109,14 +110,22 @@ Capability on Chromium and Microsoft Edge (Chromium Kernel) haven't been tested.
 - [x] acknowledgement in options page
 - [x] stop timer earlier manually
 - [x] monitor whitelist
-- [x] select time and unlock before entering website in blacklist (core function 1)
-- [x] customize blacklist (core function 2)
+- [x] select time and unlock before entering website in blacklist
+- [x] customize blacklist
 - [x] popup: countdown display
 - [x] polish the extension icon
 - The functionalities that are unlikely to appear
   - [ ] limited local storage
   - [ ] set accumulated time limit
   - [ ] browsing history statistic
+
+# Acknowledge
+
+Here I present my great thanks to the following people:
+
+- [@老师好我叫何同学][mr_he_channel]: the source of inspiration of this extension.
+- [@KeithHenry](https://github.com/KeithHenry): support transforming the callback-based API in chrome to promise-based. [[Source]](https://github.com/KeithHenry/chromeExtensionAsync)
+- [@lxieyang](https://github.com/lxieyang/): provide web extension boilerplate with React.js. [[Source]](https://github.com/lxieyang/chrome-extension-boilerplate-react)
 
 [mr_he_channel]: https://www.youtube.com/c/hetongxue
 [mr_he_video]: https://www.youtube.com/watch?v=mCEjEkgU1AA

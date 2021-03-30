@@ -4,7 +4,9 @@
 
 [English README](README.md)
 
-> 灵感来自[老师好我叫何同学的视频][mr_he_video]。
+---
+
+> 灵感来自[@老师好我叫何同学 的视频][mr_he_video]。
 
 互联网并不好玩，除非你意识清晰。失智般的在网上浪费时间从不是什么好事。
 
@@ -20,11 +22,9 @@ SecondLock正是为这类人所设计，有意识但不够坚定的人。在打�
 > - 你要看多长时间
 > - 你还能去做什么
 >
-> -- 何同学
+> -- @老师好我叫何同学
 
 上面三个问题在浏览网页之前同样适用。
-
----
 
 # 功能
 
@@ -33,7 +33,8 @@ SecondLock正是为这类人所设计，有意识但不够坚定的人。在打�
 - 多功能弹窗
   - 倒计时显示
   - 提前结束倒计时
-- 自定义默认解锁时长选项
+- 自定义解锁时长选择页面
+- 自定义倒计时结束页面
 
 # 安装
 
@@ -49,9 +50,14 @@ SecondLock正是为这类人所设计，有意识但不够坚定的人。在打�
 
 懒得测旧版本的兼容性了（
 
-暂未在 Chromium 和 Microsoft Edge (Chromium 版) 上测试兼容性。
+暂未在其它基于Chromium的浏览器上测试兼容性。
 
 # 更新日志
+
+- v0.4.0
+  - 用React.js重写了前端
+  - 支持倒计时结束页面现实的文字
+  - 支持当所有标签页被SecondLock关闭时，打开一个新标签页
 
 - v0.3.0
   - 兼容Firefox
@@ -104,14 +110,23 @@ SecondLock正是为这类人所设计，有意识但不够坚定的人。在打�
 - [x] 鸣谢列表
 - [x] 提前结束计时
 - [x] 白名单
-- [x] 打开网站前要确定使用时间(核心功能 1)
-- [x] 黑名单(核心功能 2)
+- [x] 打开网站前要确定使用时间
+- [x] 黑名单
 - [x] 倒计时显示
 - [x] 弄个好看点的 icon
 - 想到但不想做的功能
   - [ ] 限制储存空间
   - [ ] 累计用时显示/限制
   - [ ] 数据统计
+
+# 鸣谢
+
+感谢以下人物对本插件的帮助：
+
+- [@老师好我叫何同学][mr_he_channel]：一切的灵感来源
+- [@KeithHenry](https://github.com/KeithHenry)：提供了将chrome里基于callback的API转成基于Promise的API的支持[[Source]](https://github.com/KeithHenry/chromeExtensionAsync)
+- [@lxieyang](https://github.com/lxieyang/)：提供了基于React.js开发浏览器插件的模板[[Source]](https://github.com/lxieyang/chrome-extension-boilerplate-react)
+
 
 # 开发日志
 
@@ -233,5 +248,6 @@ SecondLock正是为这类人所设计，有意识但不够坚定的人。在打�
 - 画了一个草率的 Logo
 - 嗯学 Chrome Extension 开发
 
+[mr_he_channel]: https://space.bilibili.com/163637592
 [mr_he_video]: https://www.bilibili.com/video/BV1ev411x7en
 [mr_he_app]: http://download.yitangyx.cn/test/student-he/new.html?202001
