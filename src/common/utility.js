@@ -190,7 +190,8 @@ let blinkTimeoutMap = new Map();
  */
 function blinkElement(element, times = 3, period = 200, display = true) {
   if (times <= 0) {
-    element.style.opacity = display ? 1 : 0;
+    if (display) 
+      element.style.opacity = 1;
     return;
   } else {
     element.style.opacity = 1;
