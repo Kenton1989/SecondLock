@@ -125,45 +125,6 @@ class TabBlocker extends RemoteCallable {
 
     monitor.active = oldActive;
   }
-
-  /**
-   * Notify all tabs that are blocking the given hostname to unblock,
-   * **except the current page**.
-   *
-   * To let a tab automatically close itself after this function is called,
-   * autoBlock(hostname: string) should be called in the content-script of
-   * that page.
-   *
-   * @param {String} hostname the hostname to be unblocked.
-   */
-  static notifyUnblock(hostname) {
-    api.runtime
-      .sendMessage({
-        doNotBlockHost: hostname,
-      })
-      .catch((reason) => {
-        // this method does not expect any response
-        if (reason.message !== NO_RESPONSE_MSG) {
-          throw reason;
-        }
-      });
-  }
-
-  /**
-   * [For content script] Auto unblock the given page
-   * when the given tab should be unblocked.
-   *
-   * @param {String} hostname the hostname to be unblocked.
-   */
-  static autoUnblock(hostname) {
-    if (!hostname) return;
-    api.runtime.onMessage.addListener((message) => {
-      if (message.doNotBlockHost) {
-        let unlockedHost = message.doNotBlockHost;
-        if (unlockedHost === hostname) closeCurrentTab();
-      }
-    });
-  }
 }
 
 export { TabBlocker };
