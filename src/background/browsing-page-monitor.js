@@ -41,7 +41,7 @@ class BrowsingPageMonitor extends RemoteCallable {
     // avoid ambiguity of "this"
     let monitor = this;
 
-    onBrowsingPageChanged.addListener(function (tab) {
+    onBrowsingPageChanged.addListener((tab) => {
       if (!monitor.active || !tab || !tab.url) return;
 
       console.debug(`User are browsing: ${tab.url}`);
@@ -51,7 +51,7 @@ class BrowsingPageMonitor extends RemoteCallable {
 
       // Wait for a while, to allow the browser to complete tab switching
       // to reduce the effect of a weird bug
-      window.setTimeout(function () {
+      window.setTimeout(() => {
         browseEvent.trigger(tab, monitoredHost);
       }, TAB_SWITCH_DELAY);
     });

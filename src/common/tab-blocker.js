@@ -77,8 +77,8 @@ class TabBlocker extends RemoteCallable {
    * Block all tabs under the given hostname, unless the hostname is not monitored by monitor
    *
    * @param {string} hostname the hostname to be blocked
-   * @param {string} blockingPageUrl the URL of new page used to block the tab. if it is undefined, 
-   * a New Tab page will be createdAll active tabs will be blocked with blockingPageUrl through 
+   * @param {string} blockingPageUrl the URL of new page used to block the tab. if it is undefined,
+   * a New Tab page will be createdAll active tabs will be blocked with blockingPageUrl through
    * method this.blockPageWithNewTab
    */
   blockAllTabsUnder(hostname, blockingPageUrl) {
@@ -142,7 +142,7 @@ class TabBlocker extends RemoteCallable {
       .sendMessage({
         doNotBlockHost: hostname,
       })
-      .catch(function (reason) {
+      .catch((reason) => {
         // this method does not expect any response
         if (reason.message !== NO_RESPONSE_MSG) {
           throw reason;
@@ -158,7 +158,7 @@ class TabBlocker extends RemoteCallable {
    */
   static autoUnblock(hostname) {
     if (!hostname) return;
-    api.runtime.onMessage.addListener(function (message) {
+    api.runtime.onMessage.addListener((message) => {
       if (message.doNotBlockHost) {
         let unlockedHost = message.doNotBlockHost;
         if (unlockedHost === hostname) closeCurrentTab();

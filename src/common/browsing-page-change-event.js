@@ -14,14 +14,14 @@ let onBrowsingPageChanged = new CustomEventWrapper(
 let latestTab = NaN;
 
 // If user open a new website in a tab
-api.tabs.onUpdated.addListener(function (id, changes, tab) {
+api.tabs.onUpdated.addListener((id, changes, tab) => {
   if (!tab.active || !changes.url) return;
   onBrowsingPageChanged.trigger(tab);
 });
 
 const NO_TAB_EXIST_MSG_PREFIX = "No tab with id";
 // If user switch to another tab
-api.tabs.onActivated.addListener(function (tabInfo) {
+api.tabs.onActivated.addListener((tabInfo) => {
   if (tabInfo.tabId === latestTab) return;
   latestTab = tabInfo.tabId;
 
@@ -38,7 +38,7 @@ api.tabs.onActivated.addListener(function (tabInfo) {
 });
 
 // If user switch to another window
-api.windows.onFocusChanged.addListener(function (winId) {
+api.windows.onFocusChanged.addListener((winId) => {
   // if all window lose focus
   if (winId === api.windows.WINDOW_ID_NONE) return;
 

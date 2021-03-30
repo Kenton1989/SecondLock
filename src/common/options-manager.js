@@ -72,13 +72,13 @@ class OneOption {
     let thisOption = this;
 
     if (autoInit) {
-      api.storage.local.get([storageKey]).then(function (result) {
+      api.storage.local.get([storageKey]).then((result) => {
         thisOption.setCached(result[storageKey]);
       });
     }
 
     if (autoUpdate) {
-      api.storage.onChanged.addListener(function (changes, area) {
+      api.storage.onChanged.addListener((changes, area) => {
         if (area !== "local") return;
         if (changes[storageKey]) {
           thisOption.setCached(changes[storageKey].newValue);
@@ -209,14 +209,14 @@ class OptionCollection {
     let thisOptions = this;
 
     // query the storage in bulk
-    api.storage.local.get(optionNames).then(function (res) {
+    api.storage.local.get(optionNames).then((res) => {
       for (const key of optionNames) {
         thisOptions[key].setCached(res[key]);
       }
     });
 
     // listen to storage changes in bulk
-    api.storage.onChanged.addListener(function (changes, area) {
+    api.storage.onChanged.addListener((changes, area) => {
       if (area !== "local") return;
       for (const changedKey of Object.keys(changes)) {
         let option = thisOptions[changedKey];
@@ -255,7 +255,7 @@ function assertOptions(options, ...requiredOptions) {
 }
 
 // TODO - sync options every 5 seconds
-window.setInterval(function () {}, 5000);
+window.setInterval(() => {}, 5000);
 
 export {
   ALL_OPTION_NAME,

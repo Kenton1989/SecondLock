@@ -17,11 +17,10 @@ const SELECT_DUR_PAGE_URL = api.runtime.getURL("select-time.html");
 const TIME_UP_PAGE_URL = api.runtime.getURL("times-up.html");
 
 // Set default options
-api.runtime.onInstalled.addListener(function () {
-  api.storage.local.get(DEFAULT_OPTIONS).then(function (result) {
-    api.storage.local.set(result).then(function () {
-      console.debug("Setting: ", result);
-    });
+api.runtime.onInstalled.addListener(async () => {
+  let result = await api.storage.local.get(DEFAULT_OPTIONS);
+  api.storage.local.set(result).then(() => {
+    console.debug("Setting: ", result);
   });
 });
 
@@ -32,12 +31,12 @@ let calmDownTiming = new HostTimingMonitor("calm-down-time-monitor");
 let tabBlocker = new TabBlocker("tab-blocker", dynamicPageBack, monitor);
 let backgroundAux = new RemoteCallable("background-aux");
 
-options.monitoredList.doOnUpdated(function (list) {
+options.monitoredList.doOnUpdated((list) => {
   if (!list) return;
   monitor.blacklist.reset(list);
 });
 
-options.whitelistHost.doOnUpdated(function (list) {
+options.whitelistHost.doOnUpdated((list) => {
   if (!list) return;
   monitor.whitelist.reset(list);
 });
@@ -57,7 +56,7 @@ function blockToSelectTime(tab, hostname) {
 
 monitor.onBrowse.addListener(blockToSelectTime);
 
-unlockTiming.onTimesUp.addListener(function (hostname) {
+unlockTiming.onTimesUp.addListener((hostname) => {
   let type = options.timesUpPageType.getCached();
   switch (type) {
     case "none":
@@ -74,7 +73,7 @@ unlockTiming.onTimesUp.addListener(function (hostname) {
   }
 });
 
-backgroundAux.queryPageState = function (url) {
+backgroundAux.queryPageState = (url) => {
   let state = {
     isMonitored: false,
     monitoredHost: undefined,
@@ -104,8 +103,8 @@ backgroundAux.queryPageState = function (url) {
   return state;
 };
 
-backgroundAux.stopTimingAndClose = function (hostname) {
-  tabBlocker.blockAllByClosing(hostname).then(function () {
+backgroundAux.stopTimingAndClose = (hostname) => {
+  tabBlocker.blockAllByClosing(hostname).then(() => {
     // stop timing after closing
     // avoid frequent tabs switching,
     // which is likely to trigger browsing monitor unexpectedly
@@ -114,16 +113,16 @@ backgroundAux.stopTimingAndClose = function (hostname) {
 };
 
 const CANDIDATE_RELATIVE_URL = [TIME_UP_PAGE_URL, SELECT_DUR_PAGE_URL];
-backgroundAux.closeRelativePages = function (hostname) {
-  tabBlocker
-    .blockAllByClosing(hostname)
-    .then(() => {
-      return api.tabs.query({ url: CANDIDATE_RELATIVE_URL });
-    })
-    .then((toClose) => {
-      toClose = toClose.filter(
-        (tab) => dynamicPageBack.getParam(tab.id).blockedHost === hostname
-      );
-      closeTabs(toClose, true);
-    });
+
+backgroundAux.closeExtPageAbout = async (hostname) => {
+  let toClose = await api.tabs.query({ url: CANDIDATE_RELATIVE_URL });
+  toClose = toClose.filter(
+    (tab) => dynamicPageBack.getParam(tab.id).blockedHost === hostname
+  );
+  await closeTabs(toClose, true);
+};
+
+backgroundAux.closeRelativePages = async (hostname) => {
+  await tabBlocker.blockAllByClosing(hostname);
+  await backgroundAux.closeExtPageAbout(hostname);
 };

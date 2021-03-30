@@ -1,5 +1,5 @@
 import { CustomEventWrapper } from "../common/custom-event-wrapper";
-import RemoteCallable from "../common/remote-callable"
+import RemoteCallable from "../common/remote-callable";
 
 const TIMES_UP_EVENT_KEY = "timing-monitor-times-up";
 
@@ -120,7 +120,7 @@ class HostTimingMonitor extends RemoteCallable {
     let restTimeMap = this._timingInfoMap;
     let timesUpEvent = this._timesUpEvent;
 
-    let handle = window.setTimeout(function () {
+    let handle = window.setTimeout(() => {
       timesUpEvent.trigger(hostname, duration);
       restTimeMap.delete(hostname);
     }, timePoint - Date.now());

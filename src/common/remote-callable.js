@@ -1,4 +1,4 @@
-import { api } from "../common/api"
+import { api } from "../common/api";
 
 /**
  * A class of object that can be call remotely.
@@ -22,7 +22,7 @@ class RemoteCallable {
     // avoid ambiguity of "this"
     let obj = this;
 
-    api.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+    api.runtime.onMessage.addListener((message, sender, sendResponse) => {
       if (message.remoteCallInfo) {
         let callInfo = message.remoteCallInfo;
         if (callInfo.targetName !== obj.name) return;
@@ -32,7 +32,7 @@ class RemoteCallable {
         let res = obj[funcName](...args);
 
         if (res instanceof Promise) {
-          res.then(function (result) {
+          res.then((result) => {
             sendResponse({ ret: result });
           });
           // return true to keep message channel open until response is set

@@ -1,4 +1,4 @@
-import { api } from "../../common/api"
+import { api } from "../../common/api";
 
 // Buffered arguments
 let _args = undefined;
@@ -12,13 +12,13 @@ function setup() {
   if (_setup) return;
   _setup = true;
 
-  api.tabs.getCurrent().then(function (tab) {
+  api.tabs.getCurrent().then((tab) => {
     if (!tab) return;
     console.debug("current tab id: ", tab.id);
   });
 
   // Passive receive argument
-  api.runtime.onMessage.addListener(function (message) {
+  api.runtime.onMessage.addListener((message) => {
     if (message.dynamicPageInitArgs) {
       console.debug("arg received (passive): ", message.dynamicPageInitArgs);
       setArgs(message.dynamicPageInitArgs);
@@ -26,23 +26,21 @@ function setup() {
   });
 
   // Active Request arguments
-  api.runtime
-    .sendMessage({ dynamicPageInitRequest: true })
-    .then(function (response) {
-      // No argument received
-      if (!response) {
-        throw new Error("Failed to get page arguments.");
-      }
+  api.runtime.sendMessage({ dynamicPageInitRequest: true }).then((response) => {
+    // No argument received
+    if (!response) {
+      throw new Error("Failed to get page arguments.");
+    }
 
-      // Argument haven't been stored in the backend
-      if (!response.dynamicPageInitArgs) {
-        console.debug("The request is sent too soon.");
-        return;
-      }
+    // Argument haven't been stored in the backend
+    if (!response.dynamicPageInitArgs) {
+      console.debug("The request is sent too soon.");
+      return;
+    }
 
-      console.debug("arg received (active): ", response.dynamicPageInitArgs);
-      setArgs(response.dynamicPageInitArgs);
-    });
+    console.debug("arg received (active): ", response.dynamicPageInitArgs);
+    setArgs(response.dynamicPageInitArgs);
+  });
 }
 
 function setArgs(args) {
@@ -67,21 +65,16 @@ function setArgs(args) {
 function dynamicInit(callback) {
   setup();
   // execute the callback directly if the arguments is buffered.
-  // otherwise, register for the buffering events. 
+  // otherwise, register for the buffering events.
   if (_args !== undefined) {
     console.debug("using buffered arg.");
     callback(_args);
   } else {
-    document.addEventListener(
-      ARGS_BUFFERED_EVENT_KEY,
-      function (e) {
-        console.debug("arg received.");
-        callback(_args);
-      }
-    );
+    document.addEventListener(ARGS_BUFFERED_EVENT_KEY, (e) => {
+      console.debug("arg received.");
+      callback(_args);
+    });
   }
 }
-
-
 
 export { dynamicInit };

@@ -1,5 +1,5 @@
-import { api } from "../common/api"
-import RemoteCallable from "../common/remote-callable"
+import { api } from "../common/api";
+import RemoteCallable from "../common/remote-callable";
 
 const RECEIVER_DOES_NOT_EXIST_MSG =
   "Could not establish connection. Receiving end does not exist.";
@@ -14,7 +14,7 @@ class DynamicPageBackend extends RemoteCallable {
     let tabArgs = this._tabArgs;
 
     // send arguments back on request.
-    api.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+    api.runtime.onMessage.addListener((message, sender, sendResponse) => {
       if (message.dynamicPageInitRequest) {
         let tabId = sender.tab.id;
         let args = tabArgs.get(tabId);
@@ -23,7 +23,7 @@ class DynamicPageBackend extends RemoteCallable {
     });
 
     // remove args of tab on close
-    api.tabs.onRemoved.addListener(function (tabId, removeInfo) {
+    api.tabs.onRemoved.addListener((tabId, removeInfo) => {
       console.debug(`Tab #${tabId} closed.`);
       if (tabArgs.delete(tabId)) {
         console.debug(`Argument for tab #${tabId} deleted.`);
@@ -62,7 +62,7 @@ class DynamicPageBackend extends RemoteCallable {
     let tab = await api.tabs.create(tabProperties);
     this._tabArgs.set(tab.id, pageArgs);
     console.debug(`Created tab #${tab.id} opened with URL:${url}.`);
-    
+
     // Actively send arguments
     api.tabs
       .sendMessage(tab.id, { dynamicPageInitArgs: pageArgs })

@@ -130,7 +130,7 @@ function setTextForClass(className, text) {
  * Close current tab.
  */
 function closeCurrentTab() {
-  api.tabs.getCurrent().then(function (tab) {
+  api.tabs.getCurrent().then((tab) => {
     if (!tab) return;
     api.tabs.remove(tab.id);
   });
@@ -200,9 +200,9 @@ function blinkElement(element, times = 3, period = 200, display = true) {
   let existing = blinkTimeoutMap.get(element);
   if (existing !== undefined) window.clearTimeout(existing);
 
-  let timeoutId = window.setTimeout(function () {
+  let timeoutId = window.setTimeout(() => {
     element.style.opacity = 0;
-    let timeoutId = window.setTimeout(function () {
+    let timeoutId = window.setTimeout(() => {
       blinkElement(element, times - 1, period, display);
     }, period / 2);
     blinkTimeoutMap.set(element, timeoutId);
