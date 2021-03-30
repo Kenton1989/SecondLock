@@ -53,9 +53,14 @@ function makeOptionNeedSave(
           asyncAlert(errMsg);
           return;
         }
+
+        inputEle.current.disabled = true;
+        saveBtn.current.disabled = true;
         await onSave(val);
         setInput(inputEle, val);
         unsavedHint.current.style.opacity = 0;
+        inputEle.current.disabled = false;
+        saveBtn.current.disabled = false;
         this.dirty = false;
       };
 
@@ -142,7 +147,10 @@ function makeOptionAutoSave(
         asyncAlert(errMsg);
         return;
       }
+
+      inputEle.current.disabled = true;
       await onSave(val);
+      inputEle.current.disabled = false;
       blinkElement(savedHint.current, 1, 4000, false);
     }
 
