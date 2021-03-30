@@ -53,6 +53,11 @@ Capability on Chromium and Microsoft Edge (Chromium Kernel) haven't been tested.
 
 # Update
 
+- v0.4.0
+  - Rewrite frontend with React.js
+  - Support customized message on times up page
+  - 
+
 - v0.3.0
   - Add capability: Firefox
 
@@ -87,14 +92,14 @@ Capability on Chromium and Microsoft Edge (Chromium Kernel) haven't been tested.
 - [ ] notification on ending time approaching
 - [ ] calm down time
 - [ ] customize monitor working days
-- [ ] display motto on blocking page
-- [ ] customize mottos
+- [ ] customize mottos set
 - [ ] option exporting & importing
 - [ ] option syncing
-- [ ] options: close website on time's up without showing time's up page
 - [ ] options: customize blocking page on time's up
-- [ ] options: leave one newtab when all tabs in current window are closed
 - [ ] options: set the message on time's up when setting unlock duration
+- [x] options: close website on time's up without showing time's up page
+- [x] display customized motto on blocking page
+- [x] options: leave one newtab when all tabs in current window are closed
 - [x] rewrite frontend with a framework
 - [x] support Firefox
 - [x] selection page：set unlock time by ending point
