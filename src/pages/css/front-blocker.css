@@ -1,0 +1,25 @@
+.front-blocker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  background-color: rgba(0, 0, 0, 0.5);
+
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+
+  z-index: 100;
+}
+
+.pause-msg {
+  background-color: black;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin: 10px;
+  color: white;
+  font-size: xx-large;
+}

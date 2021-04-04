@@ -44,15 +44,20 @@ function remapChromeApi() {
             }
 
             // Chrome extensions always fire the callback, but populate chrome.runtime.lastError with exception details
-            if (chrome.runtime.lastError)
+            if (chrome.runtime.lastError) {
+              // detail error message
+              let msg = `Error from Chrome extension API: ${
+                chrome.runtime.lastError.message || chrome.runtime.lastError
+                } Function: ${f.name}. Args: ${JSON.stringify(safeArgs)}`;
+              
+              // rough error message
+              // let msg =
+              //   chrome.runtime.lastError.message ||
+              //   `Error thrown by API ${chrome.runtime.lastError}`;
+              
               // Return as an error for the awaited catch block
-              reject(
-                new Error(
-                  chrome.runtime.lastError.message ||
-                    `Error thrown by API ${chrome.runtime.lastError}`
-                )
-              );
-            else {
+              reject(new Error(msg));
+            } else {
               if (parseCB) {
                 const cbObj = parseCB(...cbArgs);
                 resolve(cbObj);

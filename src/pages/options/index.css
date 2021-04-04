@@ -2,6 +2,7 @@
 @import "../css/typography.css";
 @import "../css/color.css";
 @import "../css/nav-list.css";
+@import "../css/front-blocker.css";
 
 .main-div {
   width: 80%;

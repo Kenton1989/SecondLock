@@ -33,8 +33,22 @@ const ALL_OPTION_NAME = Object.keys(DEFAULT_OPTIONS);
 const ALL_OPTION_NAME_SET = new Set(ALL_OPTION_NAME);
 const SYNCED_OPTION_NAME = [];
 
-// Dirty bit
-let dirtyLocal = false;
+/**
+ * dummy function for class OneOption parameters
+ * @param {string} optionName name of option
+ */
+function doNothing(optionName) {}
+
+const DEFAULT_CALLBACKS = {
+  // callback on store into sync storage fail
+  onSyncFail: doNothing,
+
+  // callback on retry set option into sync storage
+  onSyncRetry: doNothing,
+
+  // callback on set option into sync storage success
+  onSyncSuccess: doNothing,
+};
 
 /**
  * Cache the value of the given option from the storage.
@@ -46,14 +60,17 @@ class OneOption {
    * manage the option updating event
    * @param {String} name name of the option
    * @param {EventTarget} eventTarget the given event target
-   * @param {boolean} autoInit whether the option should query the storage and initialize the cached value automatically.
-   * @param {boolean} autoUpdate whether the option should listen the storage change event and update the cached value automatically.
+   * @param {boolean} autoInit whether this option should initialize themselves
+   * @param {boolean} autoUpdate whether this options should update themselves
+   * @param {*} callbacks callback used to control the behaviors of option
+   *   the param will not be copied, modifying original param will
    */
   constructor(
     name,
     eventTarget = document,
     autoInit = true,
-    autoUpdate = true
+    autoUpdate = true,
+    callbacks = DEFAULT_CALLBACKS
   ) {
     if (!ALL_OPTION_NAME_SET.has(name)) {
       throw new ReferenceError(`Create invalid option: ${name}.`);
@@ -66,6 +83,7 @@ class OneOption {
       this._eventTarget
     );
     this._storageKey = name;
+    this._param = callbacks;
 
     // make private member accessible in the callback.
     let storageKey = this._storageKey;
@@ -124,7 +142,7 @@ class OneOption {
     let val = {};
     val[this._storageKey] = value;
     await api.storage.local.set(val);
-    dirtyLocal = true;
+    
   }
 
   /**

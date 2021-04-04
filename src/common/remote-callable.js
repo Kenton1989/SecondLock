@@ -28,11 +28,18 @@ class RemoteCallable {
         if (callInfo.targetName !== obj.name) return;
 
         let { funcName, args, waitRet } = callInfo;
-        let res = obj[funcName](...args);
 
         if (!waitRet) {
+          // run the function after sending the response
+          // avoid unnecessary channel usage
+          sendResponse(undefined);
+          window.setTimeout(() => {
+            obj[funcName](...args);
+          }, 1);
           return;
         }
+        
+        let res = obj[funcName](...args);
         if (res instanceof Promise) {
           res
             .then((result) => {
