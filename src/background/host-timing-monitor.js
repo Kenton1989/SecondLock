@@ -15,7 +15,7 @@ class TimingInfo {
  */
 class HostTimingMonitor extends RemoteCallable {
   static get MINIMAL_TIMER_LEN() {
-    return 1000;
+    return 100;
   }
 
   /**
@@ -115,7 +115,12 @@ class HostTimingMonitor extends RemoteCallable {
     if (timePoint instanceof Date) timePoint = timePoint.getTime();
 
     let duration = timePoint - Date.now();
-    if (duration <= HostTimingMonitor.MINIMAL_TIMER_LEN) return;
+    if (duration <= HostTimingMonitor.MINIMAL_TIMER_LEN) {
+      console.warn(
+        `The timer is too short: ${duration} ms to be setup. The minimum duration required: ${HostTimingMonitor.MINIMAL_TIMER_LEN} ms.`
+      );
+      return;
+    }
 
     let restTimeMap = this._timingInfoMap;
     let timesUpEvent = this._timesUpEvent;
