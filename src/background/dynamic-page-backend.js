@@ -62,12 +62,12 @@ class DynamicPageBackend extends RemoteCallable {
     let tab = await api.tabs.create(tabProperties);
     this._tabArgs.set(tab.id, pageArgs);
     console.debug(`Created tab #${tab.id} opened with URL:${url}.`);
-
+    
     // Actively send arguments
     api.tabs
       .sendMessage(tab.id, { dynamicPageInitArgs: pageArgs })
       .catch((reason) => {
-        if (reason.message === RECEIVER_DOES_NOT_EXIST_MSG) {
+        if (reason.message.indexOf(RECEIVER_DOES_NOT_EXIST_MSG) >= 0) {
           console.debug(
             `Argument sent too early. Tab #${tab.id} haven't setup.`
           );

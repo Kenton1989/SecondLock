@@ -133,12 +133,13 @@ export default class DurationSelection extends React.Component {
       [this.state.blockedHost, unlockDuration]
     );
 
+    // try to go back to the blocked tab
     if (this.blockedTabId !== undefined) {
       try {
-        let tab = await api.tabs.get(this.blockedTabId);
-        await api.tabs.update(tab.id, { active: true });
-      } catch {
+        await api.tabs.update(this.blockedTabId, { active: true });
+      } catch (e) {
         // tab is not found, do nothing
+        console.warn(e);
       }
     }
     RemoteCallable.call("background-aux", "closeExtPageAbout", [

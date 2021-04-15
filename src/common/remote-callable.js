@@ -38,15 +38,23 @@ class RemoteCallable {
           }, 1);
           return;
         }
-        
-        let res = obj[funcName](...args);
+
+        let res;
+        try {
+          res = obj[funcName](...args);
+        } catch (err) {
+          sendResponse({ errMsg: err.message });
+          throw err;
+        }
+
         if (res instanceof Promise) {
           res
             .then((result) => {
               sendResponse({ ret: result });
             })
             .catch((err) => {
-              console.error("Error during Remote Call: ", err);
+              sendResponse({ errMsg: err.message });
+              throw err;
             });
           // return true to keep message channel open until response is set
           return true;
@@ -67,12 +75,13 @@ class RemoteCallable {
   /**
    * Call a method of the given remote callable object.
    *
-   * @param {String} name name of the remote object
+   * @param {String} name name of the RemoteCallable object
    * @param {String} funcName name of the function to be called
    * @param {any[]} args parameter list
    * @param {boolean} waitRet if true, the call will return a Promise that will resolve with
-   *  the return from the remote callee. Otherwise, return a promise fulfilled with undefined.
-   * @returns {Promise<*>} the promise resolved with the value return by remote method
+   *  the returned value from the remote callee. Otherwise, return a promise fulfilled 
+   *  with undefined immediately.
+   * @returns {Promise<*>} the promise resolved with the value return by remote method or undefined
    */
   static async call(name, funcName, args = [], waitRet = true) {
     let remoteCallQuery = {
@@ -83,9 +92,14 @@ class RemoteCallable {
         waitRet: waitRet,
       },
     };
+    
     let prom = api.runtime.sendMessage(remoteCallQuery);
+
     if (waitRet) {
       let reply = await prom;
+      if (reply.errMsg) {
+        throw new Error(reply.errMsg);
+      }
       return reply.ret;
     } else {
       return;

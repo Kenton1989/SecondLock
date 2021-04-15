@@ -29,7 +29,7 @@ api.tabs.onActivated.addListener((tabInfo) => {
     .get(tabInfo.tabId)
     .then((tab) => tab && onBrowsingPageChanged.trigger(tab))
     .catch((reason) => {
-      if (reason.message.startsWith(NO_TAB_EXIST_MSG_PREFIX)) {
+      if (reason.message.indexOf(NO_TAB_EXIST_MSG_PREFIX) >= 0) {
         // multiple tabs are closed at the same time
       } else {
         throw reason;
