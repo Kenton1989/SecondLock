@@ -2,10 +2,13 @@ import { api } from "../common/api";
 import { CustomEventWrapper } from "./custom-event-wrapper";
 import { wait, unWait } from "../common/utility";
 
-/**
- * All valid options
- */
-const DEFAULT_OPTIONS = {
+const DEFAULT_LOCAL_OPTIONS = {
+  syncOn: true,
+  lastSync: new Date(),
+};
+
+const DEFAULT_SHARED_OPTIONS = {
+  lastModify: new Date(),
   monitoredList: [
     "bilibili.com",
     "facebook.com",
@@ -23,15 +26,19 @@ const DEFAULT_OPTIONS = {
   notificationTimes: [10, 60, 5 * 60],
   // activeDays: [0, 1, 2, 3, 4, 5, 6],
   leaveOneTab: true,
-  // syncOn: false,
   defDurations: [1, 5, 10, 15, 30, 60],
   timesUpPageType: "default",
   mottos: ["Time waits for no one. – Folklore"],
 };
 
+const DEFAULT_OPTIONS = Object.assign(
+  {},
+  DEFAULT_LOCAL_OPTIONS,
+  DEFAULT_SHARED_OPTIONS
+);
+
 const ALL_OPTION_NAME = Object.keys(DEFAULT_OPTIONS);
 const ALL_OPTION_NAME_SET = new Set(ALL_OPTION_NAME);
-const SYNCED_OPTION_NAME = [];
 
 /**
  * dummy function for class OneOption parameters
@@ -40,14 +47,14 @@ const SYNCED_OPTION_NAME = [];
 function doNothing(optionName) {}
 
 const DEFAULT_CALLBACKS = {
-  // callback on store into sync storage fail
-  onSyncFail: doNothing,
+  // callback on store into storage fail
+  onStoreFail: doNothing,
 
-  // callback on retry set option into sync storage
-  onSyncRetry: doNothing,
+  // callback on retry set option into storage
+  onStoreRetry: doNothing,
 
-  // callback on set option into sync storage success
-  onSyncSuccess: doNothing,
+  // callback on set option into storage success
+  onStoreSuccess: doNothing,
 };
 
 /**
@@ -142,7 +149,6 @@ class OneOption {
     let val = {};
     val[this._storageKey] = value;
     await api.storage.local.set(val);
-    
   }
 
   /**
