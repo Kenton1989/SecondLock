@@ -4,6 +4,7 @@ import { HostTimingMonitor } from "./host-timing-monitor";
 import {
   ALL_OPTION_NAME,
   DEFAULT_OPTIONS,
+  DEFAULT_SHARED_OPTIONS,
   OptionCollection,
 } from "../common/options-manager.js";
 import RemoteCallable from "../common/remote-callable";
@@ -18,9 +19,14 @@ const TIME_UP_PAGE_URL = api.runtime.getURL("times-up.html");
 
 // Set default options
 api.runtime.onInstalled.addListener(async () => {
-  let result = await api.storage.local.get(DEFAULT_OPTIONS);
-  api.storage.local.set(result).then(() => {
-    console.debug("Setting: ", result);
+  let localResult = await api.storage.local.get(DEFAULT_OPTIONS);
+  api.storage.local.set(localResult).then(() => {
+    console.debug("Setting: ", localResult);
+  });
+
+  let syncResult = await api.storage.sync.get(DEFAULT_SHARED_OPTIONS);
+  api.storage.sync.set(syncResult).then(() => {
+    console.debug("Setting: ", syncResult);
   });
 });
 

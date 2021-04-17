@@ -1,14 +1,14 @@
 import { api } from "../common/api";
 import { CustomEventWrapper } from "./custom-event-wrapper";
-import { wait, unWait } from "../common/utility";
+import { defaultStorage, switchBackingStorageApi } from "./default-storage";
 
 const DEFAULT_LOCAL_OPTIONS = {
   syncOn: true,
-  lastSync: new Date(),
+  lastSwitch: new Date(0),
 };
 
 const DEFAULT_SHARED_OPTIONS = {
-  lastModify: new Date(),
+  lastModify: new Date(0),
   monitoredList: [
     "bilibili.com",
     "facebook.com",
@@ -36,7 +36,7 @@ const DEFAULT_OPTIONS = Object.assign(
   DEFAULT_LOCAL_OPTIONS,
   DEFAULT_SHARED_OPTIONS
 );
-
+const READ_ONLY_OPTIONS = new Set(["syncOn", "lastSync", "lastModify"]);
 const ALL_OPTION_NAME = Object.keys(DEFAULT_OPTIONS);
 const ALL_OPTION_NAME_SET = new Set(ALL_OPTION_NAME);
 
@@ -80,7 +80,7 @@ class OneOption {
     callbacks = DEFAULT_CALLBACKS
   ) {
     if (!ALL_OPTION_NAME_SET.has(name)) {
-      throw new ReferenceError(`Create invalid option: ${name}.`);
+      throw new Error(`Creating invalid option: ${name}.`);
     }
 
     this._value = undefined;
@@ -92,24 +92,33 @@ class OneOption {
     this._storageKey = name;
     this._param = callbacks;
 
-    // make private member accessible in the callback.
     let storageKey = this._storageKey;
-    let thisOption = this;
+
+    if (DEFAULT_LOCAL_OPTIONS[name] !== undefined) {
+      this._storage = () => api.storage.local;
+    }
 
     if (autoInit) {
-      api.storage.local.get([storageKey]).then((result) => {
-        thisOption.setCached(result[storageKey]);
+      this._storage().get([storageKey]).then((result) => {
+        this.setCached(result[storageKey]);
       });
     }
 
     if (autoUpdate) {
-      api.storage.onChanged.addListener((changes, area) => {
-        if (area !== "local") return;
+      api.storage.onChanged.addListener((changes) => {
         if (changes[storageKey]) {
-          thisOption.setCached(changes[storageKey].newValue);
+          this.setCached(changes[storageKey].newValue);
         }
       });
     }
+
+    if (READ_ONLY_OPTIONS.has(name)) {
+      this.set = ()=>{throw Error(`option ${this._storageKey} is readonly.`)};
+    }
+  }
+
+  _storage() {
+    return defaultStorage;
   }
 
   /**
@@ -117,6 +126,19 @@ class OneOption {
    */
   getCached() {
     return this._value;
+  }
+
+  /**
+   * Get the option from storage
+   * 
+   * @param {boolean} updateCache if the cached value should be updated after getting
+   * @returns promise fulfilled with value get from storage
+   */
+  async get(updateCache = true) {
+    let res = await this._storage().get([this._storageKey]);
+    res = res[this._storageKey];
+    if (updateCache) this.setCached(res);
+    return res;
   }
 
   /**
@@ -146,30 +168,8 @@ class OneOption {
     if (Object.is(value, this._value)) {
       return;
     }
-    let val = {};
-    val[this._storageKey] = value;
-    await api.storage.local.set(val);
-  }
-
-  /**
-   * Set the value options after a given length of delay
-   * Used to avoid frequent repeating setting.
-   *
-   * @param {*} value the new value
-   * @param {number} delay the delay in milliseconds
-   * @returns {Promise} a promise resolved after setting is done.
-   */
-  delayedSet(value, delay = 500) {
-    if (this._pendingWait !== undefined) {
-      unWait(this._pendingWait);
-    }
-    this._pendingWait = wait(delay);
-
-    let thisOption = this;
-    return this._pendingWait.then(() => {
-      thisOption.set(value);
-      delete thisOption._pendingWait;
-    });
+    let val = { [this._storageKey]: value };
+    await this._storage().set(val);
   }
 
   /**
@@ -219,31 +219,38 @@ class OptionCollection {
     let optionSet = new Set(optionNames);
     optionNames = [...optionSet];
 
+    let localOptions = [], sharedOptions = [];
     for (const option of optionNames) {
       if (!ALL_OPTION_NAME_SET.has(option)) {
-        throw new ReferenceError(`Referring invalid option: ${option}.`);
+        throw new Error(`Referring invalid option: ${option}.`);
       }
       Object.defineProperty(this, option, {
         value: new OneOption(option, this._eventTarget, false, false),
         writable: false,
       });
+      if (DEFAULT_LOCAL_OPTIONS[option]) {
+        localOptions.push(option);
+      } else {
+        sharedOptions.push(option);
+      }
     }
 
-    // avoid ambiguity of "this"
-    let thisOptions = this;
-
     // query the storage in bulk
-    api.storage.local.get(optionNames).then((res) => {
-      for (const key of optionNames) {
-        thisOptions[key].setCached(res[key]);
+    api.storage.local.get(localOptions).then((res) => {
+      for (const key of localOptions) {
+        this[key].setCached(res[key]);
+      }
+    });
+    defaultStorage.get(sharedOptions).then((res) => {
+      for (const key of sharedOptions) {
+        this[key].setCached(res[key]);
       }
     });
 
     // listen to storage changes in bulk
-    api.storage.onChanged.addListener((changes, area) => {
-      if (area !== "local") return;
+    api.storage.onChanged.addListener((changes) => {
       for (const changedKey of Object.keys(changes)) {
-        let option = thisOptions[changedKey];
+        let option = this[changedKey];
         if (option) {
           option.setCached(changes[changedKey].newValue);
         }
@@ -257,13 +264,16 @@ class OptionCollection {
    * @return {OneOption} the option object
    */
   getOption(name) {
-    if (!ALL_OPTION_NAME_SET.has(name)) {
-      throw new ReferenceError(`Referring invalid option: ${name}.`);
-    }
     return this[name];
   }
 }
 
+/**
+ * Assert that the given option collection contains
+ * the given option name
+ * @param {OptionCollection} options the option collection
+ * @param  {...string} requiredOptions required options name
+ */
 function assertOptions(options, ...requiredOptions) {
   console.assert(
     options instanceof OptionCollection,
@@ -278,14 +288,38 @@ function assertOptions(options, ...requiredOptions) {
   }
 }
 
-// TODO - sync options every 5 seconds
-window.setInterval(() => {}, 5000);
+/**
+ * Switching the default storage space between local or sync
+ *
+ * @param {boolean} useSync If the sync storage space is used a default
+ * @param {string} preference when contents in two storage conflict with each other,
+ * which storage is preferred ("local" or "sync")
+ * @returns promise fulfilled with undefined after the switching is finished. promise
+ * will be rejected when some error happens
+ */
+async function syncAndSwitchStorage(useSync, preference = "sync") {
+  let curSyncOn = await api.storage.local.get("syncOn");
+  if (curSyncOn === useSync) return;
+  
+  if (preference === "local") {
+    let content = await api.storage.local.get(DEFAULT_SHARED_OPTIONS);
+    await api.storage.sync.set(content);
+  } else if (preference === "sync") {
+    let content = await api.storage.sync.get(DEFAULT_SHARED_OPTIONS);
+    await api.storage.local.set(content);
+  }
+
+  await switchBackingStorageApi(useSync);
+}
 
 export {
   ALL_OPTION_NAME,
   ALL_OPTION_NAME_SET,
   DEFAULT_OPTIONS,
+  DEFAULT_LOCAL_OPTIONS,
+  DEFAULT_SHARED_OPTIONS,
   OptionCollection,
   OneOption,
   assertOptions,
+  syncAndSwitchStorage,
 };
