@@ -1,14 +1,15 @@
 import { api } from "../common/api";
 import { CustomEventWrapper } from "./custom-event-wrapper";
 import { defaultStorage, switchBackingStorageApi } from "./default-storage";
+import { $t } from "./utility";
 
 const DEFAULT_LOCAL_OPTIONS = {
   syncOn: true,
-  lastSwitch: new Date(0),
+  lastSwitch: new Date(0).toJSON(),
 };
 
 const DEFAULT_SHARED_OPTIONS = {
-  lastModify: new Date(0),
+  lastModify: new Date(0).toJSON(),
   monitoredList: [
     "bilibili.com",
     "facebook.com",
@@ -28,7 +29,7 @@ const DEFAULT_SHARED_OPTIONS = {
   leaveOneTab: true,
   defDurations: [1, 5, 10, 15, 30, 60],
   timesUpPageType: "default",
-  mottos: ["Time waits for no one. – Folklore"],
+  mottos: [$t("defaultMotto")],
 };
 
 const DEFAULT_OPTIONS = Object.assign(
@@ -168,7 +169,8 @@ class OneOption {
     if (Object.is(value, this._value)) {
       return;
     }
-    let val = { [this._storageKey]: value };
+    let val = { lastModify: new Date(Date.now()).toJSON() };
+    val[this._storageKey] = value;
     await this._storage().set(val);
   }
 
@@ -228,6 +230,7 @@ class OptionCollection {
         value: new OneOption(option, this._eventTarget, false, false),
         writable: false,
       });
+
       if (DEFAULT_LOCAL_OPTIONS[option]) {
         localOptions.push(option);
       } else {
@@ -297,7 +300,7 @@ function assertOptions(options, ...requiredOptions) {
  * @returns promise fulfilled with undefined after the switching is finished. promise
  * will be rejected when some error happens
  */
-async function syncAndSwitchStorage(useSync, preference = "sync") {
+async function syncAndSwitchStorage(useSync, preference) {
   let curSyncOn = await api.storage.local.get("syncOn");
   if (curSyncOn === useSync) return;
   

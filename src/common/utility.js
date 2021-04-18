@@ -232,6 +232,7 @@ function showTxt(element, text, blink = true, ...blinkArgs) {
 const BYTE_UNIT = ["B", "KB", "MB", "GB", "TB"];
 const STEP = 1024.0;
 function formatBytes(bytes) {
+  bytes = Number(bytes);
   let unit = 0;
   while (bytes > STEP) {
     bytes /= STEP;
@@ -328,16 +329,6 @@ function wait(ms) {
 }
 
 /**
- * Cancel a waiting promise created through function wait(ms)
- * @param {Promise} prom promise created by wait()
- */
-function unWait(prom) {
-  if (prom._timeoutHandle === undefined) return;
-  clearTimeout(prom._timeoutHandle);
-  delete prom._timeoutHandle;
-}
-
-/**
  * async version of window.alert
  *
  * @param  {...any} msgs the message to display
@@ -365,7 +356,6 @@ export {
   queryTabsUnder,
   closeTabs,
   wait,
-  unWait,
   $,
   $$,
   $id,

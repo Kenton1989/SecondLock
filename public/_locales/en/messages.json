@@ -238,5 +238,38 @@
   },
   "autoSavedHint": {
     "message": "(auto saved)"
+  },
+  "enableOptionSyncing": {
+    "message": "Enable Option Syncing"
+  },
+  "defaultMotto": {
+    "message": "Time waits for no one. – Folklore"
+  },
+  "areYouSureTurnSffSyncing": {
+    "message": "Are you sure to turn off syncing?"
+  },
+  "storageConflictDetected": {
+    "message": "Conflicts between local storage and remote storage are detected.\n\nYou must specify which storage should be used to overwrite the other one to keep the local storage consistent with the remote one."
+  },
+  "lastModifyTime": {
+    "message": "Last modify time"
+  },
+  "localStorage": {
+    "message": "Local storage"
+  },
+  "remoteStorage": {
+    "message": "Remote storage"
+  },
+  "pleaseEnterOneOfTheFollowingWord": {
+    "message": "Please enter one of the following word"
+  },
+  "overwriteLocalWithRemote": {
+    "message": "Keep remote storage, overwrite local storage with the remote one"
+  },
+  "overwriteRemoteWithLocal": {
+    "message": "Keep local storage, overwrite remote storage with the local one"
+  },
+  "invalidInput": {
+    "message": "Invalid input."
   }
 }

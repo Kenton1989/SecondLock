@@ -235,5 +235,41 @@
   },
   "autoSavedHint": {
     "message": "（已自动保存）"
+  },
+  "enableOptionSyncing": {
+    "message": "启用设置同步"
+  },
+  "msgOnTimesUp": {
+    "message": "倒计时结束时页面上显示的信息"
+  },
+  "defaultMotto": {
+    "message": "拖延和等待，是这个世界上最容易压垮一个人斗志的东西"
+  },
+  "areYouSureTurnSffSyncing": {
+    "message": "你确定要关闭选项同步功能吗？"
+  },
+  "storageConflictDetected": {
+    "message": "检测到本地储存和云端储存的内容互相冲突。\n\n你需要选择用哪一个储存的内容覆盖另一个，以保证本地和云端的内容是一致的。"
+  },
+  "lastModifyTime": {
+    "message": "上一次修改的时间"
+  },
+  "localStorage": {
+    "message": "本地储存"
+  },
+  "remoteStorage": {
+    "message": "云端储存"
+  },
+  "overwriteLocalWithRemote": {
+    "message": "保留云端储存，将本地储存用云端的内容覆盖"
+  },
+  "overwriteRemoteWithLocal": {
+    "message": "保留本地储存，将云端储存用本地内容覆盖"
+  },
+  "pleaseEnterOneOfTheFollowingWord": {
+    "message": "请输入以下单词之一"
+  },
+  "invalidInput": {
+    "message": "无效输入。"
   }
 }

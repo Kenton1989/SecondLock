@@ -47,7 +47,7 @@ const defaultStorage = {
  */
 async function switchBackingStorageApi(useSync) {
   defaultStorageApi = useSync ? api.storage.sync : api.storage.local;
-  await api.storage.local.set({ syncOn: useSync, lastSwitch: new Date(Date.now()) });
+  await api.storage.local.set({ syncOn: useSync, lastSwitch: new Date(Date.now()).toJSON() });
 }
 
 export { defaultStorage, switchBackingStorageApi };

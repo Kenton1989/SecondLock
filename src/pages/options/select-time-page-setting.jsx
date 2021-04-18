@@ -45,7 +45,6 @@ export default class SelectTimeSetting extends Component {
     // create option for default duration selection
     {
       let refs = mkRefs(3);
-      console.debug(refs);
       let [unsavedHint, saveBtn, inputEle] = refs;
       let option = this.props.options.defDurations;
       this.DefUnlockDurOption = makeOptionNeedSave(
