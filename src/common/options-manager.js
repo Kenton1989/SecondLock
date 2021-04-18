@@ -1,7 +1,7 @@
 import { api } from "../common/api";
 import { CustomEventWrapper } from "./custom-event-wrapper";
 import { defaultStorage, switchBackingStorageApi } from "./default-storage";
-import { $t } from "./utility";
+import { $t, asyncAlert } from "./utility";
 
 const DEFAULT_LOCAL_OPTIONS = {
   syncOn: true,
@@ -23,8 +23,8 @@ const DEFAULT_SHARED_OPTIONS = {
   ],
   whitelistHost: [],
   activated: true,
-  notificationOn: false,
-  notificationTimes: [10, 60, 5 * 60],
+  // notificationOn: false,
+  // notificationTimes: [10, 60, 5 * 60],
   // activeDays: [0, 1, 2, 3, 4, 5, 6],
   leaveOneTab: true,
   defDurations: [1, 5, 10, 15, 30, 60],
@@ -315,6 +315,22 @@ async function syncAndSwitchStorage(useSync, preference) {
   await switchBackingStorageApi(useSync);
 }
 
+/**
+ * Check if the error is caused by too frequent writing operations
+ * and handle it. If not, pass the error
+ * 
+ * @param {Error} err the error to be handle
+ */
+const WRITE_OPERATION_KEYWORD = "WRITE_OPERATION";
+function handleWritingTooFast(err) {
+  if (err.message && err.message.indexOf(WRITE_OPERATION_KEYWORD) >= 0) {
+    console.warn(err.message);
+    asyncAlert($t("tooFrequentWritingAlert"));
+  } else {
+    throw err;
+  }
+}
+
 export {
   ALL_OPTION_NAME,
   ALL_OPTION_NAME_SET,
@@ -325,4 +341,5 @@ export {
   OneOption,
   assertOptions,
   syncAndSwitchStorage,
+  handleWritingTooFast,
 };

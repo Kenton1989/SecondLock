@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { handleWritingTooFast } from "../../common/options-manager";
 import { $t } from "../../common/utility";
 import HostList from "./host-list";
 
@@ -57,12 +58,16 @@ export default class MonitoredHost extends Component {
         <HostList
           title={$t("blacklist")}
           initList={this.state.blacklist}
-          onSave={(val) => options.monitoredList.set(val)}
+          onSave={(val) =>
+            options.monitoredList.set(val)
+          }
         />
         <HostList
           title={$t("whitelist")}
           initList={this.state.whitelist}
-          onSave={(val) => options.whitelistHost.set(val)}
+          onSave={(val) =>
+            options.whitelistHost.set(val)
+          }
         />
       </div>
     );

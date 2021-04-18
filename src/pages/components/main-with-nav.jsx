@@ -22,13 +22,19 @@ class MainWithNav extends React.Component {
 
             {/* Navigation tag that will display all content */}
             {this.state.curSection !== "" && (
-              <li key={""} onClick={() => this.setState({ curSection: "" })}>
+              <li
+                key={""}
+                onClick={() => {
+                  this.setState({ curSection: "" });
+                  window.scrollTo(0, 0);
+                }}
+              >
                 {$t("showAll")}
               </li>
             )}
           </ul>
         </aside>
-        
+
         <div className="main-div">
           {this.props.children.map((ele) => this.shouldDisplay(ele) && ele)}
         </div>

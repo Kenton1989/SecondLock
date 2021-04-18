@@ -20,14 +20,10 @@ const TIME_UP_PAGE_URL = api.runtime.getURL("times-up.html");
 // Set default options
 api.runtime.onInstalled.addListener(async () => {
   let localResult = await api.storage.local.get(DEFAULT_OPTIONS);
-  api.storage.local.set(localResult).then(() => {
-    console.debug("Setting: ", localResult);
-  });
+  api.storage.local.set(localResult);
 
   let syncResult = await api.storage.sync.get(DEFAULT_SHARED_OPTIONS);
-  api.storage.sync.set(syncResult).then(() => {
-    console.debug("Setting: ", syncResult);
-  });
+  api.storage.sync.set(syncResult);
 });
 
 let dynamicPageBack = new DynamicPageBackend("dynamic-page-backend");

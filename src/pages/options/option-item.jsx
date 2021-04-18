@@ -1,4 +1,5 @@
 import React, { Component, createRef } from "react";
+import { handleWritingTooFast } from "../../common/options-manager";
 import { asyncAlert, blinkElement } from "../../common/utility";
 
 function mkRefs(number) {
@@ -56,7 +57,12 @@ function makeOptionNeedSave(
 
         inputEle.current.disabled = true;
         saveBtn.current.disabled = true;
-        await onSave(val);
+        try {
+          await onSave(val);
+        } catch(e) {
+          handleWritingTooFast(e);
+          return;
+        }
         setInput(inputEle, val);
         unsavedHint.current.style.opacity = 0;
         inputEle.current.disabled = false;
@@ -149,7 +155,12 @@ function makeOptionAutoSave(
       }
 
       inputEle.current.disabled = true;
-      await onSave(val);
+      try {
+        await onSave(val);
+      } catch (e) {
+        handleWritingTooFast(e);
+        return;
+      }
       inputEle.current.disabled = false;
       blinkElement(savedHint.current, 1, 4000, false);
     }

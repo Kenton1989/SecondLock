@@ -271,5 +271,8 @@
   },
   "invalidInput": {
     "message": "无效输入。"
+  },
+  "tooFrequentWritingAlert": {
+    "message": "因为你过于频繁的修改与保存设置，选项页面暂时无法正常运行。请等待一两分钟后再尝试修改设置。"
   }
 }

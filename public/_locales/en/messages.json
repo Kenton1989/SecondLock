@@ -271,5 +271,8 @@
   },
   "invalidInput": {
     "message": "Invalid input."
+  },
+  "tooFrequentWritingAlert": {
+    "message": "It seems that you are changing the setting too frequently and this page can not function normally. Please wait for 1 to 2 minutes before retrying editing settings."
   }
 }

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { api } from "../../common/api";
 import {
-  ALL_OPTION_NAME_SET,
   assertOptions,
+  handleWritingTooFast,
   syncAndSwitchStorage,
 } from "../../common/options-manager";
 import { $t, asyncAlert, formatBytes } from "../../common/utility";
@@ -72,10 +72,6 @@ export default class SyncSetting extends Component {
     this.setState({ enableSync: newVal });
   }
 
-  /**
-   * handle the change event
-   * @param {Event} e the change event
-   */
   handleEnableSyncChange(e) {
     let handler;
 
@@ -84,8 +80,12 @@ export default class SyncSetting extends Component {
       handler = async () => {
         let choice = window.confirm($t("areYouSureTurnSffSyncing"));
         if (choice) {
-          await syncAndSwitchStorage(false, "sync");
-          this.setState({ enableSync: false });
+          try {
+            await syncAndSwitchStorage(true, "sync");
+            this.setState({ enableSync: false });
+          } catch (e) {
+            handleWritingTooFast(e);
+          }
         }
       };
     } else {
@@ -134,7 +134,12 @@ export default class SyncSetting extends Component {
             return;
           }
         }
-        await syncAndSwitchStorage(true, preference);
+        try {
+          await syncAndSwitchStorage(true, preference);
+          this.setState({ enableSync: true });
+        } catch (e) {
+          handleWritingTooFast(e);
+        }
       };
     }
 

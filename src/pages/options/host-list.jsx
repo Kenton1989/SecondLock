@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { $t, asyncAlert, reformatHostname } from "../../common/utility";
 import EnterableInput from "../components/enterable-input";
 import HostnameSet from "../../common/hostname-set";
+import { handleWritingTooFast } from "../../common/options-manager";
 
 let hasBits = (origin, mask) => (origin & mask) === mask;
 let setBits = (origin, mask) => origin | mask;
@@ -203,7 +204,11 @@ export default class HostList extends Component {
     }
     newHostList.sort((a, b) => a.localeCompare(b));
 
-    this.props.onSave && (await this.props.onSave(newHostList));
+    try {
+      this.props.onSave && (await this.props.onSave(newHostList));
+    } catch (e) {
+      handleWritingTooFast(e);
+    }
 
     this.state.itemState.clear();
     this.setState({

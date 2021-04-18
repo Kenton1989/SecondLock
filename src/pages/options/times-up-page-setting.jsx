@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { assertOptions } from "../../common/options-manager";
+import { assertOptions, handleWritingTooFast } from "../../common/options-manager";
 import { $t } from "../../common/utility";
 import { makeOptionAutoSave, makeOptionNeedSave, mkRefs } from "./option-item";
 
@@ -17,6 +17,34 @@ export default class TimesUpSetting extends Component {
       this.setState({ timesUpPageType: val });
     };
 
+    // create option for times up page type setting.
+    {
+      let [savedHint, inputEle] = mkRefs(2);
+      let option = this.props.options.timesUpPageType;
+
+      this.TimesUpPageTypeOption = makeOptionAutoSave(
+        <div>
+          {$t("pageDisplayedOnTimesUp")}:&nbsp;
+          <select
+            ref={inputEle}
+            onChange={(e) => this.setTimesUpPageType(e.target.value)}
+          >
+            <option value="none">{$t("noPage")}</option>
+            <option value="default">{$t("default")}</option>
+            <option value="newtab">{$t("newTabPage")}</option>
+          </select>
+          <span ref={savedHint} className="auto-save-tag">
+            {$t("autoSavedHint")}
+          </span>
+        </div>,
+        option,
+        { savedHint, inputEle },
+        {
+          onSave: (val) => option.set(val),
+        }
+      );
+    }
+  
     // create option for mottos on times up page
     {
       let [unsavedHint, saveBtn, inputEle] = mkRefs(3);
@@ -50,34 +78,6 @@ export default class TimesUpSetting extends Component {
             val[0].length > MAX_LENGTH ? `${$t("tooManyChar")}` : "",
         },
         { detectEnter: false }
-      );
-    }
-
-    // create option for times up page type setting.
-    {
-      let [savedHint, inputEle] = mkRefs(2);
-      let option = this.props.options.timesUpPageType;
-
-      this.TimesUpPageTypeOption = makeOptionAutoSave(
-        <div>
-          {$t("pageDisplayedOnTimesUp")}:&nbsp;
-          <select
-            ref={inputEle}
-            onChange={(e) => this.setTimesUpPageType(e.target.value)}
-          >
-            <option value="none">{$t("noPage")}</option>
-            <option value="default">{$t("default")}</option>
-            <option value="newtab">{$t("newTabPage")}</option>
-          </select>
-          <span ref={savedHint} className="auto-save-tag">
-            {$t("autoSavedHint")}
-          </span>
-        </div>,
-        option,
-        { savedHint, inputEle },
-        {
-          onSave: (val) => option.set(val),
-        }
       );
     }
   }
