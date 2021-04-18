@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { handleWritingTooFast } from "../../common/options-manager";
 import { $t } from "../../common/utility";
 import HostList from "./host-list";
 

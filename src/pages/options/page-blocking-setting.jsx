@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { assertOptions, handleWritingTooFast } from "../../common/options-manager";
+import { assertOptions } from "../../common/options-manager";
 import { $t } from "../../common/utility";
 import { makeOptionAutoSave, mkRefs } from "./option-item";
 import SelectTimeSetting from "./select-time-page-setting";

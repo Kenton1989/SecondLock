@@ -1,5 +1,5 @@
-import React, { Component, createRef } from "react";
-import { assertOptions, handleWritingTooFast } from "../../common/options-manager";
+import React, { Component } from "react";
+import { assertOptions } from "../../common/options-manager";
 import { $t } from "../../common/utility";
 import { makeOptionNeedSave, mkRefs } from "./option-item";
 
