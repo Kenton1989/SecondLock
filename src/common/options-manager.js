@@ -22,7 +22,7 @@ const DEFAULT_SHARED_OPTIONS = {
     "zhihu.com",
   ],
   whitelistHost: [],
-  activated: true,
+  // activated: true,
   // notificationOn: false,
   // notificationTimes: [10, 60, 5 * 60],
   // activeDays: [0, 1, 2, 3, 4, 5, 6],
