@@ -180,7 +180,7 @@
     "message": "未知网址格式"
   },
   "hostMatchRule3": {
-    "message": "支持匹配完整的IPv4和IPv6地址。不支持用IP地址+掩码匹配网络区域。"
+    "message": "支持匹配完整的IPv4和IPv6网址。"
   },
   "orUntilTimePoint": {
     "message": "或者，解锁页面直到"

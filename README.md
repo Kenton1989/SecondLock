@@ -48,6 +48,9 @@ Capability on other Chromium-based browser haven't been tested.
 
 # Update
 
+- v0.5.0
+  - Support options syncing
+
 - v0.4.0
   - Rewrite frontend with React.js
   - Support customized message on times up page
@@ -93,6 +96,7 @@ Capability on other Chromium-based browser haven't been tested.
 - [ ] options: customize blocking page on time's up
 - [ ] options: set the message on time's up when setting unlock duration
 - [ ] Add question mark near each option to display detail explanation of option
+- [ ] Shared timing for all monitored site
 - [x] options: close website on time's up without showing time's up page
 - [x] display customized motto on blocking page
 - [x] options: leave one newtab when all tabs in current window are closed
