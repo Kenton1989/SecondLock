@@ -92,11 +92,11 @@ Capability on other Chromium-based browser haven't been tested.
 - [ ] customize monitor working days
 - [ ] customize mottos set
 - [ ] option exporting & importing
-- [ ] option syncing
 - [ ] options: customize blocking page on time's up
 - [ ] options: set the message on time's up when setting unlock duration
 - [ ] Add question mark near each option to display detail explanation of option
 - [ ] Shared timing for all monitored site
+- [x] option syncing
 - [x] options: close website on time's up without showing time's up page
 - [x] display customized motto on blocking page
 - [x] options: leave one newtab when all tabs in current window are closed

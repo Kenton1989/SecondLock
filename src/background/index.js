@@ -21,9 +21,11 @@ const TIME_UP_PAGE_URL = api.runtime.getURL("times-up.html");
 api.runtime.onInstalled.addListener(async () => {
   let localResult = await api.storage.local.get(DEFAULT_OPTIONS);
   api.storage.local.set(localResult);
+  console.debug("local storage initialized:", localResult);
 
   let syncResult = await api.storage.sync.get(DEFAULT_SHARED_OPTIONS);
   api.storage.sync.set(syncResult);
+  console.debug("sync storage initialized:", syncResult);
 });
 
 let dynamicPageBack = new DynamicPageBackend("dynamic-page-backend");
@@ -58,22 +60,39 @@ function blockToSelectTime(tab, hostname) {
 
 monitor.onBrowse.addListener(blockToSelectTime);
 
-unlockTiming.onTimesUp.addListener((hostname) => {
-  let type = options.timesUpPageType.getCached();
-  switch (type) {
-    case "none":
-      tabBlocker.blockAllByClosing(hostname);
-      break;
-    case "default":
-      tabBlocker.blockAllTabsUnder(hostname, TIME_UP_PAGE_URL);
-      break;
-    case "newtab":
-      tabBlocker.blockAllTabsUnder(hostname, undefined);
-      break;
-    default:
-      console.error("Unknown time's up page type:", type);
-  }
-});
+// handling times up event
+{
+  // default blocking function
+  function defaultBlocker() { console.error("blocker on times up is not set."); }
+  
+  // blocking function
+  let blockingOnTimesUp = defaultBlocker;
+  
+  options.timesUpPageType.doOnUpdated((type) => {
+    switch (type) {
+      case "none":
+        blockingOnTimesUp = (hostname) => tabBlocker.blockAllByClosing(hostname);
+        break;
+      case "default":
+        blockingOnTimesUp = (hostname) =>
+          tabBlocker.blockAllTabsUnder(hostname, TIME_UP_PAGE_URL);
+        break;
+      case "newtab":
+        blockingOnTimesUp = (hostname) =>
+          tabBlocker.blockAllTabsUnder(hostname, undefined);
+        break;
+      default:
+        blockingOnTimesUp = defaultBlocker;
+        console.error("Unknown time's up page type:", type);
+    }
+  })
+  
+  // cannot use xxx.addListener(blockingOnTimesUp) directly.
+  // otherwise the blocker will not be updated correctly
+  unlockTiming.onTimesUp.addListener((hostname) => {
+    blockingOnTimesUp(hostname);
+  });
+}
 
 backgroundAux.queryPageState = (url) => {
   let state = {
