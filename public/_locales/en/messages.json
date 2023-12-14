@@ -218,6 +218,9 @@
   "noBlockedDetect": {
     "message": "No blocked host are detected."
   },
+  "noReminder": {
+    "message": "Please enter reminder before unlock."
+  },
   "minimumUnlockTime": {
     "message": "Minimum unlock time: "
   },
