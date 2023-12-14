@@ -218,6 +218,9 @@
   "noBlockedDetect": {
     "message": "未检测到有页面被拦截"
   },
+  "noReminder": {
+    "message": "解锁前请输入备忘信息"
+  },
   "minimumUnlockTime": {
     "message": "最短解锁时间："
   },

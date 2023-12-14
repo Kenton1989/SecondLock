@@ -52,8 +52,11 @@ export default class DurationSelection extends React.Component {
     this.state = {
       blockedHost: undefined,
       unlockDur: "",
+      unlockReminder: "",
       unlockEndTime: toHHMM(calDefaultEndTimePoint()),
     };
+
+    this.reminderRef = React.createRef();
 
     this.blockedTabId = undefined;
 
@@ -68,6 +71,7 @@ export default class DurationSelection extends React.Component {
       this.blockedTabId = args.blockedTabId;
       this.setState({ blockedHost: args.blockedHost });
     });
+    this.reminderRef.current.focus();
   }
 
   render() {
@@ -76,6 +80,16 @@ export default class DurationSelection extends React.Component {
       <div>
         <h1>{$t("durSelectHint")}</h1>
         <h2 className="blocked-link">{displayedHost}</h2>
+        <div id="reminder">
+          <span>Reminder: </span>
+          <EnterableInput
+            onChange={(e) => {
+              this.setState({ unlockReminder: e.target.value });
+            }}
+            forwardRef={this.reminderRef}
+            value={this.state.unlockReminder}
+          />
+        </div>
         <DefaultDurButtonList
           doOnSelect={(val) => this.unlockMs(val * MINUTE)}
         />
@@ -92,7 +106,7 @@ export default class DurationSelection extends React.Component {
           <button onClick={this.enterMinutes}>GO</button>
         </div>
         <div>
-          <span>{$t("orUntilTimePoint")}</span>
+          <span>{$t("orUntilTimePoint")} </span>
           <EnterableInput
             type="time"
             onEnter={this.enterEndTime}
@@ -111,6 +125,12 @@ export default class DurationSelection extends React.Component {
   async unlockMs(ms) {
     if (!this.state.blockedHost) {
       asyncAlert($t("noBlockedDetect"));
+      return;
+    }
+
+    if (!this.state.unlockReminder) {
+      asyncAlert($t("noReminder"));
+      this.reminderRef.current.focus();
       return;
     }
 
