@@ -146,6 +146,8 @@ export default class DurationSelection extends React.Component {
       return;
     }
 
+    api.storage.local.set({ reminder: this.state.unlockReminder });
+
     let unlockDuration = Math.round(ms);
     await RemoteCallable.call(
       "lock-time-monitor",

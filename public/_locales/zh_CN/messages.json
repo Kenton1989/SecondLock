@@ -206,6 +206,9 @@
   "default": {
     "message": "默认"
   },
+  "reminder": {
+    "message": "备忘"
+  },
   "newTabPage": {
     "message": "新标签页"
   },

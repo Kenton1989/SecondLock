@@ -209,6 +209,9 @@
   "default": {
     "message": "Default"
   },
+  "reminder": {
+    "message": "Reminder"
+  },
   "newTabPage": {
     "message": "New Tab Page"
   },

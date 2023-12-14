@@ -34,6 +34,7 @@ class Popup extends React.Component {
         unlockEndTime: undefined,
         needCalmDown: undefined,
         calmDownEndTime: undefined,
+        reminder: "",
       },
     };
 
@@ -76,10 +77,21 @@ class Popup extends React.Component {
     this.stopAndClose = this.stopAndClose.bind(this);
   }
 
+  componentDidMount() {
+    api.storage.local.get("reminder").then(val =>
+      this.setState(val)
+    )
+  }
+
   render() {
     return (
       <div>
         <CurHostDisplay curUrl={this.state.curUrl} />
+        <hr/>
+        <div>
+          <p>{$t("reminder")}:</p>
+          <p id="reminder">{this.state.reminder}</p>
+        </div>
         <CountdownTimer endTime={this.state.pageState.unlockEndTime} />
         {this.state.pageState.isMonitored && (
           <button onClick={this.stopAndClose}>{$t("stopTimingClose")}</button>

@@ -4,6 +4,7 @@ import MainUI from "../components/main-ui";
 import { OptionCollection } from "../../common/options-manager";
 import { dynamicInit } from "../js/dynamic-page";
 import RemoteCallable from "../../common/remote-callable";
+import { api } from "../../common/api";
 
 let options = new OptionCollection("mottos");
 
@@ -11,6 +12,7 @@ export default class TimesUpPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      reminder: "",
       blockedHost: "",
       timesUpMsg: "the quick brown fox jumps over the lazy dog",
     };
@@ -23,16 +25,25 @@ export default class TimesUpPage extends Component {
   }
 
   componentDidMount() {
-    dynamicInit((args) => {
-      this.setState({ blockedHost: args.blockedHost });
+    dynamicInit(({ blockedHost }) => {
+      this.setState({ blockedHost });
     });
+
+    api.storage.local.get("reminder").then(val =>
+      this.setState(val)
+    )
   }
 
   render() {
     let displayedHost = this.state.blockedHost || "example.com";
+    let msg = this.state.timesUpMsg;
+    if (this.state.reminder)
+      msg = `${$t("reminder")}: ${this.state.reminder}`;
+
     return (
       <MainUI title={$t("timesUpTitle")}>
-        <h1 id="motto-txt">{this.state.timesUpMsg}</h1>
+
+        <h1 id="motto-txt">{msg}</h1>
         <h3>{$t("timesUpWarn")}</h3>
         <p>
           <span className="blocked-link">{displayedHost}</span>{" "}
